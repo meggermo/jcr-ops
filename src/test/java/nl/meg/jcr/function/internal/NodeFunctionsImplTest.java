@@ -39,6 +39,15 @@ public class NodeFunctionsImplTest {
     @Mock
     private RepositoryException e;
 
+    @Mock
+    private Session session;
+
+    @Test
+    public void testGetSession() throws RepositoryException {
+        when(node.getSession()).thenReturn(session);
+        assertThat(nodeFunctions.getSession().apply(node), is(session));
+    }
+
     @Test
     public void testGetName() throws RepositoryException {
         when(node.getName()).thenReturn("name");
@@ -97,6 +106,19 @@ public class NodeFunctionsImplTest {
     }
 
     @Test
+    public void testGetExistingProperty() throws RepositoryException {
+        when(node.hasProperty("X")).thenReturn(true);
+        when(node.getProperty("X")).thenReturn(property);
+        assertThat(nodeFunctions.getProperty("X").apply(node).get(), is(property));
+    }
+
+    @Test
+    public void testGetAbsentProperty() throws RepositoryException {
+        when(node.hasProperty("X")).thenReturn(false);
+        assertThat(nodeFunctions.getProperty("X").apply(node).isPresent(), is(false));
+    }
+
+    @Test
     public void testGetProperties_Empty() throws RepositoryException {
         assertThat(nodeFunctions.getProperties().apply(node), is(Collections.<Property>emptyIterator()));
     }
@@ -113,6 +135,12 @@ public class NodeFunctionsImplTest {
     @Test
     public void testExceptionTranslation() throws RepositoryException {
         final Throwable t = e;
+        try {
+            when(node.getSession()).thenThrow(e);
+            nodeFunctions.getSession().apply(node);
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
         try {
             when(node.getName()).thenThrow(e);
             nodeFunctions.getName().apply(node);
@@ -165,6 +193,13 @@ public class NodeFunctionsImplTest {
             when(node.hasProperties()).thenReturn(true);
             when(node.getProperties()).thenThrow(e);
             nodeFunctions.getProperties().apply(node);
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+        try {
+            when(node.hasProperty("X")).thenReturn(true);
+            when(node.getProperty("X")).thenThrow(e);
+            nodeFunctions.getProperty("X").apply(node);
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }

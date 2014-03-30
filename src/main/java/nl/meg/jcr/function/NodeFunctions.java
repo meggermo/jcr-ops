@@ -5,10 +5,13 @@ import com.google.common.base.Optional;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
+import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Iterator;
 
 public interface NodeFunctions {
+
+    Function<Node, Session> getSession();
 
     Function<Node, String> getName();
 
@@ -23,6 +26,8 @@ public interface NodeFunctions {
     Function<Node, Optional<Node>> getParent();
 
     Function<Node, Iterator<Node>> getNodes();
+
+    Function<Node, Optional<Property>> getProperty(String name);
 
     Function<Node, Iterator<Property>> getProperties();
 

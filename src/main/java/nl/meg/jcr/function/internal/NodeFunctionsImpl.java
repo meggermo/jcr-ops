@@ -6,16 +6,18 @@ import com.google.common.collect.Iterators;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 import nl.meg.jcr.function.NodeFunctions;
 
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
+import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
 import java.util.Iterator;
 
 import static java.util.Collections.emptyIterator;
 
 final class NodeFunctionsImpl implements NodeFunctions {
+
+    @Override
+    public Function<Node, Session> getSession() {
+        return GET_SESSION;
+    }
 
     @Override
     public Function<Node, String> getName() {
@@ -58,9 +60,38 @@ final class NodeFunctionsImpl implements NodeFunctions {
     }
 
     @Override
+    public Function<Node, Optional<Property>> getProperty(final String name) {
+        return new Function<Node, Optional<Property>>() {
+            @Override
+            public Optional<Property> apply(Node node) {
+                try {
+                    if (node.hasProperty(name)) {
+                        return Optional.of(node.getProperty(name));
+                    } else {
+                        return Optional.absent();
+                    }
+                } catch (RepositoryException e) {
+                    throw new RuntimeRepositoryException(e);
+                }
+            }
+        };
+    }
+
+    @Override
     public Function<Node, Iterator<Property>> getProperties() {
         return GET_PROPERTIES;
     }
+
+    private static final Function<Node, Session> GET_SESSION = new Function<Node, Session>() {
+        @Override
+        public Session apply(Node node) {
+            try {
+                return node.getSession();
+            } catch (RepositoryException e) {
+                throw new RuntimeRepositoryException(e);
+            }
+        }
+    };
 
     private static final Function<Node, String> GET_NAME = new Function<Node, String>() {
         @Override
