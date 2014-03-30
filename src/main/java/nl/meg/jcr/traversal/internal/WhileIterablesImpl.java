@@ -5,6 +5,7 @@ import nl.meg.jcr.traversal.WhileIterables;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 final class WhileIterablesImpl implements WhileIterables {
 
@@ -50,9 +51,13 @@ final class WhileIterablesImpl implements WhileIterables {
 
         @Override
         public S next() {
-            final S next = value;
-            value = nextValue(iterator);
-            return next;
+            if (value != null) {
+                final S next = value;
+                value = nextValue(iterator);
+                return next;
+            } else {
+                throw new NoSuchElementException();
+            }
         }
 
         @Override

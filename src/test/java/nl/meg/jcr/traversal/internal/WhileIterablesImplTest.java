@@ -9,7 +9,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.ImmutableList.copyOf;
@@ -25,6 +27,12 @@ public class WhileIterablesImplTest {
 
     @Mock
     private List<Integer> empty;
+
+    @Mock
+    private List<Integer> nullValues;
+
+    @Mock
+    private Iterator<Integer> iteratorWithNulls;
 
     @Before
     public void setUp() {
@@ -52,6 +60,25 @@ public class WhileIterablesImplTest {
     public void testTakeWhile_WithEmptyList() {
         final Predicate<Integer> p = alwaysTrue();
         assertThat(whileIterables.takeWhile(p, empty).iterator().hasNext(), is(false));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testTakeWhile_ThrowsNoSuchElement() {
+        when(nullValues.iterator()).thenReturn(iteratorWithNulls);
+        when(iteratorWithNulls.hasNext()).thenReturn(false);
+        final Predicate<Integer> p = alwaysTrue();
+        whileIterables.takeWhile(p, nullValues).iterator().next();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testTakeWhile_ThrowsNoSuchElement_AfterSecond() {
+        when(nullValues.iterator()).thenReturn(iteratorWithNulls);
+        when(iteratorWithNulls.hasNext()).thenReturn(true, false);
+        when(iteratorWithNulls.next()).thenReturn(1);
+        final Predicate<Integer> p = alwaysTrue();
+        final Iterator<Integer> iterator = whileIterables.takeWhile(p, nullValues).iterator();
+        iterator.next();
+        iterator.next();
     }
 
     @Test

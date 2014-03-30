@@ -119,7 +119,7 @@ public class NodePredicatesImplTest {
     }
 
     @Test
-    public void testThrowing() throws RepositoryException {
+    public void testExceptionTranslation() throws RepositoryException {
         final Throwable t = e;
         try {
             when(n1.isSame(n2)).thenThrow(e);

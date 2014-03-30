@@ -1,6 +1,7 @@
 package nl.meg.jcr.traversal.internal;
 
 import com.google.common.collect.TreeTraverser;
+import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,9 @@ public class DescendantTraverserImplTest {
 
     @Mock
     private NodeIterator i0, i2;
+
+    @Mock
+    private RepositoryException e;
 
     private TreeTraverser<Node> traverser;
 
@@ -60,4 +64,16 @@ public class DescendantTraverserImplTest {
         final List<Node> postOrderResult = traverser.breadthFirstTraversal(n0).toList();
         assertThat(postOrderResult, is(asList(n0, n1, n2, n3, n4, n5)));
     }
+
+    @Test
+    public void testExceptionTranslation() throws RepositoryException {
+        final Throwable t = e;
+        when(n0.getNodes()).thenThrow(e);
+        try {
+            traverser.breadthFirstTraversal(n0).toList();
+        } catch (RuntimeRepositoryException rre) {
+            assertThat(rre.getCause(), is(t));
+        }
+    }
+
 }

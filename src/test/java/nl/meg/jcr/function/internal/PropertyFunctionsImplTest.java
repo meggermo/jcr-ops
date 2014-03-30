@@ -54,7 +54,7 @@ public class PropertyFunctionsImplTest {
     }
 
     @Test
-    public void testThrowing() throws RepositoryException {
+    public void testExceptionTranslation() throws RepositoryException {
         final Throwable t = e;
         try {
             when(p.getName()).thenThrow(e);

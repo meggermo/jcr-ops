@@ -1,6 +1,7 @@
 package nl.meg.jcr.traversal.internal;
 
 import com.google.common.collect.TreeTraverser;
+import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +21,13 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AncestorTraverserImplTest {
 
+    private final TreeTraverser<Node> traverser = new AncestorTraverserImpl();
+
     @Mock
     private Node n0, n1, n2, n3, n4;
+
+    @Mock
+    private RepositoryException e;
 
     @Before
     public void setUp() throws RepositoryException {
@@ -38,23 +44,30 @@ public class AncestorTraverserImplTest {
 
     @Test
     public void testTraversePreOrder() {
-        final TreeTraverser<Node> aTr = new AncestorTraverserImpl();
-        final List<Node> ancestors = aTr.preOrderTraversal(n0).toList();
+        final List<Node> ancestors = traverser.preOrderTraversal(n0).toList();
         assertThat(ancestors, is(asList(n0, n1, n2, n3, n4)));
     }
 
     @Test
     public void testTraversePostOrder() {
-        final TreeTraverser<Node> aTr = new AncestorTraverserImpl();
-        final List<Node> ancestors = aTr.postOrderTraversal(n0).toList();
+        final List<Node> ancestors = traverser.postOrderTraversal(n0).toList();
         assertThat(ancestors, is(asList(n4, n3, n2, n1, n0)));
     }
 
     @Test
     public void testTraverseBreadthFirst() {
-        final TreeTraverser<Node> aTr = new AncestorTraverserImpl();
-        final List<Node> ancestors = aTr.breadthFirstTraversal(n0).toList();
+        final List<Node> ancestors = traverser.breadthFirstTraversal(n0).toList();
         assertThat(ancestors, is(asList(n0, n1, n2, n3, n4)));
     }
 
+    @Test
+    public void testExceptionTranslation() throws RepositoryException {
+        final Throwable t = e;
+        when(n3.getParent()).thenThrow(e);
+        try {
+            traverser.breadthFirstTraversal(n0).toList();
+        } catch (RuntimeRepositoryException rre) {
+            assertThat(rre.getCause(), is(t));
+        }
+    }
 }

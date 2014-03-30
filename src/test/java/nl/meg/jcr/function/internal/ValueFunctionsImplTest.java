@@ -58,7 +58,7 @@ public class ValueFunctionsImplTest {
     }
 
     @Test
-    public void testThrowing() throws RepositoryException {
+    public void testExceptionTranslation() throws RepositoryException {
         final Throwable t = e;
         try {
             when(value.getString()).thenThrow(e);

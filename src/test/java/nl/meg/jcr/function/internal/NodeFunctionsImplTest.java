@@ -111,7 +111,7 @@ public class NodeFunctionsImplTest {
     }
 
     @Test
-    public void testThrowing() throws RepositoryException {
+    public void testExceptionTranslation() throws RepositoryException {
         final Throwable t = e;
         try {
             when(node.getName()).thenThrow(e);
