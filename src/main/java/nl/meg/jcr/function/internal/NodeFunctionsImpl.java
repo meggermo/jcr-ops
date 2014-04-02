@@ -3,194 +3,149 @@ package nl.meg.jcr.function.internal;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.INode;
 import nl.meg.jcr.function.NodeFunctions;
 
-import javax.jcr.*;
+import javax.jcr.Property;
+import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
+import java.util.Collections;
 import java.util.Iterator;
-
-import static java.util.Collections.emptyIterator;
 
 final class NodeFunctionsImpl implements NodeFunctions {
 
     @Override
-    public Function<Node, Session> getSession() {
+    public Function<INode, Session> getSession() {
         return GET_SESSION;
     }
 
     @Override
-    public Function<Node, String> getName() {
+    public Function<INode, String> getName() {
         return GET_NAME;
     }
 
     @Override
-    public Function<Node, String> getPath() {
+    public Function<INode, String> getPath() {
         return GET_PATH;
     }
 
     @Override
-    public Function<Node, String> getIdentifier() {
+    public Function<INode, String> getIdentifier() {
         return GET_ID;
     }
 
     @Override
-    public Function<Node, NodeType> getPrimaryNodeType() {
+    public Function<INode, NodeType> getPrimaryNodeType() {
         return GET_PRIMARY_NODE_TYPE;
     }
 
     @Override
-    public Function<Node, Iterator<NodeType>> getMixinNodeTypes() {
+    public Function<INode, Iterator<NodeType>> getMixinNodeTypes() {
         return GET_MIXIN_NODE_TYPES;
     }
 
     @Override
-    public Function<Node, Integer> getIndex() {
+    public Function<INode, Integer> getIndex() {
         return GET_INDEX;
     }
 
     @Override
-    public Function<Node, Optional<Node>> getParent() {
+    public Function<INode, Optional<INode>> getParent() {
         return GET_PARENT;
     }
 
     @Override
-    public Function<Node, Iterator<Node>> getNodes() {
+    public Function<INode, Iterator<INode>> getNodes() {
         return GET_NODES;
     }
 
     @Override
-    public Function<Node, Optional<Property>> getProperty(final String name) {
-        return new Function<Node, Optional<Property>>() {
+    public Function<INode, Optional<Property>> getProperty(final String name) {
+        return new Function<INode, Optional<Property>>() {
             @Override
-            public Optional<Property> apply(Node node) {
-                try {
-                    if (node.hasProperty(name)) {
-                        return Optional.of(node.getProperty(name));
-                    } else {
-                        return Optional.absent();
-                    }
-                } catch (RepositoryException e) {
-                    throw new RuntimeRepositoryException(e);
+            public Optional<Property> apply(INode node) {
+                if (node.hasProperty(name)) {
+                    return Optional.of(node.getProperty(name));
+                } else {
+                    return Optional.absent();
                 }
             }
         };
     }
 
     @Override
-    public Function<Node, Iterator<Property>> getProperties() {
+    public Function<INode, Iterator<Property>> getProperties() {
         return GET_PROPERTIES;
     }
 
-    private static final Function<Node, Session> GET_SESSION = new Function<Node, Session>() {
+    private static final Function<INode, Session> GET_SESSION = new Function<INode, Session>() {
         @Override
-        public Session apply(Node node) {
-            try {
-                return node.getSession();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public Session apply(INode node) {
+            return node.getSession();
         }
     };
 
-    private static final Function<Node, String> GET_NAME = new Function<Node, String>() {
+    private static final Function<INode, String> GET_NAME = new Function<INode, String>() {
         @Override
-        public String apply(Node node) {
-            try {
-                return node.getName();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public String apply(INode node) {
+            return node.getName();
         }
     };
 
-    private static final Function<Node, String> GET_PATH = new Function<Node, String>() {
+    private static final Function<INode, String> GET_PATH = new Function<INode, String>() {
         @Override
-        public String apply(Node node) {
-            try {
-                return node.getPath();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public String apply(INode node) {
+            return node.getPath();
         }
     };
 
-    private static final Function<Node, String> GET_ID = new Function<Node, String>() {
+    private static final Function<INode, String> GET_ID = new Function<INode, String>() {
         @Override
-        public String apply(Node node) {
-            try {
-                return node.getIdentifier();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public String apply(INode node) {
+            return node.getIdentifier();
         }
     };
 
-    private static final Function<Node, NodeType> GET_PRIMARY_NODE_TYPE = new Function<Node, NodeType>() {
+    private static final Function<INode, NodeType> GET_PRIMARY_NODE_TYPE = new Function<INode, NodeType>() {
         @Override
-        public NodeType apply(Node node) {
-            try {
-                return node.getPrimaryNodeType();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public NodeType apply(INode node) {
+            return node.getPrimaryNodeType();
         }
     };
 
-    private static final Function<Node, Iterator<Property>> GET_PROPERTIES = new Function<Node, Iterator<Property>>() {
+    private static final Function<INode, Iterator<Property>> GET_PROPERTIES = new Function<INode, Iterator<Property>>() {
         @Override
-        public Iterator<Property> apply(Node node) {
-            try {
-                return node.hasProperties() ? node.getProperties() : emptyIterator();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public Iterator<Property> apply(INode node) {
+
+            return node.hasProperties() ? node.getProperties() : Collections.<Property>emptyIterator();
         }
     };
 
-    private static Function<Node, Integer> GET_INDEX = new Function<Node, Integer>() {
+    private static Function<INode, Integer> GET_INDEX = new Function<INode, Integer>() {
         @Override
-        public Integer apply(Node node) {
-            try {
-                return node.getIndex();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public Integer apply(INode node) {
+            return node.getIndex();
         }
     };
 
-    private static Function<Node, Optional<Node>> GET_PARENT = new Function<Node, Optional<Node>>() {
+    private static Function<INode, Optional<INode>> GET_PARENT = new Function<INode, Optional<INode>>() {
         @Override
-        public Optional<Node> apply(Node node) {
-            try {
-                return Optional.of(node.getParent());
-            } catch (ItemNotFoundException e) {
-                return Optional.absent();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public Optional<INode> apply(INode node) {
+            return node.getParent();
         }
     };
 
-    private static Function<Node, Iterator<Node>> GET_NODES = new Function<Node, Iterator<Node>>() {
+    private static Function<INode, Iterator<INode>> GET_NODES = new Function<INode, Iterator<INode>>() {
         @Override
-        public Iterator<Node> apply(Node node) {
-            try {
-                return node.getNodes();
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public Iterator<INode> apply(INode node) {
+            return node.getNodes();
         }
     };
 
-    private static Function<Node, Iterator<NodeType>> GET_MIXIN_NODE_TYPES = new Function<Node, Iterator<NodeType>>() {
+    private static Function<INode, Iterator<NodeType>> GET_MIXIN_NODE_TYPES = new Function<INode, Iterator<NodeType>>() {
         @Override
-        public Iterator<NodeType> apply(Node node) {
-            try {
-                return Iterators.forArray(node.getMixinNodeTypes());
-            } catch (RepositoryException e) {
-                throw new RuntimeRepositoryException(e);
-            }
+        public Iterator<NodeType> apply(INode node) {
+            return Iterators.forArray(node.getMixinNodeTypes());
         }
     };
 }

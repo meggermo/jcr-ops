@@ -1,15 +1,13 @@
 package nl.meg.jcr.traversal;
 
 import com.google.common.collect.TreeTraverser;
-import nl.meg.jcr.traversal.WhileIterables;
-
-import javax.jcr.Node;
+import nl.meg.jcr.INode;
 
 public interface TraversalFactory {
 
-    TreeTraverser<Node> ancestorTraverser();
+    TreeTraverser<INode> ancestorTraverser();
 
-    TreeTraverser<Node> descendantTraverser();
+    TreeTraverser<INode> descendantTraverser();
 
     WhileIterables whileIterables();
 }

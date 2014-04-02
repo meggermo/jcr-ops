@@ -1,26 +1,18 @@
 package nl.meg.jcr.traversal.internal;
 
 import com.google.common.collect.TreeTraverser;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.INode;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import java.util.Iterator;
 
-import static com.google.common.collect.Iterators.emptyIterator;
-
-class DescendantTraverserImpl extends TreeTraverser<Node> {
+class DescendantTraverserImpl extends TreeTraverser<INode> {
 
     @Override
-    public Iterable<Node> children(final Node root) {
-        return new Iterable<Node>() {
+    public Iterable<INode> children(final INode root) {
+        return new Iterable<INode>() {
             @Override
-            public Iterator<Node> iterator() {
-                try {
-                    return root.hasNodes() ? root.getNodes() : emptyIterator();
-                } catch (RepositoryException e) {
-                    throw new RuntimeRepositoryException(e);
-                }
+            public Iterator<INode> iterator() {
+                return root.getNodes();
             }
         };
     }

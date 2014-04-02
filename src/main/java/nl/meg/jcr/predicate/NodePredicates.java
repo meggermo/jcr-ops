@@ -1,22 +1,22 @@
 package nl.meg.jcr.predicate;
 
 import com.google.common.base.Predicate;
+import nl.meg.jcr.INode;
 
-import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
 
 public interface NodePredicates {
 
-    Predicate<Node> isSame(Node other);
+    Predicate<INode> isSame(INode other);
 
-    Predicate<Node> isNodeType(String nodeTypeName);
+    Predicate<INode> isNodeType(String nodeTypeName);
 
-    Predicate<Node> identifierIn(String... identifiers);
+    Predicate<INode> identifierIn(String... identifiers);
 
-    Predicate<Node> nameIn(String... names);
+    Predicate<INode> nameIn(String... names);
 
-    Predicate<Node> withProperty(Predicate<Property> predicate);
+    Predicate<INode> withProperty(Predicate<Property> predicate);
 
-    Predicate<Node> withNodeType(Predicate<NodeType> predicate);
+    Predicate<INode> withNodeType(Predicate<NodeType> predicate);
 }

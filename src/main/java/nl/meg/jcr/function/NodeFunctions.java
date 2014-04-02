@@ -2,8 +2,8 @@ package nl.meg.jcr.function;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import nl.meg.jcr.INode;
 
-import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
@@ -11,26 +11,26 @@ import java.util.Iterator;
 
 public interface NodeFunctions {
 
-    Function<Node, Session> getSession();
+    Function<INode, Session> getSession();
 
-    Function<Node, String> getName();
+    Function<INode, String> getName();
 
-    Function<Node, String> getPath();
+    Function<INode, String> getPath();
 
-    Function<Node, String> getIdentifier();
+    Function<INode, String> getIdentifier();
 
-    Function<Node, NodeType> getPrimaryNodeType();
+    Function<INode, NodeType> getPrimaryNodeType();
 
-    Function<Node, Integer> getIndex();
+    Function<INode, Integer> getIndex();
 
-    Function<Node, Optional<Node>> getParent();
+    Function<INode, Optional<INode>> getParent();
 
-    Function<Node, Iterator<Node>> getNodes();
+    Function<INode, Iterator<INode>> getNodes();
 
-    Function<Node, Optional<Property>> getProperty(String name);
+    Function<INode, Optional<Property>> getProperty(String name);
 
-    Function<Node, Iterator<Property>> getProperties();
+    Function<INode, Iterator<Property>> getProperties();
 
-    Function<Node, Iterator<NodeType>> getMixinNodeTypes();
+    Function<INode, Iterator<NodeType>> getMixinNodeTypes();
 
 }

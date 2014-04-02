@@ -1,18 +1,18 @@
 package nl.meg.jcr.traversal.internal;
 
 import com.google.common.collect.TreeTraverser;
+import nl.meg.jcr.INode;
 import nl.meg.jcr.traversal.TraversalFactory;
 import nl.meg.jcr.traversal.WhileIterables;
 
-import javax.jcr.Node;
 
 public final class TraversalFactoryImpl implements TraversalFactory {
 
-    private final TreeTraverser<Node> ancestorTraverser;
-    private final TreeTraverser<Node> descendantTraverser;
+    private final TreeTraverser<INode> ancestorTraverser;
+    private final TreeTraverser<INode> descendantTraverser;
     private final WhileIterables whileIterables;
 
-    public TraversalFactoryImpl(TreeTraverser<Node> ancestorTraverser, TreeTraverser<Node> descendantTraverser, WhileIterables whileIterables) {
+    public TraversalFactoryImpl(TreeTraverser<INode> ancestorTraverser, TreeTraverser<INode> descendantTraverser, WhileIterables whileIterables) {
         this.ancestorTraverser = ancestorTraverser;
         this.descendantTraverser = descendantTraverser;
         this.whileIterables = whileIterables;
@@ -23,12 +23,12 @@ public final class TraversalFactoryImpl implements TraversalFactory {
     }
 
     @Override
-    public TreeTraverser<Node> ancestorTraverser() {
+    public TreeTraverser<INode> ancestorTraverser() {
         return ancestorTraverser;
     }
 
     @Override
-    public TreeTraverser<Node> descendantTraverser() {
+    public TreeTraverser<INode> descendantTraverser() {
         return descendantTraverser;
     }
 

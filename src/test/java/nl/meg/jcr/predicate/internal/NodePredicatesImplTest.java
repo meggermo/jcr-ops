@@ -3,7 +3,7 @@ package nl.meg.jcr.predicate.internal;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.INode;
 import nl.meg.jcr.function.NodeFunctions;
 import nl.meg.jcr.predicate.NodePredicates;
 import org.junit.Before;
@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
@@ -31,12 +30,12 @@ public class NodePredicatesImplTest {
     private NodeFunctions nodeFunctions;
 
     @Mock
-    private Node n1, n2;
+    private INode n1, n2;
 
     @Mock
-    private Function<Node, Iterator<Property>> pF;
+    private Function<INode, Iterator<Property>> pF;
     @Mock
-    private Function<Node, String> idF, nameF;
+    private Function<INode, String> idF, nameF;
     @Mock
     private Iterator<Property> p1I;
     @Mock
@@ -49,10 +48,10 @@ public class NodePredicatesImplTest {
     private Predicate<NodeType> ntP;
 
     @Mock
-    private Function<Node, Iterator<NodeType>> mntF;
+    private Function<INode, Iterator<NodeType>> mntF;
 
     @Mock
-    private Function<Node, NodeType> pntF;
+    private Function<INode, NodeType> pntF;
 
     @Mock
     private NodeType nodeType;
@@ -116,23 +115,6 @@ public class NodePredicatesImplTest {
         when(ntP.apply(nodeType)).thenReturn(true, false);
         assertThat(nP.withNodeType(ntP).apply(n1), is(true));
         assertThat(nP.withNodeType(ntP).apply(n1), is(false));
-    }
-
-    @Test
-    public void testExceptionTranslation() throws RepositoryException {
-        final Throwable t = e;
-        try {
-            when(n1.isSame(n2)).thenThrow(e);
-            nP.isSame(n1).apply(n2);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(n1.isNodeType("X")).thenThrow(e);
-            nP.isNodeType("X").apply(n1);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
     }
 
 }

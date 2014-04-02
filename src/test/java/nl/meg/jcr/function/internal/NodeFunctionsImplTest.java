@@ -1,6 +1,7 @@
 package nl.meg.jcr.function.internal;
 
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import com.google.common.base.Optional;
+import nl.meg.jcr.INode;
 import nl.meg.jcr.function.NodeFunctions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,10 @@ public class NodeFunctionsImplTest {
     private final NodeFunctions nodeFunctions = new NodeFunctionsImpl();
 
     @Mock
-    private Node node;
+    private INode node;
+
+    @Mock
+    private Optional<INode> parent;
 
     @Mock
     private NodeType nodeType;
@@ -88,20 +92,22 @@ public class NodeFunctionsImplTest {
 
     @Test
     public void testGetParent() throws RepositoryException {
-        when(node.getParent()).thenReturn(node);
+        when(node.getParent()).thenReturn(parent);
+        when(parent.get()).thenReturn(node);
         assertThat(nodeFunctions.getParent().apply(node).get(), is(node));
     }
 
     @Test
     public void testGetParentOfRoot() throws RepositoryException {
-        when(node.getParent()).thenThrow(ItemNotFoundException.class);
+        when(node.getParent()).thenReturn(parent);
+        when(parent.isPresent()).thenReturn(false);
         assertThat(nodeFunctions.getParent().apply(node).isPresent(), is(false));
     }
 
     @Test
     public void testGetNodes() throws RepositoryException {
         when(node.getNodes()).thenReturn(nodeIterator);
-        final Iterator<Node> iterator = nodeIterator;
+        final Iterator<INode> iterator = nodeIterator;
         assertThat(nodeFunctions.getNodes().apply(node), is(iterator));
     }
 
@@ -120,6 +126,7 @@ public class NodeFunctionsImplTest {
 
     @Test
     public void testGetProperties_Empty() throws RepositoryException {
+        when(node.hasProperties()).thenReturn(false);
         assertThat(nodeFunctions.getProperties().apply(node), is(Collections.<Property>emptyIterator()));
     }
 
@@ -130,79 +137,6 @@ public class NodeFunctionsImplTest {
         when(propertyIterator.hasNext()).thenReturn(true, false);
         when(propertyIterator.next()).thenReturn(property);
         assertThat(nodeFunctions.getProperties().apply(node).next(), is(property));
-    }
-
-    @Test
-    public void testExceptionTranslation() throws RepositoryException {
-        final Throwable t = e;
-        try {
-            when(node.getSession()).thenThrow(e);
-            nodeFunctions.getSession().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getName()).thenThrow(e);
-            nodeFunctions.getName().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getPath()).thenThrow(e);
-            nodeFunctions.getPath().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getIdentifier()).thenThrow(e);
-            nodeFunctions.getIdentifier().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getIndex()).thenThrow(e);
-            nodeFunctions.getIndex().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getNodes()).thenThrow(e);
-            nodeFunctions.getNodes().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getParent()).thenThrow(e);
-            nodeFunctions.getParent().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getPrimaryNodeType()).thenThrow(e);
-            nodeFunctions.getPrimaryNodeType().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getMixinNodeTypes()).thenThrow(e);
-            nodeFunctions.getMixinNodeTypes().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.hasProperties()).thenReturn(true);
-            when(node.getProperties()).thenThrow(e);
-            nodeFunctions.getProperties().apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.hasProperty("X")).thenReturn(true);
-            when(node.getProperty("X")).thenThrow(e);
-            nodeFunctions.getProperty("X").apply(node);
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
     }
 
 }
