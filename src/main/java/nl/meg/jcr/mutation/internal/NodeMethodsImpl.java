@@ -43,11 +43,11 @@ public class NodeMethodsImpl implements NodeMethods {
 
     private void moveAndReorder(INode parent, INode node, String newName) {
         final ImmutableList<INode> nodes = ImmutableList.copyOf(parent.getNodes());
-        int nodePosition = Iterables.indexOf(nodes, compose(equalTo(node.getName()), GET_NAME));
+        int nodeIndex = Iterables.indexOf(nodes, compose(equalTo(node.getName()), GET_NAME));
         move(parent, node, newName);
-        if (nodePosition < nodes.size()) {
+        if (nodeIndex < nodes.size() - 1) {
             try {
-                parent.get().orderBefore(newName, nodes.get(nodePosition + 1).getName());
+                parent.get().orderBefore(newName, nodes.get(nodeIndex + 1).getName());
             } catch (RepositoryException e) {
                 throw new RuntimeRepositoryException(e);
             }

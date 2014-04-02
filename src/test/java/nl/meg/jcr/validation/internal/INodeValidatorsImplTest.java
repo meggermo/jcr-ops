@@ -43,7 +43,7 @@ public class INodeValidatorsImplTest {
     }
 
     @Test
-    public void testCanAddChild() {
+    public void testCanAddChildInValid() {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(iNode.getName()).thenReturn("name");
         when(iNode.getPrimaryNodeType()).thenReturn(nodeType);
