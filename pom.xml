@@ -7,6 +7,19 @@
     <groupId>nl.meg</groupId>
     <artifactId>jcr-ops</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>JCR Operations</name>
+    <description>
+        Functional immutable operations on the The Content repository API for Java.
+    </description>
+    <inceptionYear>2014</inceptionYear>
+
+    <developers>
+        <developer>
+            <id>meggermo</id>
+            <name>Michiel Eggermont</name>
+            <email>michiel.eggermont@gmail.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <!-- project configuration -->
