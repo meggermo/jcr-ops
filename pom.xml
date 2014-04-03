@@ -18,8 +18,15 @@
             <id>meggermo</id>
             <name>Michiel Eggermont</name>
             <email>michiel.eggermont@gmail.com</email>
+            <url>https://github.com/meggermo</url>
         </developer>
     </developers>
+
+    <scm>
+        <url>https://github.com/meggermo/jcr-ops</url>
+        <connection>scm:git:git://github.com/meggermo/jcr-ops.git</connection>
+        <developerConnection>scm:git:git@github.com/meggermo/jcr-ops.git</developerConnection>
+    </scm>
 
     <properties>
         <!-- project configuration -->
