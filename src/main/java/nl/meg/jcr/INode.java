@@ -11,39 +11,34 @@ import java.util.Iterator;
 
 public interface INode extends Supplier<Node> {
 
+    Integer getIndex();
+
+    String getIdentifier();
+
     String getName();
 
     String getPath();
 
     Session getSession();
 
+    boolean isRoot();
+
     boolean isSame(INode node);
 
-    NodeType getPrimaryNodeType();
-
-    Optional<INode> getParent();
+    Optional<INode> getNode(String name);
 
     Iterator<INode> getNodes();
 
-    boolean hasNodes();
-
-    boolean hasNode(String name);
-
-    boolean isNodeType(String nodeTypeName);
-
-    boolean hasProperty(String name);
-
-    Property getProperty(String name);
-
-    String getIdentifier();
-
-    boolean hasProperties();
+    Optional<Property> getProperty(String name);
 
     Iterator<Property> getProperties();
 
-    Integer getIndex();
+    boolean isNodeType(String nodeTypeName);
+
+    NodeType getPrimaryNodeType();
 
     NodeType[] getMixinNodeTypes();
 
-    boolean isRoot();
+    Optional<INode> getParent();
+
 }

@@ -113,26 +113,24 @@ public class NodeFunctionsImplTest {
 
     @Test
     public void testGetExistingProperty() throws RepositoryException {
-        when(node.hasProperty("X")).thenReturn(true);
-        when(node.getProperty("X")).thenReturn(property);
+        when(node.getProperty("X")).thenReturn(Optional.of(property));
         assertThat(nodeFunctions.getProperty("X").apply(node).get(), is(property));
     }
 
     @Test
     public void testGetAbsentProperty() throws RepositoryException {
-        when(node.hasProperty("X")).thenReturn(false);
+        when(node.getProperty("X")).thenReturn(Optional.<Property>absent());
         assertThat(nodeFunctions.getProperty("X").apply(node).isPresent(), is(false));
     }
 
     @Test
     public void testGetProperties_Empty() throws RepositoryException {
-        when(node.hasProperties()).thenReturn(false);
+        when(node.getProperties()).thenReturn(Collections.<Property>emptyIterator());
         assertThat(nodeFunctions.getProperties().apply(node), is(Collections.<Property>emptyIterator()));
     }
 
     @Test
     public void testGetProperties() throws RepositoryException {
-        when(node.hasProperties()).thenReturn(true);
         when(node.getProperties()).thenReturn(propertyIterator);
         when(propertyIterator.hasNext()).thenReturn(true, false);
         when(propertyIterator.next()).thenReturn(property);

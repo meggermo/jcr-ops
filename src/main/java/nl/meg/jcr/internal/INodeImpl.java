@@ -6,10 +6,7 @@ import com.google.common.collect.Iterators;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
+import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
 import java.util.Collections;
 import java.util.Iterator;
@@ -59,6 +56,15 @@ final class INodeImpl implements INode, Function<Node, INode> {
     }
 
     @Override
+    public Optional<INode> getNode(String name) {
+        try {
+            return node.hasNode(name) ? Optional.<INode>of(apply(node.getNode(name))) : Optional.<INode>absent();
+        } catch (RepositoryException e) {
+            throw new RuntimeRepositoryException(e);
+        }
+    }
+
+    @Override
     public NodeType getPrimaryNodeType() {
         try {
             return node.getPrimaryNodeType();
@@ -71,8 +77,10 @@ final class INodeImpl implements INode, Function<Node, INode> {
     public Optional<INode> getParent() {
         try {
             return Optional.of(apply(node.getParent()));
-        } catch (RepositoryException e) {
+        } catch (ItemNotFoundException e) {
             return Optional.absent();
+        } catch (RepositoryException e) {
+            throw new RuntimeRepositoryException(e);
         }
     }
 
@@ -80,24 +88,6 @@ final class INodeImpl implements INode, Function<Node, INode> {
     public Iterator<INode> getNodes() {
         try {
             return node.hasNodes() ? Iterators.transform(node.getNodes(), this) : Collections.emptyIterator();
-        } catch (RepositoryException e) {
-            throw new RuntimeRepositoryException(e);
-        }
-    }
-
-    @Override
-    public boolean hasNodes() {
-        try {
-            return node.hasNodes();
-        } catch (RepositoryException e) {
-            throw new RuntimeRepositoryException(e);
-        }
-    }
-
-    @Override
-    public boolean hasNode(String name) {
-        try {
-            return node.hasNode(name);
         } catch (RepositoryException e) {
             throw new RuntimeRepositoryException(e);
         }
@@ -113,18 +103,9 @@ final class INodeImpl implements INode, Function<Node, INode> {
     }
 
     @Override
-    public boolean hasProperty(String name) {
+    public Optional<Property> getProperty(String name) {
         try {
-            return node.hasProperty(name);
-        } catch (RepositoryException e) {
-            throw new RuntimeRepositoryException(e);
-        }
-    }
-
-    @Override
-    public Property getProperty(String name) {
-        try {
-            return hasProperty(name) ? node.getProperty(name) : null;
+            return node.hasProperty(name) ? Optional.<Property>of(node.getProperty(name)) : Optional.<Property>absent();
         } catch (RepositoryException e) {
             throw new RuntimeRepositoryException(e);
         }
@@ -140,18 +121,9 @@ final class INodeImpl implements INode, Function<Node, INode> {
     }
 
     @Override
-    public boolean hasProperties() {
-        try {
-            return node.hasProperties();
-        } catch (RepositoryException e) {
-            throw new RuntimeRepositoryException(e);
-        }
-    }
-
-    @Override
     public Iterator<Property> getProperties() {
         try {
-            return hasProperties() ? node.getProperties() : Collections.emptyIterator();
+            return node.hasProperties() ? node.getProperties() : Collections.emptyIterator();
         } catch (RepositoryException e) {
             throw new RuntimeRepositoryException(e);
         }

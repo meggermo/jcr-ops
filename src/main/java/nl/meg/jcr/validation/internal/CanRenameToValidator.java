@@ -16,7 +16,7 @@ final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCo
         super(new Predicate<INode>() {
             @Override
             public boolean apply(INode input) {
-                return !input.getParent().get().hasNode(name);
+                return !input.getParent().get().getNode(name).isPresent();
             }
         });
         this.name = name;

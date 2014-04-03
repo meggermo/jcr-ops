@@ -9,7 +9,6 @@ import nl.meg.jcr.function.NodeFunctions;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
-import java.util.Collections;
 import java.util.Iterator;
 
 final class NodeFunctionsImpl implements NodeFunctions {
@@ -64,11 +63,7 @@ final class NodeFunctionsImpl implements NodeFunctions {
         return new Function<INode, Optional<Property>>() {
             @Override
             public Optional<Property> apply(INode node) {
-                if (node.hasProperty(name)) {
-                    return Optional.of(node.getProperty(name));
-                } else {
-                    return Optional.absent();
-                }
+                return node.getProperty(name);
             }
         };
     }
@@ -117,7 +112,7 @@ final class NodeFunctionsImpl implements NodeFunctions {
         @Override
         public Iterator<Property> apply(INode node) {
 
-            return node.hasProperties() ? node.getProperties() : Collections.<Property>emptyIterator();
+            return node.getProperties();
         }
     };
 

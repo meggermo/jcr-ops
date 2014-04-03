@@ -14,8 +14,8 @@ import javax.jcr.nodetype.NodeType;
 import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -108,22 +108,25 @@ public class INodeImplTest {
     }
 
     @Test
+    public void testGetNode() throws RepositoryException {
+        when(node.hasNode("X")).thenReturn(true);
+        when(node.getNode("X")).thenReturn(node);
+        assertThat(iNode.getNode("X").get().get(), is(node));
+    }
+
+    @Test
+    public void testGetNode_Absent() throws RepositoryException {
+        when(node.hasNode("X")).thenReturn(false);
+        assertThat(iNode.getNode("X").isPresent(), is(false));
+    }
+
+    @Test
     public void testGetNodes() throws RepositoryException {
         when(node.hasNodes()).thenReturn(true);
         when(node.getNodes()).thenReturn(nodeIterator);
         when(nodeIterator.hasNext()).thenReturn(true,false);
         when(nodeIterator.next()).thenReturn(node);
         assertThat(iNode.getNodes().next().get(), is(node));
-    }
-
-    @Test
-    public void testHasNodes() throws RepositoryException {
-        assertThat(iNode.hasNodes(), is(false));
-    }
-
-    @Test
-    public void testHasNode() {
-        assertThat(iNode.hasNode("X"), is(false));
     }
 
     @Test
@@ -136,13 +139,13 @@ public class INodeImplTest {
     public void testGetExistingProperty() throws RepositoryException {
         when(node.hasProperty("X")).thenReturn(true);
         when(node.getProperty("X")).thenReturn(property);
-        assertThat(iNode.getProperty("X"), is(property));
+        assertThat(iNode.getProperty("X").get(), is(property));
     }
 
     @Test
     public void testGetAbsentProperty() throws RepositoryException {
         when(node.hasProperty("X")).thenReturn(false);
-        assertThat(iNode.getProperty("X"), is(nullValue()));
+        assertThat(iNode.getProperty("X").isPresent(), is(false));
     }
 
     @Test
@@ -168,10 +171,24 @@ public class INodeImplTest {
         assertThat(iNode.isRoot(), is(true));
     }
 
+    @Test(expected = RuntimeRepositoryException.class)
+    public void testIsRootThrows() throws RepositoryException {
+        when(node.getSession()).thenThrow(RepositoryException.class);
+        iNode.isRoot();
+        shouldHaveThrown();
+    }
+
     @Test
     public void testIsSame() throws RepositoryException {
         when(node.isSame(node)).thenReturn(true);
         assertThat(iNode.isSame(iNode), is(true));
+    }
+
+    @Test(expected = RuntimeRepositoryException.class)
+    public void testIsSameThrows() throws RepositoryException {
+        when(node.isSame(node)).thenThrow(RepositoryException.class);
+        iNode.isSame(iNode);
+        shouldHaveThrown();
     }
 
     @Test
@@ -187,54 +204,70 @@ public class INodeImplTest {
         try {
             when(node.getSession()).thenThrow(e);
             iNode.getSession();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getName()).thenThrow(e);
             iNode.getName();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getPath()).thenThrow(e);
             iNode.getPath();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getIdentifier()).thenThrow(e);
             iNode.getIdentifier();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getIndex()).thenThrow(e);
             iNode.getIndex();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
-            when(node.getNodes()).thenThrow(e);
+            when(node.hasNodes()).thenThrow(e);
             iNode.getNodes();
+            shouldHaveThrown();
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+        try {
+            when(node.hasNode("X")).thenThrow(e);
+            iNode.getNode("X");
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getParent()).thenThrow(e);
             iNode.getParent();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getPrimaryNodeType()).thenThrow(e);
             iNode.getPrimaryNodeType();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
             when(node.getMixinNodeTypes()).thenThrow(e);
             iNode.getMixinNodeTypes();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
@@ -242,6 +275,7 @@ public class INodeImplTest {
             when(node.hasProperties()).thenReturn(true);
             when(node.getProperties()).thenThrow(e);
             iNode.getProperties();
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
@@ -249,9 +283,21 @@ public class INodeImplTest {
             when(node.hasProperty("X")).thenReturn(true);
             when(node.getProperty("X")).thenThrow(e);
             iNode.getProperty("X");
+            shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
+        try {
+            when(node.isNodeType("X")).thenThrow(e);
+            iNode.isNodeType("X");
+            shouldHaveThrown();
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+    }
+
+    private void shouldHaveThrown() {
+        fail("expected exception to be thrown");
     }
 
 }

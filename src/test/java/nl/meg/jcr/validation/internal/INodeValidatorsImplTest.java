@@ -15,8 +15,7 @@ import javax.jcr.nodetype.NodeType;
 
 import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class INodeValidatorsImplTest {
@@ -43,6 +42,13 @@ public class INodeValidatorsImplTest {
     }
 
     @Test
+    public void testIsNotRoot_ValidationError() {
+        when(iNode.isRoot()).thenReturn(true);
+        iNodeValidators.isNotRoot().validate(iNode, context);
+        verify(context).addError(eq(NodeErrorCode.NODE_CANNOT_BE_ROOT), anyMapOf(String.class, Object.class));
+    }
+
+    @Test
     public void testCanAddChildInValid() {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(iNode.getName()).thenReturn("name");
@@ -55,9 +61,17 @@ public class INodeValidatorsImplTest {
     @Test
     public void testCanRenameTo() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.hasNode("name")).thenReturn(true);
+        when(parent.getNode("name")).thenReturn(Optional.<INode>absent());
+        iNodeValidators.canRenameTo("name").validate(iNode, context);
+        verifyZeroInteractions(context);
+    }
+
+    @Test
+    public void testCanRenameTo_ValidationError() {
+        when(iNode.getParent()).thenReturn(Optional.of(parent));
+        when(parent.getNode("name")).thenReturn(Optional.of(parent));
         when(parent.getPath()).thenReturn("path");
-        iNodeValidators.canRenameTo("name").validate(iNode,context);
+        iNodeValidators.canRenameTo("name").validate(iNode, context);
         verify(context).addError(eq(NodeErrorCode.ITEM_EXISTS), anyMapOf(String.class, Object.class));
     }
 }
