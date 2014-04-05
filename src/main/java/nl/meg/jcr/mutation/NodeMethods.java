@@ -4,8 +4,8 @@ import nl.meg.jcr.INode;
 
 public interface NodeMethods {
 
-    void move(INode node, INode newParent);
+    INode move(INode node, INode newParent);
 
-    void rename(INode node, String newName);
+    INode rename(INode node, String newName);
 
 }

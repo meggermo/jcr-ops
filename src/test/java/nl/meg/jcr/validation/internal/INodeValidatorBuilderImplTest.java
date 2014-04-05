@@ -18,7 +18,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class INodeValidatorsImplTest {
+public class INodeValidatorBuilderImplTest {
 
     private INodeValidators iNodeValidators;
 
