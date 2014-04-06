@@ -35,9 +35,9 @@ public final class CompositeValidatorImpl<E extends Enum<E>, T> implements Valid
         return from(validators).transform(contextFunction).last().get();
     }
 
-    private static final Predicate HAS_NO_ERRORS = new Predicate<ValidationContext<?,?>>() {
+    private static final Predicate HAS_NO_ERRORS = new Predicate<ValidationContext<?, ?>>() {
         @Override
-        public boolean apply(ValidationContext<?,?> context) {
+        public boolean apply(ValidationContext<?, ?> context) {
             return context.isValid();
         }
     };

@@ -3,7 +3,7 @@ package nl.meg.jcr.mutation.internal;
 import com.google.common.base.Function;
 import nl.meg.jcr.INode;
 
-final class MoveNodeImpl implements Function<INode,INode> {
+final class MoveNodeImpl implements Function<INode, INode> {
 
     private final INode newParent;
 

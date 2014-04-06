@@ -5,9 +5,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public final class ValidationContextImpl<E extends Enum<E>, T>  implements ValidationContext<E,T> {
+public final class ValidationContextImpl<E extends Enum<E>, T> implements ValidationContext<E, T> {
 
-    private final EnumMap<E,List<Map<String, ?>>> errors;
+    private final EnumMap<E, List<Map<String, ?>>> errors;
 
     public ValidationContextImpl(Class<E> errorCodeType) {
         errors = new EnumMap<>(errorCodeType);

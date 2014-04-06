@@ -1,6 +1,5 @@
 package nl.meg.jcr.function.internal;
 
-import nl.meg.jcr.function.FunctionsFactory;
 import nl.meg.jcr.function.*;
 
 public final class FunctionsFactoryImpl implements FunctionsFactory {

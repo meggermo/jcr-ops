@@ -1,12 +1,8 @@
 package nl.meg.jcr.predicate.internal;
 
 import nl.meg.jcr.function.FunctionsFactory;
-import nl.meg.jcr.predicate.PredicatesFactory;
-import nl.meg.jcr.predicate.NodePredicates;
-import nl.meg.jcr.predicate.NodeTypePredicates;
-import nl.meg.jcr.predicate.PropertyPredicates;
-import nl.meg.jcr.predicate.ValuePredicates;
 import nl.meg.jcr.function.internal.FunctionsFactoryImpl;
+import nl.meg.jcr.predicate.*;
 
 public final class PredicatesFactoryImpl implements PredicatesFactory {
 

@@ -8,7 +8,7 @@ public interface ValidationContext<E extends Enum<E>, T> {
 
     boolean isValid();
 
-    EnumMap<E, List<Map<String,?>>> getErrors();
+    EnumMap<E, List<Map<String, ?>>> getErrors();
 
     ValidationContext<E, T> addError(E error, Map<String, ?> contextParameterMap);
 }
