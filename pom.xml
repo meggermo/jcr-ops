@@ -28,6 +28,11 @@
         <developerConnection>scm:git:git@github.com/meggermo/jcr-ops.git</developerConnection>
     </scm>
 
+    <issueManagement>
+        <url>https://github.com/meggermo/jcr-ops/issues</url>
+        <system>github</system>
+    </issueManagement>
+
     <properties>
         <!-- project configuration -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -135,6 +140,22 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>perform</id>
+                        <goals>
+                            <goal>perform</goal>
+                        </goals>
+                        <configuration>
+                            <goals>clean verify</goals>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
             </plugin>
         </plugins>
     </build>
