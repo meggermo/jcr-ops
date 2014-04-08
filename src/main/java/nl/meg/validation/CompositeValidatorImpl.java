@@ -1,9 +1,8 @@
 package nl.meg.validation;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
-import static com.google.common.collect.FluentIterable.from;
+import java.util.Iterator;
 
 public final class CompositeValidatorImpl<E extends Enum<E>, T> implements Validator<E, T> {
 
@@ -21,18 +20,12 @@ public final class CompositeValidatorImpl<E extends Enum<E>, T> implements Valid
     }
 
     @Override
-    public ValidationContext<E, T> validate(final T entity, final ValidationContext<E, T> context) {
-        final Function<Validator<E, T>, ValidationContext<E, T>> contextFunction = new Function<Validator<E, T>, ValidationContext<E, T>>() {
-            @Override
-            public ValidationContext<E, T> apply(Validator<E, T> input) {
-                if (continueValidation.apply(context)) {
-                    return input.validate(entity, context);
-                } else {
-                    return context;
-                }
-            }
-        };
-        return from(validators).transform(contextFunction).last().get();
+    public ValidationContext<E, T> validate(T entity, ValidationContext<E, T> context) {
+        final Iterator<Validator<E, T>> validatorIterator = validators.iterator();
+        while (validatorIterator.hasNext() && continueValidation.apply(context)) {
+            context = validatorIterator.next().validate(entity, context);
+        }
+        return context;
     }
 
     private static final Predicate HAS_NO_ERRORS = new Predicate<ValidationContext<?, ?>>() {
