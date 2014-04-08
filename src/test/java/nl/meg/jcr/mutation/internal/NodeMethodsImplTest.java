@@ -1,5 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
@@ -21,6 +22,9 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,14 +57,18 @@ public class NodeMethodsImplTest {
     private Validator<NodeErrorCode, INode> validator;
     @Mock
     private ValidationContext<NodeErrorCode, INode> context;
+    @Mock
+    private ValidatingFunctionAdapter<NodeErrorCode, INode, INode> validatingFunctionAdapter;
+    @Mock
+    private Function<INode, INode> f;
 
     @Before
     public void setUp() {
         when(nodeValidators.canAddChild(parent)).thenReturn(validator);
         when(nodeValidators.isNotRoot()).thenReturn(validator);
         when(contextSupplier.get()).thenReturn(context);
-
-        final ValidatingFunctionAdapter<NodeErrorCode, INode, INode> validatingFunctionAdapter = new ValidatingFunctionAdapter<>(contextSupplier);
+        when(validatingFunctionAdapter.adapt(any(Validator.class),any(Function.class))).thenReturn(f);
+        when(f.apply(node)).thenReturn(node);
         this.nodeMethods = new NodeMethodsImpl(nodeValidators, validatingFunctionAdapter, continueValidation);
     }
 
@@ -68,7 +76,7 @@ public class NodeMethodsImplTest {
     public void testMove() {
         when(node.getSession()).thenReturn(session);
         when(context.isValid()).thenReturn(true);
-        nodeMethods.move(node, parent);
+        assertThat(nodeMethods.move(node, parent), is(node));
     }
 
 
@@ -78,7 +86,7 @@ public class NodeMethodsImplTest {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(node.getSession()).thenReturn(session);
         when(context.isValid()).thenReturn(true);
-        nodeMethods.rename(node, "newName");
+        assertThat(nodeMethods.rename(node, "newName"), is(node));
     }
 
     @Test
@@ -91,6 +99,6 @@ public class NodeMethodsImplTest {
         when(node.getSession()).thenReturn(session);
         when(parent.get()).thenReturn(n);
         when(context.isValid()).thenReturn(true);
-        nodeMethods.rename(node, "newName");
+        assertThat(nodeMethods.rename(node, "newName"), is(node));
     }
 }

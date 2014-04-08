@@ -1,7 +1,9 @@
-package nl.meg.function;
+package nl.meg.function.internal;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
+import nl.meg.function.ValidatingFunctionAdapter;
+import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import org.junit.Before;
@@ -18,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ValidatingFunctionAdapterTest {
+public class ValidatingFunctionAdapterImplTest {
 
     private enum E {
 
@@ -40,7 +42,7 @@ public class ValidatingFunctionAdapterTest {
 
     @Before
     public void setUp() {
-        this.adapter = new ValidatingFunctionAdapter<>(contextSupplier);
+        this.adapter = new ValidatingFunctionAdapterImpl<>(contextSupplier);
     }
 
     @Test
