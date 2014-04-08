@@ -1,7 +1,9 @@
-package nl.meg.validation;
+package nl.meg.function;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
+import nl.meg.validation.ValidationContext;
+import nl.meg.validation.Validator;
 
 public class ValidatingFunctionAdapter<E extends Enum<E>, S, T> implements Function<S, T> {
 

@@ -1,4 +1,4 @@
-package nl.meg.validation;
+package nl.meg.function;
 
 import java.util.List;
 import java.util.Map;

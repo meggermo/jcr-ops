@@ -7,7 +7,7 @@ import nl.meg.jcr.INode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
-import nl.meg.validation.ValidatingFunctionAdapter;
+import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import nl.meg.validation.ValidatorBuilder;

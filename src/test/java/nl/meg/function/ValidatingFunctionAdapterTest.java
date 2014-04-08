@@ -1,7 +1,9 @@
-package nl.meg.validation;
+package nl.meg.function;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
+import nl.meg.validation.ValidationContext;
+import nl.meg.validation.Validator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
