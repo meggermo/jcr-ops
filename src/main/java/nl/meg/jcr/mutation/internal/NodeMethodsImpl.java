@@ -22,23 +22,23 @@ public class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public INode move(INode node, INode newParent) {
+    public Function<INode, INode> moveFunction(INode newParent) {
         final Validator<NodeErrorCode, INode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
                 .build();
         final Function<INode, INode> function = new MoveNodeImpl(newParent);
-        return adapter.adapt(validator, function).apply(node);
+        return adapter.adapt(validator, function);
     }
 
     @Override
-    public INode rename(INode node, String newName) {
+    public Function<INode, INode> renameFunction(String newName) {
         final Validator<NodeErrorCode, INode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
                 .build();
         final Function<INode, INode> function = new RenameNodeImpl(newName);
-        return adapter.adapt(validator, function).apply(node);
+        return adapter.adapt(validator, function);
     }
 
 }

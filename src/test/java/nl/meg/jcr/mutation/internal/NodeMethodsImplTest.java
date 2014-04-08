@@ -63,16 +63,12 @@ public class NodeMethodsImplTest {
 
     @Test
     public void testMove() {
-        assertThat(nodeMethods.move(node, parent), is(node));
+        assertThat(nodeMethods.moveFunction(parent).apply(node), is(node));
     }
 
     @Test
     public void testRename() {
-        assertThat(nodeMethods.rename(node, "newName"), is(node));
+        assertThat(nodeMethods.renameFunction("newName").apply(node), is(node));
     }
 
-    @Test
-    public void testRenameWithReordering() {
-        assertThat(nodeMethods.rename(node, "newName"), is(node));
-    }
 }
