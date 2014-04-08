@@ -1,7 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import nl.meg.function.ValidatingFunctionAdapter;
@@ -17,11 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.jcr.nodetype.NodeType;
-import java.util.Arrays;
-
+import static nl.meg.validation.ValidatorBuilder.builder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -36,15 +31,6 @@ public class NodeMethodsImplTest {
     private INode node, parent;
 
     @Mock
-    private Session session;
-
-    @Mock
-    private NodeType nodeType;
-
-    @Mock
-    private Node n;
-
-    @Mock
     private INodeValidators nodeValidators;
 
     @Mock
@@ -55,50 +41,38 @@ public class NodeMethodsImplTest {
 
     @Mock
     private Validator<NodeErrorCode, INode> validator;
+
     @Mock
     private ValidationContext<NodeErrorCode, INode> context;
+
     @Mock
     private ValidatingFunctionAdapter<NodeErrorCode, INode, INode> validatingFunctionAdapter;
+
     @Mock
-    private Function<INode, INode> f;
+    private Function<INode, INode> function;
 
     @Before
     public void setUp() {
         when(nodeValidators.canAddChild(parent)).thenReturn(validator);
         when(nodeValidators.isNotRoot()).thenReturn(validator);
         when(contextSupplier.get()).thenReturn(context);
-        when(validatingFunctionAdapter.adapt(any(Validator.class),any(Function.class))).thenReturn(f);
-        when(f.apply(node)).thenReturn(node);
-        this.nodeMethods = new NodeMethodsImpl(nodeValidators, validatingFunctionAdapter, continueValidation);
+        when(validatingFunctionAdapter.adapt(any(Validator.class), any(Function.class))).thenReturn(function);
+        when(function.apply(node)).thenReturn(node);
+        this.nodeMethods = new NodeMethodsImpl(nodeValidators, builder(continueValidation), validatingFunctionAdapter);
     }
 
     @Test
     public void testMove() {
-        when(node.getSession()).thenReturn(session);
-        when(context.isValid()).thenReturn(true);
         assertThat(nodeMethods.move(node, parent), is(node));
     }
 
-
     @Test
     public void testRename() {
-        when(node.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getPrimaryNodeType()).thenReturn(nodeType);
-        when(node.getSession()).thenReturn(session);
-        when(context.isValid()).thenReturn(true);
         assertThat(nodeMethods.rename(node, "newName"), is(node));
     }
 
     @Test
     public void testRenameWithReordering() {
-        when(node.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getPrimaryNodeType()).thenReturn(nodeType);
-        when(nodeType.hasOrderableChildNodes()).thenReturn(true);
-        when(parent.getNodes()).thenReturn(Arrays.asList(node, node).iterator());
-        when(node.getName()).thenReturn("name");
-        when(node.getSession()).thenReturn(session);
-        when(parent.get()).thenReturn(n);
-        when(context.isValid()).thenReturn(true);
         assertThat(nodeMethods.rename(node, "newName"), is(node));
     }
 }
