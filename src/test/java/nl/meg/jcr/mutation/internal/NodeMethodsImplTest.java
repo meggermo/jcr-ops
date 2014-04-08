@@ -3,6 +3,7 @@ package nl.meg.jcr.mutation.internal;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
@@ -59,7 +60,8 @@ public class NodeMethodsImplTest {
         when(nodeValidators.isNotRoot()).thenReturn(validator);
         when(contextSupplier.get()).thenReturn(context);
 
-        this.nodeMethods = new NodeMethodsImpl(nodeValidators, contextSupplier, continueValidation);
+        final ValidatingFunctionAdapter<NodeErrorCode, INode, INode> validatingFunctionAdapter = new ValidatingFunctionAdapter<>(contextSupplier);
+        this.nodeMethods = new NodeMethodsImpl(nodeValidators, validatingFunctionAdapter, continueValidation);
     }
 
     @Test

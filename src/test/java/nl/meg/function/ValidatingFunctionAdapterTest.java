@@ -40,7 +40,7 @@ public class ValidatingFunctionAdapterTest {
 
     @Before
     public void setUp() {
-        this.adapter = new ValidatingFunctionAdapter<>(contextSupplier,validator,function);
+        this.adapter = new ValidatingFunctionAdapter<>(contextSupplier);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ValidatingFunctionAdapterTest {
         when(contextSupplier.get()).thenReturn(context);
         when(validator.validate("TEST", context)).thenReturn(context);
         when(context.isValid()).thenReturn(true);
-        adapter.apply("TEST");
+        adapter.adapt(validator, function).apply("TEST");
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ValidatingFunctionAdapterTest {
         when(context.getErrors()).thenReturn(errors);
 
         try {
-            adapter.apply("TEST");
+            adapter.adapt(validator, function).apply("TEST");
         } catch (ValidationException e) {
             assertEquals(errors, e.getErrors());
         }
