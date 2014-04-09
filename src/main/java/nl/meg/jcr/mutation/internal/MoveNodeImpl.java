@@ -7,7 +7,7 @@ final class MoveNodeImpl implements Function<INode, INode> {
 
     private final INode newParent;
 
-    public MoveNodeImpl(INode newParent) {
+    MoveNodeImpl(INode newParent) {
         this.newParent = newParent;
     }
 

@@ -16,7 +16,7 @@ final class RenameNodeImpl implements Function<INode, INode> {
 
     private final String newName;
 
-    public RenameNodeImpl(String newName) {
+    RenameNodeImpl(String newName) {
         this.newName = newName;
     }
 
