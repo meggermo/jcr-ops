@@ -3,6 +3,7 @@ package nl.meg.jcr.mutation.internal;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.mutation.NodeMethods;
@@ -49,7 +50,7 @@ public class NodeMethodsImplTest {
     private ValidatingFunctionAdapter<NodeErrorCode, INode, INode> validatingFunctionAdapter;
 
     @Mock
-    private Function<INode, INode> function;
+    private ValidatingFunction<INode, INode> function;
 
     @Before
     public void setUp() {

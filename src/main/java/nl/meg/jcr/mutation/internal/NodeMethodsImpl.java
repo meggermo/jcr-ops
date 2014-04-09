@@ -1,6 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
+import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.mutation.NodeMethods;
@@ -9,7 +9,7 @@ import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.Validator;
 import nl.meg.validation.ValidatorBuilder;
 
-public class NodeMethodsImpl implements NodeMethods {
+public final class NodeMethodsImpl implements NodeMethods {
 
     private final INodeValidators nodeValidators;
     private final ValidatorBuilder<NodeErrorCode, INode> validatorBuilder;
@@ -22,23 +22,21 @@ public class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public Function<INode, INode> moveFunction(INode newParent) {
+    public ValidatingFunction<INode, INode> moveFunction(INode newParent) {
         final Validator<NodeErrorCode, INode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
                 .build();
-        final Function<INode, INode> function = new MoveNodeImpl(newParent);
-        return adapter.adapt(validator, function);
+        return adapter.adapt(validator, new MoveNodeImpl(newParent));
     }
 
     @Override
-    public Function<INode, INode> renameFunction(String newName) {
+    public ValidatingFunction<INode, INode> renameFunction(String newName) {
         final Validator<NodeErrorCode, INode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
                 .build();
-        final Function<INode, INode> function = new RenameNodeImpl(newName);
-        return adapter.adapt(validator, function);
+        return adapter.adapt(validator, new RenameNodeImpl(newName));
     }
 
 }

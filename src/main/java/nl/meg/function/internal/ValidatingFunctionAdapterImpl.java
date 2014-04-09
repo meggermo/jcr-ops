@@ -2,6 +2,7 @@ package nl.meg.function.internal;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
+import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
@@ -16,11 +17,11 @@ final class ValidatingFunctionAdapterImpl<E extends Enum<E>,S,T> implements Vali
     }
 
     @Override
-    public Function<S, T> adapt(Validator<E, S> validator, Function<S, T> function) {
+    public ValidatingFunction<S, T> adapt(Validator<E, S> validator, Function<S, T> function) {
         return new Adapter(contextSupplier, validator, function);
     }
 
-    private final class Adapter implements Function<S, T> {
+    private final class Adapter implements ValidatingFunction<S, T> {
 
         private final Supplier<ValidationContext<E, S>> contextSupplier;
         private final Validator<E, S> validator;
@@ -33,13 +34,18 @@ final class ValidatingFunctionAdapterImpl<E extends Enum<E>,S,T> implements Vali
         }
 
         @Override
-        public T apply(S node) {
-            final ValidationContext<E, S> context = validator.validate(node, contextSupplier.get());
+        public T apply(S entity) throws ValidationException {
+            final ValidationContext<E, S> context = validate(entity);
             if (context.isValid()) {
-                return function.apply(node);
+                return function.apply(entity);
             } else {
                 throw new ValidationException(context.getErrors());
             }
+        }
+
+        @Override
+        public ValidationContext<E, S> validate(S entity) {
+            return validator.validate(entity, contextSupplier.get());
         }
     }
 }
