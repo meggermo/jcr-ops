@@ -9,4 +9,5 @@ public interface NodeMethods {
 
     ValidatingFunction<INode, INode> renameFunction(String newName);
 
+    ValidatingFunction<INode, INode> repositionFunction(int newPosition);
 }

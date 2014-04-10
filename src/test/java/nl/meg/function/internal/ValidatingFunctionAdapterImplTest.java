@@ -16,7 +16,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -68,4 +70,13 @@ public class ValidatingFunctionAdapterImplTest {
             assertEquals(errors, e.getErrors());
         }
     }
+
+    @Test
+    public void testValidate() {
+        when(contextSupplier.get()).thenReturn(context);
+        when(validator.validate("TEST", context)).thenReturn(context);
+        when(context.isValid()).thenReturn(false);
+        assertThat(adapter.adapt(validator, function).validate("TEST").isValid(), is(false));
+    }
+
 }

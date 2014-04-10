@@ -21,7 +21,7 @@ import static nl.meg.validation.ValidatorBuilder.builder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NodeMethodsImplTest {
@@ -68,8 +68,30 @@ public class NodeMethodsImplTest {
     }
 
     @Test
+    public void testValidateMoveCallsNodeValidators() {
+        nodeMethods.moveFunction(parent).validate(node);
+        verify(nodeValidators).isNotRoot();
+        verify(nodeValidators).canAddChild(parent);
+        verifyNoMoreInteractions(nodeValidators);
+    }
+
+    @Test
     public void testRename() {
         assertThat(nodeMethods.renameFunction("newName").apply(node), is(node));
     }
+
+    @Test
+    public void testValidateRenameCallsNodeValidators() {
+        nodeMethods.renameFunction("newName").validate(node);
+        verify(nodeValidators).isNotRoot();
+        verify(nodeValidators).canRenameTo("newName");
+        verifyNoMoreInteractions(nodeValidators);
+    }
+
+    @Test
+    public void testReposition() {
+        assertThat(nodeMethods.repositionFunction(0).apply(node), is(node));
+    }
+
 
 }

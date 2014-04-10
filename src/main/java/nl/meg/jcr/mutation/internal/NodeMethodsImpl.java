@@ -39,4 +39,13 @@ public final class NodeMethodsImpl implements NodeMethods {
         return adapter.adapt(validator, new RenameNodeImpl(newName));
     }
 
+    @Override
+    public ValidatingFunction<INode, INode> repositionFunction(int newPosition) {
+        final Validator<NodeErrorCode, INode> validator = validatorBuilder
+                .add(nodeValidators.isNotRoot())
+                .add(nodeValidators.supportsOrdering())
+                .add(nodeValidators.positionInBounds(newPosition))
+                .build();
+        return adapter.adapt(validator, new RepostionNodeImpl(newPosition));
+    }
 }

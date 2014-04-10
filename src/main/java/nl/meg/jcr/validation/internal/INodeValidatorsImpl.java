@@ -8,6 +8,7 @@ import nl.meg.validation.Validator;
 public final class INodeValidatorsImpl implements INodeValidators {
 
     private static final Validator<NodeErrorCode, INode> IS_NOT_ROOT = new IsNotRootValidator();
+    private static final Validator<NodeErrorCode, INode> SUPPORTS_ORDERING = new SupportsOrderingValidator();
 
     @Override
     public Validator<NodeErrorCode, INode> isNotRoot() {
@@ -22,5 +23,15 @@ public final class INodeValidatorsImpl implements INodeValidators {
     @Override
     public Validator<NodeErrorCode, INode> canRenameTo(String name) {
         return new CanRenameToValidator(name);
+    }
+
+    @Override
+    public Validator<NodeErrorCode, INode> positionInBounds(int newPosition) {
+        return new PositionInBoundsValidator(newPosition);
+    }
+
+    @Override
+    public Validator<NodeErrorCode, INode> supportsOrdering() {
+        return SUPPORTS_ORDERING;
     }
 }
