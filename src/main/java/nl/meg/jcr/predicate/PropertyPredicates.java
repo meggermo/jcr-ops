@@ -1,9 +1,9 @@
 package nl.meg.jcr.predicate;
 
-import com.google.common.base.Predicate;
 
 import javax.jcr.Property;
 import javax.jcr.Value;
+import java.util.function.Predicate;
 
 public interface PropertyPredicates {
 

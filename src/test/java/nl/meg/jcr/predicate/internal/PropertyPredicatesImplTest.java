@@ -1,8 +1,6 @@
 package nl.meg.jcr.predicate.internal;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import nl.meg.jcr.function.PropertyFunctions;
 import nl.meg.jcr.predicate.PropertyPredicates;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +9,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.Property;
+import javax.jcr.RepositoryException;
 import javax.jcr.Value;
+import java.util.function.Predicate;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -23,13 +23,7 @@ public class PropertyPredicatesImplTest {
     private PropertyPredicates propertyPredicates;
 
     @Mock
-    private PropertyFunctions pF;
-
-    @Mock
     private Property p;
-
-    @Mock
-    private Function<Property, String> nameF;
 
     @Mock
     private Predicate<Value> vP;
@@ -42,43 +36,38 @@ public class PropertyPredicatesImplTest {
 
     @Before
     public void setUp() {
-        propertyPredicates = new PropertyPredicatesImpl(pF);
+        propertyPredicates = new PropertyPredicatesImpl();
     }
 
     @Test
-    public void testNameIn() {
-        when(pF.getName()).thenReturn(nameF);
-        when(nameF.apply(p)).thenReturn("X");
-        assertThat(propertyPredicates.nameIn("X", "Y").apply(p), is(true));
-        assertThat(propertyPredicates.nameIn("A", "B").apply(p), is(false));
+    public void testNameIn() throws RepositoryException {
+        when(p.getName()).thenReturn("X");
+        assertThat(propertyPredicates.nameIn("X", "Y").test(p), is(true));
+        assertThat(propertyPredicates.nameIn("A", "B").test(p), is(false));
     }
 
     @Test
-    public void testPathIn() {
-        when(pF.getPath()).thenReturn(nameF);
-        when(nameF.apply(p)).thenReturn("X");
-        assertThat(propertyPredicates.pathIn("X", "Y").apply(p), is(true));
-        assertThat(propertyPredicates.pathIn("A", "B").apply(p), is(false));
+    public void testPathIn() throws RepositoryException {
+        when(p.getPath()).thenReturn("X");
+        assertThat(propertyPredicates.pathIn("X", "Y").test(p), is(true));
+        assertThat(propertyPredicates.pathIn("A", "B").test(p), is(false));
     }
 
     @Test
-    public void testWithValuePredicate() {
-        when(pF.getValue()).thenReturn(vF);
-        when(vF.apply(p)).thenReturn(v);
-        when(vP.apply(v)).thenReturn(true, false);
-        assertThat(propertyPredicates.with(vP).apply(p), is(true));
-        assertThat(propertyPredicates.with(vP).apply(p), is(false));
+    public void testWithValuePredicate() throws RepositoryException {
+        when(p.getValue()).thenReturn(v);
+        when(vP.test(v)).thenReturn(true, false);
+        assertThat(propertyPredicates.with(vP).test(p), is(true));
+        assertThat(propertyPredicates.with(vP).test(p), is(false));
     }
 
     @Test
-    public void testWithNamedValue() {
-        when(pF.getName()).thenReturn(nameF);
-        when(nameF.apply(p)).thenReturn("X");
-        when(pF.getValue()).thenReturn(vF);
-        when(vF.apply(p)).thenReturn(v);
-        when(vP.apply(v)).thenReturn(true, false);
-        assertThat(propertyPredicates.with(vP).apply(p), is(true));
-        assertThat(propertyPredicates.with("X", vP).apply(p), is(false));
+    public void testWithNamedValue() throws RepositoryException {
+        when(p.getValue()).thenReturn(v);
+        when(p.getName()).thenReturn("X");
+        when(vP.test(v)).thenReturn(true, false);
+        assertThat(propertyPredicates.with(vP).test(p), is(true));
+        assertThat(propertyPredicates.with("X", vP).test(p), is(false));
 
     }
 }

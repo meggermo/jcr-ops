@@ -1,9 +1,8 @@
 package nl.meg.jcr.predicate;
 
-import com.google.common.base.Predicate;
-
 import javax.jcr.Value;
 import java.util.Calendar;
+import java.util.function.Predicate;
 
 public interface ValuePredicates {
 

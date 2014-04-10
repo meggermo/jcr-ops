@@ -1,7 +1,5 @@
 package nl.meg.jcr.predicate.internal;
 
-import nl.meg.jcr.function.FunctionsFactory;
-import nl.meg.jcr.function.internal.FunctionsFactoryImpl;
 import nl.meg.jcr.predicate.*;
 
 public final class PredicatesFactoryImpl implements PredicatesFactory {
@@ -18,15 +16,11 @@ public final class PredicatesFactoryImpl implements PredicatesFactory {
         this.valuePredicates = valuePredicates;
     }
 
-    public PredicatesFactoryImpl(FunctionsFactory functionsFactory) {
-        this(new NodePredicatesImpl(functionsFactory.getNodeFunctions()),
-                new NodeTypePredicatesImpl(functionsFactory.getNodeTypeFunctions()),
-                new PropertyPredicatesImpl(functionsFactory.gePropertyFunctions()),
-                new ValuePredicatesImpl(functionsFactory.getValueFunctions()));
-    }
-
     public PredicatesFactoryImpl() {
-        this(new FunctionsFactoryImpl());
+        this(new NodePredicatesImpl(),
+                new NodeTypePredicatesImpl(),
+                new PropertyPredicatesImpl(),
+                new ValuePredicatesImpl());
     }
 
     @Override

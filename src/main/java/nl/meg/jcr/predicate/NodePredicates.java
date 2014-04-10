@@ -1,10 +1,10 @@
 package nl.meg.jcr.predicate;
 
-import com.google.common.base.Predicate;
 import nl.meg.jcr.INode;
 
 import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
+import java.util.function.Predicate;
 
 public interface NodePredicates {
 
