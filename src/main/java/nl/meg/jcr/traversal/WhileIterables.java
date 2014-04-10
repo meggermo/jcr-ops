@@ -1,6 +1,7 @@
 package nl.meg.jcr.traversal;
 
-import com.google.common.base.Predicate;
+
+import java.util.function.Predicate;
 
 public interface WhileIterables {
 

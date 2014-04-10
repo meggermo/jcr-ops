@@ -1,7 +1,6 @@
 package nl.meg.function.internal;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
@@ -15,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
