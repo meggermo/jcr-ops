@@ -1,6 +1,5 @@
 package nl.meg.validation;
 
-import com.google.common.base.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -8,6 +7,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -48,7 +48,7 @@ public class CompositeValidatorImplTest {
 
     @Test
     public void testValidate_ContinueEvenWithErrors() {
-        when(p.apply(any(ValidationContext.class))).thenReturn(true);
+        when(p.test(any(ValidationContext.class))).thenReturn(true);
         when(c0.isValid()).thenReturn(false);
         when(v0.validate("TEST", c0)).thenReturn(c1);
         when(c1.isValid()).thenReturn(false);
@@ -58,7 +58,7 @@ public class CompositeValidatorImplTest {
 
     @Test
     public void testValidate_WithoutValidators() {
-        when(p.apply(any(ValidationContext.class))).thenReturn(true);
+        when(p.test(any(ValidationContext.class))).thenReturn(true);
         final List<Validator<E, String>> validators = Collections.emptyList();
         assertThat(new CompositeValidatorImpl<>(validators, p).validate("TEST", c0), is(c0));
     }

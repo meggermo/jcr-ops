@@ -1,6 +1,5 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.validation.NodeErrorCode;
@@ -13,12 +12,7 @@ final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCo
     private String name;
 
     CanRenameToValidator(final String name) {
-        super(new Predicate<INode>() {
-            @Override
-            public boolean apply(INode input) {
-                return !input.getParent().get().getNode(name).isPresent();
-            }
-        });
+        super(input -> !input.getParent().get().getNode(name).isPresent());
         this.name = name;
     }
 

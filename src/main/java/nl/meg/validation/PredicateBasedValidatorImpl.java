@@ -1,9 +1,9 @@
 package nl.meg.validation;
 
-import com.google.common.base.Predicate;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class PredicateBasedValidatorImpl<E extends Enum<E>, T> implements Validator<E, T> {
 
@@ -15,7 +15,7 @@ public abstract class PredicateBasedValidatorImpl<E extends Enum<E>, T> implemen
 
     @Override
     public final ValidationContext<E, T> validate(T entity, ValidationContext<E, T> context) {
-        if (p.apply(entity)) {
+        if (p.test(entity)) {
             return context;
         } else {
             return context.addError(getError(), getContextMap(entity));

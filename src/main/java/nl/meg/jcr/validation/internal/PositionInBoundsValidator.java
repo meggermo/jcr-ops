@@ -1,6 +1,5 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Range;
 import nl.meg.jcr.INode;
@@ -16,12 +15,7 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
     private final int newPosition;
 
     PositionInBoundsValidator(final int newPosition) {
-        super(new Predicate<INode>() {
-            @Override
-            public boolean apply(INode node) {
-                return positionInRange(node.getParent().get(), newPosition);
-            }
-        });
+        super(node -> positionInRange(node.getParent().get(), newPosition));
         this.newPosition = newPosition;
     }
 

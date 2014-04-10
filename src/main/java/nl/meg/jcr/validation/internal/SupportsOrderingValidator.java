@@ -1,6 +1,5 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Predicate;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.PredicateBasedValidatorImpl;
@@ -8,12 +7,7 @@ import nl.meg.validation.PredicateBasedValidatorImpl;
 final class SupportsOrderingValidator extends PredicateBasedValidatorImpl<NodeErrorCode, INode> {
 
     SupportsOrderingValidator() {
-        super(new Predicate<INode>() {
-            @Override
-            public boolean apply(INode input) {
-                return supportsOrdering(input.getParent().get());
-            }
-        });
+        super(input -> supportsOrdering(input.getParent().get()));
     }
 
     @Override
