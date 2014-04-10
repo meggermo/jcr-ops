@@ -1,6 +1,5 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Optional;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import org.junit.Before;
@@ -10,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

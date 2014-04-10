@@ -1,13 +1,13 @@
 package nl.meg.jcr.function;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import nl.meg.jcr.INode;
 
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Iterator;
+import java.util.Optional;
 
 public interface NodeFunctions {
 

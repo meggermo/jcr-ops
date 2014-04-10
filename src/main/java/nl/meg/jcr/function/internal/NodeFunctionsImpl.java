@@ -1,7 +1,6 @@
 package nl.meg.jcr.function.internal;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.function.NodeFunctions;
@@ -10,6 +9,7 @@ import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Iterator;
+import java.util.Optional;
 
 final class NodeFunctionsImpl implements NodeFunctions {
 

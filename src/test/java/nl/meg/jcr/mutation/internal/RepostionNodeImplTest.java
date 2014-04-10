@@ -1,6 +1,5 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Optional;
 import nl.meg.jcr.INode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

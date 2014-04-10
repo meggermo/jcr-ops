@@ -1,6 +1,5 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Optional;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
@@ -12,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.nodetype.NodeType;
-
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Matchers.eq;
@@ -63,7 +62,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testCanRenameTo() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNode("name")).thenReturn(Optional.<INode>absent());
+        when(parent.getNode("name")).thenReturn(Optional.<INode>empty());
         iNodeValidators.canRenameTo("name").validate(iNode, context);
         verifyZeroInteractions(context);
     }

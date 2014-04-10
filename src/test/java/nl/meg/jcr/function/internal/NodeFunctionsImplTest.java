@@ -1,6 +1,5 @@
 package nl.meg.jcr.function.internal;
 
-import com.google.common.base.Optional;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.function.NodeFunctions;
 import org.junit.Test;
@@ -12,6 +11,7 @@ import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -26,7 +26,7 @@ public class NodeFunctionsImplTest {
     private INode node;
 
     @Mock
-    private Optional<INode> parent;
+    private INode parent;
 
     @Mock
     private NodeType nodeType;
@@ -92,15 +92,13 @@ public class NodeFunctionsImplTest {
 
     @Test
     public void testGetParent() throws RepositoryException {
-        when(node.getParent()).thenReturn(parent);
-        when(parent.get()).thenReturn(node);
-        assertThat(nodeFunctions.getParent().apply(node).get(), is(node));
+        when(node.getParent()).thenReturn(Optional.of(parent));
+        assertThat(nodeFunctions.getParent().apply(node).get(), is(parent));
     }
 
     @Test
     public void testGetParentOfRoot() throws RepositoryException {
-        when(node.getParent()).thenReturn(parent);
-        when(parent.isPresent()).thenReturn(false);
+        when(node.getParent()).thenReturn(Optional.<INode>empty());
         assertThat(nodeFunctions.getParent().apply(node).isPresent(), is(false));
     }
 
@@ -119,7 +117,7 @@ public class NodeFunctionsImplTest {
 
     @Test
     public void testGetAbsentProperty() throws RepositoryException {
-        when(node.getProperty("X")).thenReturn(Optional.<Property>absent());
+        when(node.getProperty("X")).thenReturn(Optional.<Property>empty());
         assertThat(nodeFunctions.getProperty("X").apply(node).isPresent(), is(false));
     }
 

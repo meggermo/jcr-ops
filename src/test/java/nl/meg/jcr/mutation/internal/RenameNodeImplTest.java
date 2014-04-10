@@ -1,6 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Optional;
+
 import nl.meg.jcr.INode;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +12,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

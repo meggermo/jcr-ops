@@ -1,6 +1,5 @@
 package nl.meg.jcr.internal;
 
-import com.google.common.base.Optional;
 import nl.meg.jcr.INode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
@@ -27,7 +26,7 @@ public class INodeImplTest {
     private Node node, root;
 
     @Mock
-    private Optional<INode> parent;
+    private INode parent;
 
     @Mock
     private NodeType nodeType;

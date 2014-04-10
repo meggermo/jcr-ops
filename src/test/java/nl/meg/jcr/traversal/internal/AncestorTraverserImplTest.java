@@ -1,6 +1,5 @@
 package nl.meg.jcr.traversal.internal;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.TreeTraverser;
 import nl.meg.jcr.INode;
 import org.junit.Before;
@@ -11,6 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.RepositoryException;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -26,36 +26,24 @@ public class AncestorTraverserImplTest {
     private INode n0, n1, n2, n3, n4;
 
     @Mock
-    private Optional<INode> on1, on2, on3, on4, on5;
-
-    @Mock
     private RepositoryException e;
 
     @Before
     public void setUp() throws RepositoryException {
 
-        when(n0.getParent()).thenReturn(on1);
-        when(on1.isPresent()).thenReturn(true);
-        when(on1.get()).thenReturn(n1);
+        when(n0.getParent()).thenReturn(Optional.of(n1));
 
         when(n1.getName()).thenReturn("n1");
-        when(n1.getParent()).thenReturn(on2);
-        when(on2.isPresent()).thenReturn(true);
-        when(on2.get()).thenReturn(n2);
+        when(n1.getParent()).thenReturn(Optional.of(n2));
 
         when(n2.getName()).thenReturn("n2");
-        when(n2.getParent()).thenReturn(on3);
-        when(on3.isPresent()).thenReturn(true);
-        when(on3.get()).thenReturn(n3);
+        when(n2.getParent()).thenReturn(Optional.of(n3));
 
         when(n3.getName()).thenReturn("n3");
-        when(n3.getParent()).thenReturn(on4);
-        when(on4.isPresent()).thenReturn(true);
-        when(on4.get()).thenReturn(n4);
+        when(n3.getParent()).thenReturn(Optional.of(n4));
 
         when(n4.getName()).thenReturn("n4");
-        when(n4.getParent()).thenReturn(on5);
-        when(on5.isPresent()).thenReturn(false);
+        when(n4.getParent()).thenReturn(Optional.empty());
     }
 
     @Test

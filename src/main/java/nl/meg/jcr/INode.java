@@ -1,44 +1,103 @@
 package nl.meg.jcr;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
-
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-public interface INode extends Supplier<Node> {
+import static com.google.common.collect.ImmutableList.copyOf;
+import static java.util.Collections.emptyIterator;
+import static nl.meg.jcr.RepoFunctionInvoker.invoke;
 
-    Integer getIndex();
+public interface INode extends Supplier<Node>, Function<Node, INode> {
 
-    String getIdentifier();
+    default Integer getIndex() {
+        return invoke(get(), Node::getIndex);
+    }
 
-    String getName();
+    default String getIdentifier() {
+        return invoke(get(), Node::getIdentifier);
+    }
 
-    String getPath();
+    default String getName() {
+        return invoke(get(), Node::getName);
+    }
 
-    Session getSession();
+    default String getPath() {
+        return invoke(get(), Node::getPath);
+    }
 
-    boolean isRoot();
+    default Session getSession() {
+        return invoke(get(), Node::getSession);
+    }
 
-    boolean isSame(INode node);
+    default boolean isRoot() {
+        return invoke(get(), n -> n.getSession().getRootNode().isSame(get()));
+    }
 
-    Optional<INode> getNode(String name);
+    default boolean isSame(INode node) {
+        return invoke(get(), n -> n.isSame(node.get()));
+    }
 
-    Iterator<INode> getNodes();
+    default Optional<INode> getNode(String name) {
+        return invoke(get(),
+                n -> n.hasNode(name)
+                        ? Optional.of(apply(n.getNode(name)))
+                        : Optional.empty()
+        );
+    }
 
-    Optional<Property> getProperty(String name);
+    default Optional<Property> getProperty(String name) {
+        return invoke(get(),
+                n -> n.hasProperty(name)
+                        ? Optional.of(n.getProperty(name))
+                        : Optional.empty()
+        );
+    }
 
-    Iterator<Property> getProperties();
+    @SuppressWarnings("unchecked")
+    default Iterator<Property> getProperties() {
+        return invoke(get(),
+                n -> n.hasProperties()
+                        ? n.getProperties()
+                        : emptyIterator()
+        );
+    }
 
-    boolean isNodeType(String nodeTypeName);
+    default boolean isNodeType(String nodeTypeName) {
+        return invoke(get(), n -> n.isNodeType(nodeTypeName));
+    }
 
-    NodeType getPrimaryNodeType();
+    default NodeType getPrimaryNodeType() {
+        return invoke(get(), Node::getPrimaryNodeType);
+    }
 
-    NodeType[] getMixinNodeTypes();
+    default NodeType[] getMixinNodeTypes() {
+        return invoke(get(), Node::getMixinNodeTypes);
+    }
 
-    Optional<INode> getParent();
+    @SuppressWarnings("unchecked")
+    default Iterator<INode> getNodes() {
+        return invoke(get(),
+                n -> n.hasNodes()
+                        ? copyOf(n.getNodes()).stream().map(this).iterator()
+                        : emptyIterator()
+        );
+    }
+
+    default Optional<INode> getParent() {
+        return invoke(get(), n -> {
+            try {
+                return Optional.of(INode.this.apply(n.getParent()));
+            } catch (ItemNotFoundException e) {
+                return Optional.empty();
+            }
+        });
+    }
 
 }
