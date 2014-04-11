@@ -1,14 +1,12 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
 import javax.jcr.RepositoryException;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
 
@@ -21,13 +19,8 @@ final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
     @Override
     public HippoNode apply(final HippoNode node) {
         final HippoNode parent = node.getParent().get();
-        final List<HippoNode> nodes = ImmutableList.copyOf(parent.getNodes());
-        final int currentPosition = Iterables.indexOf(nodes, new Predicate<HippoNode>() {
-            @Override
-            public boolean apply(HippoNode input) {
-                return input.isSame(node);
-            }
-        });
+        final List<HippoNode> nodes = parent.getNodeStream().collect(Collectors.toList());
+        final int currentPosition = nodes.indexOf(node);
         final String sourceName = node.getName();
         final String targetName;
         if (newPosition < currentPosition) {
@@ -42,7 +35,7 @@ final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
             targetName = node.getName();
         }
         try {
-            parent.get().orderBefore(sourceName,targetName);
+            parent.get().orderBefore(sourceName, targetName);
         } catch (RepositoryException e) {
             throw new RuntimeRepositoryException(e);
         }

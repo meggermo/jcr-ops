@@ -1,7 +1,8 @@
 package nl.meg.function;
 
-import com.google.common.base.Function;
 import nl.meg.validation.Validator;
+
+import java.util.function.Function;
 
 public interface ValidatingFunctionAdapter<E extends Enum<E>, S, T> {
 

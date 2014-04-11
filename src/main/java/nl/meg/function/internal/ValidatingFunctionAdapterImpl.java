@@ -1,15 +1,15 @@
 package nl.meg.function.internal;
 
-import com.google.common.base.Function;
 import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-final class ValidatingFunctionAdapterImpl<E extends Enum<E>,S,T> implements ValidatingFunctionAdapter<E,S,T> {
+final class ValidatingFunctionAdapterImpl<E extends Enum<E>, S, T> implements ValidatingFunctionAdapter<E, S, T> {
 
     private final Supplier<ValidationContext<E, S>> contextSupplier;
 

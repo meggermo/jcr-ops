@@ -97,7 +97,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testPositionInBounds() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodes()).thenReturn(Arrays.asList(iNode).iterator());
+        when(parent.getNodeStream()).thenReturn(Arrays.asList(iNode).stream());
         iNodeValidators.positionInBounds(0).validate(iNode, context);
         verifyZeroInteractions(context);
     }
@@ -105,7 +105,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testPositionInBounds_ValidationError() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodes()).thenReturn(Arrays.asList(iNode).iterator());
+        when(parent.getNodeStream()).thenReturn(Arrays.asList(iNode).stream(), Arrays.asList(iNode).stream());
         iNodeValidators.positionInBounds(2).validate(iNode, context);
         verify(context).addError(eq(NodeErrorCode.POSITION_OUT_OF_RANGE), anyMapOf(String.class, Object.class));
     }

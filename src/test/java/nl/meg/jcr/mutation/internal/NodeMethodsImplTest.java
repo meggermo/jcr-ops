@@ -1,7 +1,5 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.jcr.HippoNode;
@@ -16,7 +14,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static nl.meg.validation.ValidatorBuilder.builder;
 import static org.hamcrest.CoreMatchers.is;

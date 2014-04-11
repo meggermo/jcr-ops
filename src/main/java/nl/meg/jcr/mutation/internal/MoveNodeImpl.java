@@ -1,7 +1,8 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
 import nl.meg.jcr.HippoNode;
+
+import java.util.function.Function;
 
 final class MoveNodeImpl implements Function<HippoNode, HippoNode> {
 

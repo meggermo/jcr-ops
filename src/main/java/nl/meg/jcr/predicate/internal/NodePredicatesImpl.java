@@ -5,11 +5,10 @@ import nl.meg.jcr.predicate.NodePredicates;
 
 import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
-import java.util.Iterator;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
-import static com.google.common.collect.Iterators.*;
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.of;
 
 final class NodePredicatesImpl implements NodePredicates {
 
@@ -25,27 +24,24 @@ final class NodePredicatesImpl implements NodePredicates {
 
     @Override
     public Predicate<HippoNode> identifierIn(String... identifiers) {
-        return n -> Stream.of(identifiers).anyMatch(i -> i.equals(n.getIdentifier()));
+        return n -> of(identifiers).anyMatch(i -> i.equals(n.getIdentifier()));
     }
 
     @Override
     public Predicate<HippoNode> nameIn(String... names) {
-        return n -> Stream.of(names).anyMatch(i -> i.equals(n.getName()));
+        return n -> of(names).anyMatch(i -> i.equals(n.getName()));
     }
 
     @Override
     public Predicate<HippoNode> withProperty(final Predicate<Property> predicate) {
-        return n -> tryFind(n.getProperties(), predicate::test).isPresent();
+        return n -> n.getPropertyStream().anyMatch(predicate);
     }
 
     @Override
     public Predicate<HippoNode> withNodeType(final Predicate<NodeType> predicate) {
-        return node -> {
-            final Iterator<NodeType> nodeTypeIterator = concat(
-                    forArray(node.getMixinNodeTypes()),
-                    singletonIterator(node.getPrimaryNodeType()));
-            return tryFind(nodeTypeIterator, predicate::test).isPresent();
-        };
+        return node ->
+                concat(of(node.getMixinNodeTypes()),
+                        of(node.getPrimaryNodeType())).anyMatch(predicate);
     }
 
 }

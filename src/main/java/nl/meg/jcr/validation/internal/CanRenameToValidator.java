@@ -1,10 +1,10 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.collect.ImmutableMap;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.PredicateBasedValidatorImpl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
@@ -18,11 +18,10 @@ final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCo
 
     @Override
     protected Map<String, ?> getContextMap(HippoNode entity) {
-        final ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
-        return builder
-                .put("path", entity.getParent().get().getPath())
-                .put("name", name)
-                .build();
+        final Map<String, Object> map = new HashMap<>();
+        map.put("path", entity.getParent().get().getPath());
+        map.put("name", name);
+        return map;
     }
 
     @Override

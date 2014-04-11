@@ -1,6 +1,5 @@
 package nl.meg.jcr.predicate.internal;
 
-import com.google.common.base.Function;
 import nl.meg.jcr.predicate.PropertyPredicates;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +26,6 @@ public class PropertyPredicatesImplTest {
 
     @Mock
     private Predicate<Value> vP;
-
-    @Mock
-    private Function<Property, Value> vF;
 
     @Mock
     private Value v;

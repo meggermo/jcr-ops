@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -81,9 +82,7 @@ public class NodePredicatesImplTest {
 
     @Test
     public void testWithProperty() throws RepositoryException {
-        when(n1.getProperties()).thenReturn(p1I);
-        when(p1I.hasNext()).thenReturn(true, false);
-        when(p1I.next()).thenReturn(p1P);
+        when(n1.getPropertyStream()).thenReturn(Arrays.asList(p1P).stream());
         when(pP.test(p1P)).thenReturn(true);
         assertThat(nP.withProperty(pP).test(n1), is(true));
     }

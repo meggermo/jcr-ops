@@ -1,15 +1,13 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
 import javax.jcr.RepositoryException;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static com.google.common.base.Predicates.compose;
-import static com.google.common.base.Predicates.equalTo;
 import static java.lang.String.format;
 
 final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
@@ -43,8 +41,8 @@ final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
     }
 
     private HippoNode moveAndReorder(HippoNode parent, HippoNode node) {
-        final ImmutableList<HippoNode> nodes = ImmutableList.copyOf(parent.getNodes());
-        int nodeIndex = Iterables.indexOf(nodes, compose(equalTo(node.getName()), GET_NAME));
+        final List<HippoNode> nodes = parent.getNodeStream().collect(Collectors.toList());
+        final int nodeIndex = nodes.indexOf(node);
         move(parent, node);
         if (nodeIndex < nodes.size() - 1) {
             try {
@@ -60,10 +58,4 @@ final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
         return node.getPrimaryNodeType().hasOrderableChildNodes();
     }
 
-    private static final Function<HippoNode, String> GET_NAME = new Function<HippoNode, String>() {
-        @Override
-        public String apply(HippoNode input) {
-            return input.getName();
-        }
-    };
 }

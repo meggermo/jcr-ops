@@ -53,7 +53,7 @@ public class RenameNodeImplTest {
         when(node.getParent()).thenReturn(Optional.of(parent));
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
-        when(parent.getNodes()).thenReturn(Arrays.asList(node, node).iterator());
+        when(parent.getNodeStream()).thenReturn(Arrays.asList(node, node).stream());
         when(node.getName()).thenReturn("name");
         when(node.getSession()).thenReturn(session);
         when(parent.get()).thenReturn(n);
