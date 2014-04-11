@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 
 public final class RepoFunctionInvoker {
 
-    public static <S, T> T invoke(S source, RepoFunction<S, T> repoFunction) {
+    public static <S, T> T invoke(RepoFunction<S, T> repoFunction, S source) {
         try {
             return repoFunction.apply(source);
         } catch (RepositoryException e) {

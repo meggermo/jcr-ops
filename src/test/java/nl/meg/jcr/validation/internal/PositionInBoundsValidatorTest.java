@@ -1,6 +1,6 @@
 package nl.meg.jcr.validation.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class PositionInBoundsValidatorTest {
     private PositionInBoundsValidator validator;
 
     @Mock
-    private INode entity, parent;
+    private HippoNode entity, parent;
 
     @Before
     public void setUp() {

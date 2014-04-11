@@ -1,13 +1,13 @@
 package nl.meg.jcr.mutation;
 
 import nl.meg.function.ValidatingFunction;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 
 public interface NodeMethods {
 
-    ValidatingFunction<INode, INode> moveFunction(INode newParent);
+    ValidatingFunction<HippoNode, HippoNode> moveFunction(HippoNode newParent);
 
-    ValidatingFunction<INode, INode> renameFunction(String newName);
+    ValidatingFunction<HippoNode, HippoNode> renameFunction(String newName);
 
-    ValidatingFunction<INode, INode> repositionFunction(int newPosition);
+    ValidatingFunction<HippoNode, HippoNode> repositionFunction(int newPosition);
 }

@@ -1,6 +1,6 @@
 package nl.meg.jcr.predicate.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.predicate.NodePredicates;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class NodePredicatesImplTest {
     private NodePredicates nP;
 
     @Mock
-    private INode n1, n2;
+    private HippoNode n1, n2;
 
     @Mock
     private Iterator<Property> p1I;

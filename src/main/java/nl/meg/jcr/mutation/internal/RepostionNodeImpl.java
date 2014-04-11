@@ -4,13 +4,13 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
 import javax.jcr.RepositoryException;
 import java.util.List;
 
-final class RepostionNodeImpl implements Function<INode, INode> {
+final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
 
     private final int newPosition;
 
@@ -19,12 +19,12 @@ final class RepostionNodeImpl implements Function<INode, INode> {
     }
 
     @Override
-    public INode apply(final INode node) {
-        final INode parent = node.getParent().get();
-        final List<INode> nodes = ImmutableList.copyOf(parent.getNodes());
-        final int currentPosition = Iterables.indexOf(nodes, new Predicate<INode>() {
+    public HippoNode apply(final HippoNode node) {
+        final HippoNode parent = node.getParent().get();
+        final List<HippoNode> nodes = ImmutableList.copyOf(parent.getNodes());
+        final int currentPosition = Iterables.indexOf(nodes, new Predicate<HippoNode>() {
             @Override
-            public boolean apply(INode input) {
+            public boolean apply(HippoNode input) {
                 return input.isSame(node);
             }
         });

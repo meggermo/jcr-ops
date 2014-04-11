@@ -1,13 +1,13 @@
 package nl.meg.jcr.validation.internal;
 
 import com.google.common.collect.ImmutableMap;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.PredicateBasedValidatorImpl;
 
 import java.util.Map;
 
-final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCode, INode> {
+final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
 
     private String name;
 
@@ -17,7 +17,7 @@ final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCo
     }
 
     @Override
-    protected Map<String, ?> getContextMap(INode entity) {
+    protected Map<String, ?> getContextMap(HippoNode entity) {
         final ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
         return builder
                 .put("path", entity.getParent().get().getPath())

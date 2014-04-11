@@ -1,6 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ public class MoveNodeImplTest {
     private MoveNodeImpl moveNode;
 
     @Mock
-    private INode node, parent;
+    private HippoNode node, parent;
 
     @Mock
     private Session session;

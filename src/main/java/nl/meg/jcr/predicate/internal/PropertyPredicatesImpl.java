@@ -13,17 +13,17 @@ final class PropertyPredicatesImpl implements PropertyPredicates {
 
     @Override
     public Predicate<Property> nameIn(String... names) {
-        return property -> Stream.of(names).anyMatch(name -> invoke(property, Property::getName).equals(name));
+        return property -> Stream.of(names).anyMatch(name -> invoke(Property::getName, property).equals(name));
     }
 
     @Override
     public Predicate<Property> pathIn(String... paths) {
-        return property -> Stream.of(paths).anyMatch(path -> invoke(property, Property::getPath).equals(path));
+        return property -> Stream.of(paths).anyMatch(path -> invoke(Property::getPath, property).equals(path));
     }
 
     @Override
     public Predicate<Property> with(Predicate<Value> valuePredicate) {
-        return property -> valuePredicate.test(invoke(property, Property::getValue));
+        return property -> valuePredicate.test(invoke(Property::getValue, property));
     }
 
     @Override

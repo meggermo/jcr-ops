@@ -2,7 +2,7 @@ package nl.meg.jcr.mutation.internal;
 
 import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
@@ -12,18 +12,18 @@ import nl.meg.validation.ValidatorBuilder;
 public final class NodeMethodsImpl implements NodeMethods {
 
     private final INodeValidators nodeValidators;
-    private final ValidatorBuilder<NodeErrorCode, INode> validatorBuilder;
-    private final ValidatingFunctionAdapter<NodeErrorCode, INode, INode> adapter;
+    private final ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder;
+    private final ValidatingFunctionAdapter<NodeErrorCode, HippoNode, HippoNode> adapter;
 
-    public NodeMethodsImpl(INodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, INode> validatorBuilder, ValidatingFunctionAdapter<NodeErrorCode, INode, INode> adapter) {
+    public NodeMethodsImpl(INodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder, ValidatingFunctionAdapter<NodeErrorCode, HippoNode, HippoNode> adapter) {
         this.nodeValidators = nodeValidators;
         this.validatorBuilder = validatorBuilder;
         this.adapter = adapter;
     }
 
     @Override
-    public ValidatingFunction<INode, INode> moveFunction(INode newParent) {
-        final Validator<NodeErrorCode, INode> validator = validatorBuilder
+    public ValidatingFunction<HippoNode, HippoNode> moveFunction(HippoNode newParent) {
+        final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
                 .build();
@@ -31,8 +31,8 @@ public final class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public ValidatingFunction<INode, INode> renameFunction(String newName) {
-        final Validator<NodeErrorCode, INode> validator = validatorBuilder
+    public ValidatingFunction<HippoNode, HippoNode> renameFunction(String newName) {
+        final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
                 .build();
@@ -40,8 +40,8 @@ public final class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public ValidatingFunction<INode, INode> repositionFunction(int newPosition) {
-        final Validator<NodeErrorCode, INode> validator = validatorBuilder
+    public ValidatingFunction<HippoNode, HippoNode> repositionFunction(int newPosition) {
+        final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.supportsOrdering())
                 .add(nodeValidators.positionInBounds(newPosition))

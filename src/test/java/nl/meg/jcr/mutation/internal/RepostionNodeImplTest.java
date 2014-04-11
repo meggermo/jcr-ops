@@ -1,6 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class RepostionNodeImplTest {
 
     @Mock
-    private INode n0, n1, n2, n3, parent;
+    private HippoNode n0, n1, n2, n3, parent;
 
     @Mock
     private Node p;

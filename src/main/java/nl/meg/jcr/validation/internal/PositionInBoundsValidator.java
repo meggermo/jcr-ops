@@ -2,7 +2,7 @@ package nl.meg.jcr.validation.internal;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Range;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.PredicateBasedValidatorImpl;
 
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Iterators.size;
 
-final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeErrorCode, INode> {
+final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
 
     private final int newPosition;
 
@@ -20,7 +20,7 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
     }
 
     @Override
-    protected Map<String, ?> getContextMap(INode entity) {
+    protected Map<String, ?> getContextMap(HippoNode entity) {
         final ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
         return builder
                 .put("min", 0)
@@ -34,7 +34,7 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
         return NodeErrorCode.POSITION_OUT_OF_RANGE;
     }
 
-    private static boolean positionInRange(INode node, int postion) {
+    private static boolean positionInRange(HippoNode node, int postion) {
         return Range.closedOpen(0, size(node.getNodes())).contains(postion);
     }
 }

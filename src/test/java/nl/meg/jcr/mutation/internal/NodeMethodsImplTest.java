@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
@@ -30,28 +30,28 @@ public class NodeMethodsImplTest {
     private NodeMethods nodeMethods;
 
     @Mock
-    private INode node, parent;
+    private HippoNode node, parent;
 
     @Mock
     private INodeValidators nodeValidators;
 
     @Mock
-    private Predicate<ValidationContext<NodeErrorCode, INode>> continueValidation;
+    private Predicate<ValidationContext<NodeErrorCode, HippoNode>> continueValidation;
 
     @Mock
-    private Supplier<ValidationContext<NodeErrorCode, INode>> contextSupplier;
+    private Supplier<ValidationContext<NodeErrorCode, HippoNode>> contextSupplier;
 
     @Mock
-    private Validator<NodeErrorCode, INode> validator;
+    private Validator<NodeErrorCode, HippoNode> validator;
 
     @Mock
-    private ValidationContext<NodeErrorCode, INode> context;
+    private ValidationContext<NodeErrorCode, HippoNode> context;
 
     @Mock
-    private ValidatingFunctionAdapter<NodeErrorCode, INode, INode> validatingFunctionAdapter;
+    private ValidatingFunctionAdapter<NodeErrorCode, HippoNode, HippoNode> validatingFunctionAdapter;
 
     @Mock
-    private ValidatingFunction<INode, INode> function;
+    private ValidatingFunction<HippoNode, HippoNode> function;
 
     @Before
     public void setUp() {

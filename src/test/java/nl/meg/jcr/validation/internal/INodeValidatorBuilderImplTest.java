@@ -1,6 +1,6 @@
 package nl.meg.jcr.validation.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.ValidationContext;
@@ -24,10 +24,10 @@ public class INodeValidatorBuilderImplTest {
     private INodeValidators iNodeValidators;
 
     @Mock
-    private INode iNode, parent;
+    private HippoNode iNode, parent;
 
     @Mock
-    private ValidationContext<NodeErrorCode, INode> context;
+    private ValidationContext<NodeErrorCode, HippoNode> context;
 
     @Mock
     private NodeType nodeType;
@@ -62,7 +62,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testCanRenameTo() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNode("name")).thenReturn(Optional.<INode>empty());
+        when(parent.getNode("name")).thenReturn(Optional.<HippoNode>empty());
         iNodeValidators.canRenameTo("name").validate(iNode, context);
         verifyZeroInteractions(context);
     }

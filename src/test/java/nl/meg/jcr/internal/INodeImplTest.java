@@ -1,6 +1,6 @@
 package nl.meg.jcr.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -20,19 +23,16 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class INodeImplTest {
 
-    private INode iNode;
+    private HippoNode iNode;
 
     @Mock
     private Node node, root;
 
     @Mock
-    private INode parent;
+    private HippoNode parent;
 
     @Mock
     private NodeType nodeType;
-
-    @Mock
-    private NodeIterator nodeIterator;
 
     @Mock
     private PropertyIterator propertyIterator;
@@ -48,7 +48,7 @@ public class INodeImplTest {
 
     @Before
     public void setUp() {
-        this.iNode = new INodeImpl(node);
+        this.iNode = new HippoNodeImpl(node);
     }
     @Test
     public void testGetSession() throws RepositoryException {
@@ -122,9 +122,7 @@ public class INodeImplTest {
     @Test
     public void testGetNodes() throws RepositoryException {
         when(node.hasNodes()).thenReturn(true);
-        when(node.getNodes()).thenReturn(nodeIterator);
-        when(nodeIterator.hasNext()).thenReturn(true,false);
-        when(nodeIterator.next()).thenReturn(node);
+        when(node.getNodes()).thenReturn(getNodeIterator(node));
         assertThat(iNode.getNodes().next().get(), is(node));
     }
 
@@ -297,6 +295,43 @@ public class INodeImplTest {
 
     private void shouldHaveThrown() {
         fail("expected exception to be thrown");
+    }
+
+    private NodeIterator getNodeIterator(final Node... nodes) {
+
+        return new NodeIterator() {
+            final AtomicInteger i = new AtomicInteger();
+            final List<Node> nodeList = Arrays.asList(nodes);
+            @Override
+            public Node nextNode() {
+                return nodeList.get(i.getAndIncrement());
+            }
+
+            @Override
+            public void skip(long skipNum) {
+                i.addAndGet((int)skipNum);
+            }
+
+            @Override
+            public long getSize() {
+                return nodeList.size();
+            }
+
+            @Override
+            public long getPosition() {
+                return i.get();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return i.get() < getSize();
+            }
+
+            @Override
+            public Object next() {
+                return nextNode();
+            }
+        };
     }
 
 }

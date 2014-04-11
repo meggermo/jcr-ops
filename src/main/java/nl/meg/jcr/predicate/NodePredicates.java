@@ -1,6 +1,6 @@
 package nl.meg.jcr.predicate;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 
 import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
@@ -8,15 +8,15 @@ import java.util.function.Predicate;
 
 public interface NodePredicates {
 
-    Predicate<INode> isSame(INode other);
+    Predicate<HippoNode> isSame(HippoNode other);
 
-    Predicate<INode> isNodeType(String nodeTypeName);
+    Predicate<HippoNode> isNodeType(String nodeTypeName);
 
-    Predicate<INode> identifierIn(String... identifiers);
+    Predicate<HippoNode> identifierIn(String... identifiers);
 
-    Predicate<INode> nameIn(String... names);
+    Predicate<HippoNode> nameIn(String... names);
 
-    Predicate<INode> withProperty(Predicate<Property> predicate);
+    Predicate<HippoNode> withProperty(Predicate<Property> predicate);
 
-    Predicate<INode> withNodeType(Predicate<NodeType> predicate);
+    Predicate<HippoNode> withNodeType(Predicate<NodeType> predicate);
 }

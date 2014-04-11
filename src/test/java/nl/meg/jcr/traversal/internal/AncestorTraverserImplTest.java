@@ -1,7 +1,7 @@
 package nl.meg.jcr.traversal.internal;
 
 import com.google.common.collect.TreeTraverser;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +20,10 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AncestorTraverserImplTest {
 
-    private final TreeTraverser<INode> traverser = new AncestorTraverserImpl();
+    private final TreeTraverser<HippoNode> traverser = new AncestorTraverserImpl();
 
     @Mock
-    private INode n0, n1, n2, n3, n4;
+    private HippoNode n0, n1, n2, n3, n4;
 
     @Mock
     private RepositoryException e;
@@ -48,19 +48,19 @@ public class AncestorTraverserImplTest {
 
     @Test
     public void testTraversePreOrder() {
-        final List<INode> ancestors = traverser.preOrderTraversal(n0).toList();
+        final List<HippoNode> ancestors = traverser.preOrderTraversal(n0).toList();
         assertThat(ancestors, is(asList(n0, n1, n2, n3, n4)));
     }
 
     @Test
     public void testTraversePostOrder() {
-        final List<INode> ancestors = traverser.postOrderTraversal(n0).toList();
+        final List<HippoNode> ancestors = traverser.postOrderTraversal(n0).toList();
         assertThat(ancestors, is(asList(n4, n3, n2, n1, n0)));
     }
 
     @Test
     public void testTraverseBreadthFirst() {
-        final List<INode> ancestors = traverser.breadthFirstTraversal(n0).toList();
+        final List<HippoNode> ancestors = traverser.breadthFirstTraversal(n0).toList();
         assertThat(ancestors, is(asList(n0, n1, n2, n3, n4)));
     }
 

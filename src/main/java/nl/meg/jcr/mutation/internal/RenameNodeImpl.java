@@ -3,7 +3,7 @@ package nl.meg.jcr.mutation.internal;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
 import javax.jcr.RepositoryException;
@@ -12,7 +12,7 @@ import static com.google.common.base.Predicates.compose;
 import static com.google.common.base.Predicates.equalTo;
 import static java.lang.String.format;
 
-final class RenameNodeImpl implements Function<INode, INode> {
+final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
 
     private final String newName;
 
@@ -21,8 +21,8 @@ final class RenameNodeImpl implements Function<INode, INode> {
     }
 
     @Override
-    public INode apply(INode node) {
-        final INode parent = node.getParent().get();
+    public HippoNode apply(HippoNode node) {
+        final HippoNode parent = node.getParent().get();
         if (supportsOrdering(parent)) {
             return moveAndReorder(parent, node);
         } else {
@@ -30,7 +30,7 @@ final class RenameNodeImpl implements Function<INode, INode> {
         }
     }
 
-    INode move(INode parent, INode node) {
+    HippoNode move(HippoNode parent, HippoNode node) {
         final String parentPath = parent.getPath();
         final String sourceAbsPath = node.getPath();
         final String targetAbsPath = format("%s/%s", parentPath, newName);
@@ -42,8 +42,8 @@ final class RenameNodeImpl implements Function<INode, INode> {
         }
     }
 
-    private INode moveAndReorder(INode parent, INode node) {
-        final ImmutableList<INode> nodes = ImmutableList.copyOf(parent.getNodes());
+    private HippoNode moveAndReorder(HippoNode parent, HippoNode node) {
+        final ImmutableList<HippoNode> nodes = ImmutableList.copyOf(parent.getNodes());
         int nodeIndex = Iterables.indexOf(nodes, compose(equalTo(node.getName()), GET_NAME));
         move(parent, node);
         if (nodeIndex < nodes.size() - 1) {
@@ -56,13 +56,13 @@ final class RenameNodeImpl implements Function<INode, INode> {
         return node;
     }
 
-    private static boolean supportsOrdering(INode node) {
+    private static boolean supportsOrdering(HippoNode node) {
         return node.getPrimaryNodeType().hasOrderableChildNodes();
     }
 
-    private static final Function<INode, String> GET_NAME = new Function<INode, String>() {
+    private static final Function<HippoNode, String> GET_NAME = new Function<HippoNode, String>() {
         @Override
-        public String apply(INode input) {
+        public String apply(HippoNode input) {
             return input.getName();
         }
     };

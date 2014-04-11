@@ -1,7 +1,7 @@
 package nl.meg.jcr.mutation.internal;
 
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ public class RenameNodeImplTest {
     private RenameNodeImpl renameNode;
 
     @Mock
-    private INode node, parent;
+    private HippoNode node, parent;
 
     @Mock
     private Session session;
