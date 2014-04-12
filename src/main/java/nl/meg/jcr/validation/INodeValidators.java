@@ -11,7 +11,7 @@ public interface INodeValidators {
 
     Validator<NodeErrorCode, HippoNode> canRenameTo(String name);
 
-    Validator<NodeErrorCode,HippoNode> positionInBounds(int newPosition);
+    Validator<NodeErrorCode, HippoNode> positionInBounds(int newPosition);
 
-    Validator<NodeErrorCode,HippoNode> supportsOrdering();
+    Validator<NodeErrorCode, HippoNode> supportsOrdering();
 }
