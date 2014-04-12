@@ -33,17 +33,44 @@ public interface HippoNode extends HippoItem<Node> {
         return invoke(n -> n.getSession().getRootNode().isSame(get()), get());
     }
 
+    default boolean isNodeType(String nodeTypeName) {
+        return invoke(n -> n.isNodeType(nodeTypeName), get());
+    }
+
+    default NodeType getPrimaryNodeType() {
+        return invoke(Node::getPrimaryNodeType, get());
+    }
+
+    default NodeType[] getMixinNodeTypes() {
+        return invoke(Node::getMixinNodeTypes, get());
+    }
+
     default Optional<HippoNode> getNode(String name) {
         return invoke(n -> n.hasNode(name)
                         ? Optional.of(apply(n.getNode(name)))
-                        : Optional.empty(), get()
+                        : Optional.empty(),
+                get()
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    default List<HippoNode> getNodes() {
+        return invoke(n -> {
+            if (n.hasNodes()) {
+                final NodeIterator nI = n.getNodes();
+                final Spliterator<Node> sI = spliterator(nI, nI.getSize(), NONNULL | SIZED);
+                return stream(sI, false);
+            } else {
+                return Stream.<Node>empty();
+            }
+        }, get()).map(n -> apply(n)).collect(toList());
     }
 
     default Optional<Property> getProperty(String name) {
         return invoke(n -> n.hasProperty(name)
                         ? Optional.of(n.getProperty(name))
-                        : Optional.empty(), get()
+                        : Optional.empty(),
+                get()
         );
     }
 
@@ -60,28 +87,4 @@ public interface HippoNode extends HippoItem<Node> {
         }, get());
     }
 
-    default boolean isNodeType(String nodeTypeName) {
-        return invoke(n -> n.isNodeType(nodeTypeName), get());
-    }
-
-    default NodeType getPrimaryNodeType() {
-        return invoke(Node::getPrimaryNodeType, get());
-    }
-
-    default NodeType[] getMixinNodeTypes() {
-        return invoke(Node::getMixinNodeTypes, get());
-    }
-
-    @SuppressWarnings("unchecked")
-    default List<HippoNode> getNodes() {
-        return invoke(n -> {
-            if (n.hasNodes()) {
-                final NodeIterator nI = n.getNodes();
-                final Spliterator<Node> sI = spliterator(nI, nI.getSize(), NONNULL | SIZED);
-                return stream(sI, false);
-            } else {
-                return Stream.<Node>empty();
-            }
-        }, get()).map(n -> apply(n)).collect(toList());
-    }
 }
