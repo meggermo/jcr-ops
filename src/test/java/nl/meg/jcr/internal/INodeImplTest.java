@@ -11,7 +11,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,9 +32,6 @@ public class INodeImplTest {
 
     @Mock
     private NodeType nodeType;
-
-    @Mock
-    private PropertyIterator propertyIterator;
 
     @Mock
     private Property property;
@@ -123,13 +119,13 @@ public class INodeImplTest {
     public void testGetNodes() throws RepositoryException {
         when(node.hasNodes()).thenReturn(true);
         when(node.getNodes()).thenReturn(getNodeIterator(node));
-        assertThat(iNode.getNodes().next().get(), is(node));
+        assertThat(iNode.getNodes().get(0).get(), is(node));
     }
 
     @Test
     public void testGetNodes_Empty() throws RepositoryException {
         when(node.hasNodes()).thenReturn(false);
-        assertThat(iNode.getNodes().hasNext(), is(false));
+        assertThat(iNode.getNodes().isEmpty(), is(true));
     }
 
     @Test
@@ -148,16 +144,14 @@ public class INodeImplTest {
     @Test
     public void testGetProperties_Empty() throws RepositoryException {
         when(node.hasProperties()).thenReturn(false);
-        assertThat(iNode.getProperties(), is(Collections.<Property>emptyIterator()));
+        assertThat(iNode.getProperties().isEmpty(), is(true));
     }
 
     @Test
     public void testGetProperties() throws RepositoryException {
         when(node.hasProperties()).thenReturn(true);
-        when(node.getProperties()).thenReturn(propertyIterator);
-        when(propertyIterator.hasNext()).thenReturn(true, false);
-        when(propertyIterator.next()).thenReturn(property);
-        assertThat(iNode.getProperties().next(), is(property));
+        when(node.getProperties()).thenReturn(getPropertyIterator(property));
+        assertThat(iNode.getProperties().get(0), is(property));
     }
 
     @Test
@@ -330,6 +324,42 @@ public class INodeImplTest {
             @Override
             public Object next() {
                 return nextNode();
+            }
+        };
+    }
+
+    private PropertyIterator getPropertyIterator(Property... properties) {
+        return new PropertyIterator() {
+            private final AtomicInteger i = new AtomicInteger();
+            private final List<Property> propertyList = Arrays.asList(properties);
+            @Override
+            public Property nextProperty() {
+                return propertyList.get(i.getAndIncrement());
+            }
+
+            @Override
+            public void skip(long skipNum) {
+                i.addAndGet((int)skipNum);
+            }
+
+            @Override
+            public long getSize() {
+                return propertyList.size();
+            }
+
+            @Override
+            public long getPosition() {
+                return i.get();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return i.get() < propertyList.size();
+            }
+
+            @Override
+            public Object next() {
+                return nextProperty();
             }
         };
     }

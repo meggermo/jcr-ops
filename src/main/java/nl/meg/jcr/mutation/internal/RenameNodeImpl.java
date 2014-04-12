@@ -6,7 +6,6 @@ import nl.meg.jcr.exception.RuntimeRepositoryException;
 import javax.jcr.RepositoryException;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -41,7 +40,7 @@ final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
     }
 
     private HippoNode moveAndReorder(HippoNode parent, HippoNode node) {
-        final List<HippoNode> nodes = parent.getNodeStream().collect(Collectors.toList());
+        final List<HippoNode> nodes = parent.getNodes();
         final int nodeIndex = nodes.indexOf(node);
         move(parent, node);
         if (nodeIndex < nodes.size() - 1) {

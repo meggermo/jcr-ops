@@ -34,7 +34,7 @@ final class NodePredicatesImpl implements NodePredicates {
 
     @Override
     public Predicate<HippoNode> withProperty(final Predicate<Property> predicate) {
-        return n -> n.getPropertyStream().anyMatch(predicate);
+        return n -> n.getProperties().stream().anyMatch(predicate);
     }
 
     @Override

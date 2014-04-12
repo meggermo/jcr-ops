@@ -1,6 +1,5 @@
 package nl.meg.jcr.traversal.internal;
 
-import com.google.common.collect.Iterators;
 import com.google.common.collect.TreeTraverser;
 import nl.meg.jcr.HippoNode;
 import org.junit.Before;
@@ -11,6 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.RepositoryException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -34,12 +34,12 @@ public class DescendantTraverserImplTest {
 
         this.traverser = new DescendantTraverserImpl();
 
-        when(n0.getNodes()).thenReturn(Arrays.asList(n1, n2, n3).iterator());
-        when(n1.getNodes()).thenReturn(Iterators.<HippoNode>emptyIterator());
-        when(n2.getNodes()).thenReturn(Arrays.asList(n4, n5).iterator());
-        when(n3.getNodes()).thenReturn(Iterators.<HippoNode>emptyIterator());
-        when(n4.getNodes()).thenReturn(Iterators.<HippoNode>emptyIterator());
-        when(n5.getNodes()).thenReturn(Iterators.<HippoNode>emptyIterator());
+        when(n0.getNodes()).thenReturn(Arrays.asList(n1, n2, n3));
+        when(n1.getNodes()).thenReturn(Collections.emptyList());
+        when(n2.getNodes()).thenReturn(Arrays.asList(n4, n5));
+        when(n3.getNodes()).thenReturn(Collections.emptyList());
+        when(n4.getNodes()).thenReturn(Collections.emptyList());
+        when(n5.getNodes()).thenReturn(Collections.emptyList());
     }
 
     @Test

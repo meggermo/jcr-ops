@@ -7,6 +7,6 @@ class DescendantTraverserImpl extends TreeTraverser<HippoNode> {
 
     @Override
     public Iterable<HippoNode> children(final HippoNode root) {
-        return () -> root.getNodes();
+        return root.getNodes();
     }
 }

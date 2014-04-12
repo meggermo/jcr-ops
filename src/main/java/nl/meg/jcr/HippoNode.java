@@ -6,16 +6,16 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.nodetype.NodeType;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Spliterator;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Collections.emptyIterator;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.SIZED;
 import static java.util.Spliterators.spliterator;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 import static nl.meg.jcr.RepoFunctionInvoker.invoke;
 
@@ -48,22 +48,14 @@ public interface HippoNode extends HippoItem<Node> {
     }
 
     @SuppressWarnings("unchecked")
-    default Iterator<Property> getProperties() {
-        return invoke(n -> n.hasProperties()
-                        ? n.getProperties()
-                        : emptyIterator(), get()
-        );
-    }
-
-    @SuppressWarnings("unchecked")
-    default Stream<Property> getPropertyStream() {
+    default List<Property> getProperties() {
         return invoke(n -> {
             if (n.hasProperties()) {
                 final PropertyIterator pI = n.getProperties();
                 final Spliterator<Property> sI = spliterator(pI, pI.getSize(), NONNULL | SIZED);
-                return stream(sI, false);
+                return stream(sI, false).collect(toList());
             } else {
-                return Stream.<Property>empty();
+                return Collections.emptyList();
             }
         }, get());
     }
@@ -81,12 +73,7 @@ public interface HippoNode extends HippoItem<Node> {
     }
 
     @SuppressWarnings("unchecked")
-    default Iterator<HippoNode> getNodes() {
-        return getNodeStream().collect(Collectors.toList()).iterator();
-    }
-
-    @SuppressWarnings("unchecked")
-    default Stream<HippoNode> getNodeStream() {
+    default List<HippoNode> getNodes() {
         return invoke(n -> {
             if (n.hasNodes()) {
                 final NodeIterator nI = n.getNodes();
@@ -95,6 +82,6 @@ public interface HippoNode extends HippoItem<Node> {
             } else {
                 return Stream.<Node>empty();
             }
-        }, get()).map(n -> apply(n));
+        }, get()).map(n -> apply(n)).collect(toList());
     }
 }

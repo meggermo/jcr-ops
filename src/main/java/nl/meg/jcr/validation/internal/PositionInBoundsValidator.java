@@ -22,7 +22,7 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
         final Map<String, Object> map = new HashMap<>();
         map.put("min", 0);
         map.put("position", newPosition);
-        map.put("max", entity.getParent().get().getNodeStream().count() - 1);
+        map.put("max", entity.getParent().get().getNodes().size() - 1);
         return map;
     }
 
@@ -31,7 +31,7 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
         return NodeErrorCode.POSITION_OUT_OF_RANGE;
     }
 
-    private static boolean positionInRange(HippoNode node, long postion) {
-        return Range.closedOpen(0L, node.getNodeStream().count()).contains(postion);
+    private static boolean positionInRange(HippoNode node, int postion) {
+        return Range.closedOpen(0, node.getNodes().size()).contains(postion);
     }
 }

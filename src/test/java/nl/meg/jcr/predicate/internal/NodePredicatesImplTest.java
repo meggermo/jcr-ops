@@ -82,7 +82,7 @@ public class NodePredicatesImplTest {
 
     @Test
     public void testWithProperty() throws RepositoryException {
-        when(n1.getPropertyStream()).thenReturn(Arrays.asList(p1P).stream());
+        when(n1.getProperties()).thenReturn(Arrays.asList(p1P));
         when(pP.test(p1P)).thenReturn(true);
         assertThat(nP.withProperty(pP).test(n1), is(true));
     }

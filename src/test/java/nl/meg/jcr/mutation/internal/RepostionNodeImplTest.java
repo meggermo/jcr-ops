@@ -26,7 +26,7 @@ public class RepostionNodeImplTest {
     @Test
     public void testApplyMoveBefore() throws RepositoryException {
         when(n1.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodeStream()).thenReturn(Arrays.asList(n0, n1, n2, n3).stream());
+        when(parent.getNodes()).thenReturn(Arrays.asList(n0, n1, n2, n3));
         when(n1.isSame(n1)).thenReturn(true);
         when(n0.getName()).thenReturn("n0");
         when(n1.getName()).thenReturn("n1");
@@ -39,7 +39,7 @@ public class RepostionNodeImplTest {
     @Test
     public void testApplyMoveAfter() throws RepositoryException {
         when(n1.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodeStream()).thenReturn(Arrays.asList(n0, n1, n2, n3).stream());
+        when(parent.getNodes()).thenReturn(Arrays.asList(n0, n1, n2, n3));
         when(n1.isSame(n1)).thenReturn(true);
         when(n1.getName()).thenReturn("n1");
         when(n3.getName()).thenReturn("n3");
@@ -52,7 +52,7 @@ public class RepostionNodeImplTest {
     @Test
     public void testApplyMoveToCurrentPosition() throws RepositoryException {
         when(n1.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodeStream()).thenReturn(Arrays.asList(n0, n1, n2, n3).stream());
+        when(parent.getNodes()).thenReturn(Arrays.asList(n0, n1, n2, n3));
         when(n1.isSame(n1)).thenReturn(true);
         when(n1.getName()).thenReturn("n1");
         when(parent.get()).thenReturn(p);
@@ -64,7 +64,7 @@ public class RepostionNodeImplTest {
     @Test
     public void testApplyMoveToEnd() throws RepositoryException {
         when(n1.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodeStream()).thenReturn(Arrays.asList(n0, n1, n2, n3).stream());
+        when(parent.getNodes()).thenReturn(Arrays.asList(n0, n1, n2, n3));
         when(n1.isSame(n1)).thenReturn(true);
         when(n1.getName()).thenReturn("n1");
         when(parent.get()).thenReturn(p);

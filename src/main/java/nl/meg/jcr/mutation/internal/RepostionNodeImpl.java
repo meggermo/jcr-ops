@@ -6,7 +6,6 @@ import nl.meg.jcr.exception.RuntimeRepositoryException;
 import javax.jcr.RepositoryException;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
 
@@ -19,7 +18,7 @@ final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
     @Override
     public HippoNode apply(final HippoNode node) {
         final HippoNode parent = node.getParent().get();
-        final List<HippoNode> nodes = parent.getNodeStream().collect(Collectors.toList());
+        final List<HippoNode> nodes = parent.getNodes();
         final int currentPosition = nodes.indexOf(node);
         final String sourceName = node.getName();
         final String targetName;

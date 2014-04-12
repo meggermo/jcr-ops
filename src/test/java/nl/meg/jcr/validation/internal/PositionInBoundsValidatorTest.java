@@ -32,7 +32,7 @@ public class PositionInBoundsValidatorTest {
     @Test
     public void testGetContextMap() {
         when(entity.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodeStream()).thenReturn(Arrays.asList(entity).stream());
+        when(parent.getNodes()).thenReturn(Arrays.asList(entity));
         final Map<String, ?> contextMap = validator.getContextMap(entity);
         assertThat(contextMap.containsKey("min"), is(true));
         assertThat(contextMap.containsKey("max"), is(true));
