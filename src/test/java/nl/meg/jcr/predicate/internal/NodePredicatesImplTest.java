@@ -1,12 +1,11 @@
 package nl.meg.jcr.predicate.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.predicate.NodePredicates;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
@@ -19,8 +18,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class NodePredicatesImplTest {
+public class NodePredicatesImplTest extends AbstractMockitoTest {
 
     private NodePredicates nP;
 

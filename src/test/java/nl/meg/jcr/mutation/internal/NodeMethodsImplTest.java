@@ -1,5 +1,6 @@
 package nl.meg.jcr.mutation.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.jcr.HippoNode;
@@ -10,9 +11,7 @@ import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -24,8 +23,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class NodeMethodsImplTest {
+public class NodeMethodsImplTest extends AbstractMockitoTest {
 
     private NodeMethods nodeMethods;
 

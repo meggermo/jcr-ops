@@ -1,12 +1,11 @@
 package nl.meg.jcr.validation.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -16,8 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PositionInBoundsValidatorTest {
+public class PositionInBoundsValidatorTest extends AbstractMockitoTest {
 
     private PositionInBoundsValidator validator;
 

@@ -1,14 +1,13 @@
 package nl.meg.function.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -19,10 +18,10 @@ import java.util.function.Supplier;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ValidatingFunctionAdapterImplTest {
+public class ValidatingFunctionAdapterImplTest extends AbstractMockitoTest {
 
     private enum E {
 
@@ -53,6 +52,7 @@ public class ValidatingFunctionAdapterImplTest {
         when(validator.validate("TEST", context)).thenReturn(context);
         when(context.isValid()).thenReturn(true);
         adapter.adapt(validator, function).apply("TEST");
+        verify(function).apply("TEST");
     }
 
     @Test

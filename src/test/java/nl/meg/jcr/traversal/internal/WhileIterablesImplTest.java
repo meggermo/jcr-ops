@@ -1,11 +1,10 @@
 package nl.meg.jcr.traversal.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.traversal.WhileIterables;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -18,8 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class WhileIterablesImplTest {
+public class WhileIterablesImplTest extends AbstractMockitoTest {
 
     private WhileIterables whileIterables;
 

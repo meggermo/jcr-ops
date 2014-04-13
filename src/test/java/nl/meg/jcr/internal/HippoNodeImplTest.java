@@ -1,12 +1,10 @@
 package nl.meg.jcr.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
@@ -16,11 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class INodeImplTest {
+public class HippoNodeImplTest extends AbstractMockitoTest {
 
     private HippoNode hippoNode;
 
@@ -35,9 +31,6 @@ public class INodeImplTest {
 
     @Mock
     private Property property;
-
-    @Mock
-    private RepositoryException e;
 
     @Mock
     private Session session;
@@ -127,26 +120,6 @@ public class INodeImplTest {
         assertThat(hippoNode.isRoot(), is(true));
     }
 
-    @Test(expected = RuntimeRepositoryException.class)
-    public void testIsRootThrows() throws RepositoryException {
-        when(node.getSession()).thenThrow(RepositoryException.class);
-        hippoNode.isRoot();
-        shouldHaveThrown();
-    }
-
-    @Test
-    public void testIsSame() throws RepositoryException {
-        when(node.isSame(node)).thenReturn(true);
-        assertThat(hippoNode.isSame(hippoNode), is(true));
-    }
-
-    @Test(expected = RuntimeRepositoryException.class)
-    public void testIsSameThrows() throws RepositoryException {
-        when(node.isSame(node)).thenThrow(RepositoryException.class);
-        hippoNode.isSame(hippoNode);
-        shouldHaveThrown();
-    }
-
     @Test
     public void testIsNodeType() throws RepositoryException {
         when(node.isNodeType("X")).thenReturn(true);
@@ -154,113 +127,12 @@ public class INodeImplTest {
         assertThat(hippoNode.isNodeType("T"), is(false));
     }
 
-    @Test
-    public void testExceptionTranslation() throws RepositoryException {
-        final Throwable t = e;
-        try {
-            when(node.getSession()).thenThrow(e);
-            hippoNode.getSession();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getName()).thenThrow(e);
-            hippoNode.getName();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getPath()).thenThrow(e);
-            hippoNode.getPath();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getIdentifier()).thenThrow(e);
-            hippoNode.getIdentifier();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getIndex()).thenThrow(e);
-            hippoNode.getIndex();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.hasNodes()).thenThrow(e);
-            hippoNode.getNodes();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.hasNode("X")).thenThrow(e);
-            hippoNode.getNode("X");
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getParent()).thenThrow(e);
-            hippoNode.getParent();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getPrimaryNodeType()).thenThrow(e);
-            hippoNode.getPrimaryNodeType();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getMixinNodeTypes()).thenThrow(e);
-            hippoNode.getMixinNodeTypes();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.hasProperties()).thenReturn(true);
-            when(node.getProperties()).thenThrow(e);
-            hippoNode.getProperties();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.hasProperty("X")).thenReturn(true);
-            when(node.getProperty("X")).thenThrow(e);
-            hippoNode.getProperty("X");
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.isNodeType("X")).thenThrow(e);
-            hippoNode.isNodeType("X");
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-    }
-
-    private void shouldHaveThrown() {
-        fail("expected exception to be thrown");
-    }
-
     private NodeIterator getNodeIterator(final Node... nodes) {
 
         return new NodeIterator() {
             final AtomicInteger i = new AtomicInteger();
             final List<Node> nodeList = Arrays.asList(nodes);
+
             @Override
             public Node nextNode() {
                 return nodeList.get(i.getAndIncrement());
@@ -268,7 +140,7 @@ public class INodeImplTest {
 
             @Override
             public void skip(long skipNum) {
-                i.addAndGet((int)skipNum);
+                i.addAndGet((int) skipNum);
             }
 
             @Override
@@ -297,6 +169,7 @@ public class INodeImplTest {
         return new PropertyIterator() {
             private final AtomicInteger i = new AtomicInteger();
             private final List<Property> propertyList = Arrays.asList(properties);
+
             @Override
             public Property nextProperty() {
                 return propertyList.get(i.getAndIncrement());
@@ -304,7 +177,7 @@ public class INodeImplTest {
 
             @Override
             public void skip(long skipNum) {
-                i.addAndGet((int)skipNum);
+                i.addAndGet((int) skipNum);
             }
 
             @Override

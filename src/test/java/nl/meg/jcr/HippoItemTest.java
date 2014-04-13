@@ -1,19 +1,19 @@
 package nl.meg.jcr;
 
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class HippoItemTest {
+public class HippoItemTest extends AbstractMockitoTest {
 
     private HippoItem<Item> hippoItem;
 
@@ -22,12 +22,6 @@ public class HippoItemTest {
 
     @Mock
     private Item item;
-
-    @Mock
-    private Session session;
-
-    @Mock
-    private Node node;
 
     @Before
     public void setUp() {
@@ -58,6 +52,7 @@ public class HippoItemTest {
 
     @Test
     public void testGetSession() throws RepositoryException {
+        final Session session = mock(Session.class);
         when(item.getSession()).thenReturn(session);
         assertThat(hippoItem.getSession(), is(session));
     }
@@ -100,6 +95,7 @@ public class HippoItemTest {
 
     @Test
     public void testGetParent() throws RepositoryException {
+        final Node node = mock(Node.class);
         when(item.getParent()).thenReturn(node);
         when(hippoNode.get()).thenReturn(node);
         assertThat(hippoItem.getParent().get().get(), is(node));
@@ -109,5 +105,43 @@ public class HippoItemTest {
     public void testGetParent_IsAbsent() throws RepositoryException {
         when(item.getParent()).thenThrow(ItemNotFoundException.class);
         assertThat(hippoItem.getParent().isPresent(), is(false));
+    }
+
+    @Test
+    public void testExceptionTranslation() throws RepositoryException {
+        final RepositoryException rre = new RepositoryException();
+        final Throwable t = rre;
+        try {
+            when(item.getSession()).thenThrow(rre);
+            hippoItem.getSession();
+            shouldHaveThrown();
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+        try {
+            when(item.getName()).thenThrow(rre);
+            hippoItem.getName();
+            shouldHaveThrown();
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+        try {
+            when(item.getPath()).thenThrow(rre);
+            hippoItem.getPath();
+            shouldHaveThrown();
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+        try {
+            when(item.getParent()).thenThrow(rre);
+            hippoItem.getParent();
+            shouldHaveThrown();
+        } catch (RuntimeRepositoryException e) {
+            assertThat(e.getCause(), is(t));
+        }
+    }
+
+    private void shouldHaveThrown() {
+        shouldHaveThrown(RuntimeRepositoryException.class);
     }
 }

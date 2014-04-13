@@ -1,14 +1,13 @@
 package nl.meg.jcr.validation.internal;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.ValidationContext;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.nodetype.NodeType;
 import java.util.Arrays;
@@ -18,8 +17,7 @@ import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class INodeValidatorBuilderImplTest {
+public class INodeValidatorBuilderImplTest extends AbstractMockitoTest {
 
     private INodeValidators iNodeValidators;
 

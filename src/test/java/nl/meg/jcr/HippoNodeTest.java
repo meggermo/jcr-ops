@@ -1,11 +1,10 @@
 package nl.meg.jcr;
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
@@ -15,11 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class HippoNodeTest {
+public class HippoNodeTest extends AbstractMockitoTest {
+
     private HippoNode hippoNode;
 
     @Mock
@@ -59,6 +57,7 @@ public class HippoNodeTest {
         when(node.getPrimaryNodeType()).thenReturn(nodeType);
         assertThat(hippoNode.getPrimaryNodeType(), is(nodeType));
     }
+
 
     @Test
     public void testGetMixinNodeTypes() throws RepositoryException {
@@ -142,19 +141,6 @@ public class HippoNodeTest {
     }
 
     @Test
-    public void testIsSame() throws RepositoryException {
-        when(node.isSame(node)).thenReturn(true);
-        assertThat(hippoNode.isSame(hippoNode), is(true));
-    }
-
-    @Test(expected = RuntimeRepositoryException.class)
-    public void testIsSameThrows() throws RepositoryException {
-        when(node.isSame(node)).thenThrow(RepositoryException.class);
-        hippoNode.isSame(hippoNode);
-        shouldHaveThrown();
-    }
-
-    @Test
     public void testIsNodeType() throws RepositoryException {
         when(node.isNodeType("X")).thenReturn(true);
         assertThat(hippoNode.isNodeType("X"), is(true));
@@ -164,27 +150,6 @@ public class HippoNodeTest {
     @Test
     public void testExceptionTranslation() throws RepositoryException {
         final Throwable t = e;
-        try {
-            when(node.getSession()).thenThrow(e);
-            hippoNode.getSession();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getName()).thenThrow(e);
-            hippoNode.getName();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getPath()).thenThrow(e);
-            hippoNode.getPath();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
         try {
             when(node.getIdentifier()).thenThrow(e);
             hippoNode.getIdentifier();
@@ -209,13 +174,6 @@ public class HippoNodeTest {
         try {
             when(node.hasNode("X")).thenThrow(e);
             hippoNode.getNode("X");
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(node.getParent()).thenThrow(e);
-            hippoNode.getParent();
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
@@ -259,8 +217,9 @@ public class HippoNodeTest {
         }
     }
 
+
     private void shouldHaveThrown() {
-        fail("expected exception to be thrown");
+        shouldHaveThrown(RuntimeRepositoryException.class);
     }
 
     private NodeIterator getNodeIterator(final Node... nodes) {

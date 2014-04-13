@@ -1,12 +1,11 @@
 package nl.meg.jcr.mutation.internal;
 
 
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -18,8 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RenameNodeImplTest {
+public class RenameNodeImplTest extends AbstractMockitoTest {
 
     private RenameNodeImpl renameNode;
 
