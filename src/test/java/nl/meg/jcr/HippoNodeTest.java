@@ -58,7 +58,6 @@ public class HippoNodeTest extends AbstractMockitoTest {
         assertThat(hippoNode.getPrimaryNodeType(), is(nodeType));
     }
 
-
     @Test
     public void testGetMixinNodeTypes() throws RepositoryException {
         final NodeType[] nodeTypes = {nodeType};
