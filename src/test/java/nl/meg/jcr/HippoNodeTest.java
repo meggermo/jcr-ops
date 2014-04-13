@@ -1,6 +1,5 @@
-package nl.meg.jcr.internal;
+package nl.meg.jcr;
 
-import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +19,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class INodeImplTest {
-
+public class HippoNodeTest {
     private HippoNode hippoNode;
 
     @Mock
@@ -44,7 +42,16 @@ public class INodeImplTest {
 
     @Before
     public void setUp() {
-        this.hippoNode = new HippoNodeImpl(node);
+        this.hippoNode = new HippoNode() {
+            @Override
+            public HippoNode apply(Node node) {
+                return hippoNode;
+            }
+            @Override
+            public Node get() {
+                return node;
+            }
+        };
     }
 
     @Test

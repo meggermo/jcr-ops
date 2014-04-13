@@ -10,11 +10,11 @@ import java.util.function.Function;
 abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
     private final E node;
-    private final Function<Node, HippoNode> iNodeFactory;
+    private final Function<Node, HippoNode> hippoNodeFactory;
 
-    AbstractHippoItem(E node, Function<Node, HippoNode> iNodeFactory) {
+    AbstractHippoItem(E node, Function<Node, HippoNode> hippoNodeFactory) {
         this.node = node;
-        this.iNodeFactory = iNodeFactory;
+        this.hippoNodeFactory = hippoNodeFactory;
     }
 
     @Override
@@ -24,6 +24,6 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
     @Override
     public final HippoNode apply(Node node) {
-        return iNodeFactory.apply(node);
+        return hippoNodeFactory.apply(node);
     }
 }
