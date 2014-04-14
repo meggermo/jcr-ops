@@ -1,7 +1,6 @@
 package nl.meg.function.internal;
 
 import nl.meg.function.FunctionAdapter;
-import nl.meg.function.ValidatingFunction;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
@@ -18,11 +17,11 @@ final class FunctionAdapterImpl<E extends Enum<E>, S, T> implements FunctionAdap
     }
 
     @Override
-    public ValidatingFunction<S, T> preValidate(Validator<E, S> validator, Function<S, T> function) {
+    public Function<S, T> preValidate(Validator<E, S> validator, Function<S, T> function) {
         return new Adapter(contextSupplier, validator, function);
     }
 
-    private final class Adapter implements ValidatingFunction<S, T> {
+    private final class Adapter implements Function<S, T> {
 
         private final Supplier<ValidationContext<E, S>> contextSupplier;
         private final Validator<E, S> validator;

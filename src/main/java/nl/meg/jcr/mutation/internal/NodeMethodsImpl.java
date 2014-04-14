@@ -1,6 +1,5 @@
 package nl.meg.jcr.mutation.internal;
 
-import nl.meg.function.ValidatingFunction;
 import nl.meg.function.FunctionAdapter;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
@@ -8,6 +7,8 @@ import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.Validator;
 import nl.meg.validation.ValidatorBuilder;
+
+import java.util.function.Function;
 
 public final class NodeMethodsImpl implements NodeMethods {
 
@@ -22,7 +23,7 @@ public final class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public ValidatingFunction<HippoNode, HippoNode> moveFunction(HippoNode newParent) {
+    public Function<HippoNode, HippoNode> moveFunction(HippoNode newParent) {
         final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
@@ -31,7 +32,7 @@ public final class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public ValidatingFunction<HippoNode, HippoNode> renameFunction(String newName) {
+    public Function<HippoNode, HippoNode> renameFunction(String newName) {
         final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
@@ -40,7 +41,7 @@ public final class NodeMethodsImpl implements NodeMethods {
     }
 
     @Override
-    public ValidatingFunction<HippoNode, HippoNode> repositionFunction(int newPosition) {
+    public Function<HippoNode, HippoNode> repositionFunction(int newPosition) {
         final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.supportsOrdering())

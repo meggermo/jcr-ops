@@ -2,7 +2,6 @@ package nl.meg.jcr.mutation.internal;
 
 import nl.meg.AbstractMockitoTest;
 import nl.meg.function.FunctionAdapter;
-import nl.meg.function.ValidatingFunction;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
@@ -49,7 +48,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
     private FunctionAdapter<NodeErrorCode, HippoNode, HippoNode> functionAdapter;
 
     @Mock
-    private ValidatingFunction<HippoNode, HippoNode> function;
+    private Function<HippoNode, HippoNode> function;
 
     @Before
     public void setUp() {
