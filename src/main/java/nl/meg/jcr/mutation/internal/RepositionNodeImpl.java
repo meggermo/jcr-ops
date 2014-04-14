@@ -7,11 +7,11 @@ import javax.jcr.RepositoryException;
 import java.util.List;
 import java.util.function.Function;
 
-final class RepostionNodeImpl implements Function<HippoNode, HippoNode> {
+final class RepositionNodeImpl implements Function<HippoNode, HippoNode> {
 
     private final int newPosition;
 
-    RepostionNodeImpl(int newPosition) {
+    RepositionNodeImpl(int newPosition) {
         this.newPosition = newPosition;
     }
 

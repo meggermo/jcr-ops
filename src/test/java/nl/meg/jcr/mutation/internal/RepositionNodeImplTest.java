@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class RepostionNodeImplTest extends AbstractMockitoTest {
+public class RepositionNodeImplTest extends AbstractMockitoTest {
 
     @Mock
     private HippoNode n0, n1, n2, n3, parent;
@@ -29,7 +29,7 @@ public class RepostionNodeImplTest extends AbstractMockitoTest {
         when(n0.getName()).thenReturn("n0");
         when(n1.getName()).thenReturn("n1");
         when(parent.get()).thenReturn(p);
-        final RepostionNodeImpl repostionNode = new RepostionNodeImpl(0);
+        final RepositionNodeImpl repostionNode = new RepositionNodeImpl(0);
         repostionNode.apply(n1);
         verify(p).orderBefore("n1", "n0");
     }
@@ -42,7 +42,7 @@ public class RepostionNodeImplTest extends AbstractMockitoTest {
         when(n1.getName()).thenReturn("n1");
         when(n3.getName()).thenReturn("n3");
         when(parent.get()).thenReturn(p);
-        final RepostionNodeImpl repostionNode = new RepostionNodeImpl(2);
+        final RepositionNodeImpl repostionNode = new RepositionNodeImpl(2);
         repostionNode.apply(n1);
         verify(p).orderBefore("n1", "n3");
     }
@@ -54,7 +54,7 @@ public class RepostionNodeImplTest extends AbstractMockitoTest {
         when(n1.isSame(n1)).thenReturn(true);
         when(n1.getName()).thenReturn("n1");
         when(parent.get()).thenReturn(p);
-        final RepostionNodeImpl repostionNode = new RepostionNodeImpl(1);
+        final RepositionNodeImpl repostionNode = new RepositionNodeImpl(1);
         repostionNode.apply(n1);
         verify(p).orderBefore("n1", "n1");
     }
@@ -66,7 +66,7 @@ public class RepostionNodeImplTest extends AbstractMockitoTest {
         when(n1.isSame(n1)).thenReturn(true);
         when(n1.getName()).thenReturn("n1");
         when(parent.get()).thenReturn(p);
-        final RepostionNodeImpl repostionNode = new RepostionNodeImpl(3);
+        final RepositionNodeImpl repostionNode = new RepositionNodeImpl(3);
         repostionNode.apply(n1);
         verify(p).orderBefore("n1", null);
     }

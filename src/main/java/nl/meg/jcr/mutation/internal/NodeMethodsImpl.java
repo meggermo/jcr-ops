@@ -47,6 +47,6 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.supportsOrdering())
                 .add(nodeValidators.positionInBounds(newPosition))
                 .build();
-        return adapter.preValidate(validator, new RepostionNodeImpl(newPosition));
+        return adapter.preValidate(validator, new RepositionNodeImpl(newPosition));
     }
 }
