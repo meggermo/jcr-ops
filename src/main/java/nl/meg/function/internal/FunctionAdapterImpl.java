@@ -21,4 +21,16 @@ final class FunctionAdapterImpl<E extends Enum<E>, S, T> implements FunctionAdap
         };
     }
 
+    @Override
+    public Function<S, T> postValidate(Validator<E, T> validator, Function<S, T> function) {
+        return entity -> {
+            final T result = function.apply(entity);
+            final ValidationContext<E, T> context = validator.validate(result, new ValidationContext<E, T>());
+            if (context.isValid()) {
+                return result;
+            } else {
+                throw new ValidationException(context.getErrors());
+            }
+        };
+    }
 }
