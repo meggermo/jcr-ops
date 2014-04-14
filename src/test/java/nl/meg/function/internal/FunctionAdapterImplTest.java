@@ -31,10 +31,16 @@ public class FunctionAdapterImplTest extends AbstractMockitoTest {
     private FunctionAdapter<E, String, Integer> adapter;
 
     @Mock
-    private ValidationContext<E, String> context;
+    private Validator<E, String> preValidator;
 
     @Mock
-    private Validator<E, String> validator;
+    private ValidationContext<E, String> preContext;
+
+    @Mock
+    private Validator<E, Integer> postValidator;
+
+    @Mock
+    private ValidationContext<E, Integer> postContext;
 
     @Mock
     private Function<String, Integer> function;
@@ -45,23 +51,23 @@ public class FunctionAdapterImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testApply() {
-        when(validator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(context);
-        when(context.isValid()).thenReturn(true);
-        adapter.preValidate(validator, function).apply("TEST");
+    public void testPreValidate() {
+        when(preValidator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(preContext);
+        when(preContext.isValid()).thenReturn(true);
+        adapter.preValidate(preValidator, function).apply("TEST");
         verify(function).apply("TEST");
     }
 
     @Test
-    public void testApply_ThrowsValidationException() {
-        when(validator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(context);
-        when(context.isValid()).thenReturn(false);
+    public void testPreValidate_ThrowsValidationException() {
+        when(preValidator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(preContext);
+        when(preContext.isValid()).thenReturn(false);
 
         final EnumMap<E, List<Map<String, ?>>> errors = new EnumMap<>(E.class);
-        when(context.getErrors()).thenReturn(errors);
+        when(preContext.getErrors()).thenReturn(errors);
 
         try {
-            adapter.preValidate(validator, function).apply("TEST");
+            adapter.preValidate(preValidator, function).apply("TEST");
         } catch (ValidationException e) {
             assertEquals(errors, e.getErrors());
         }
@@ -69,10 +75,21 @@ public class FunctionAdapterImplTest extends AbstractMockitoTest {
 
     @Test
     public void testValidate() {
-        when(validator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(context);
-        when(context.isValid()).thenReturn(true);
+        when(preValidator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(preContext);
+        when(preContext.isValid()).thenReturn(true);
         when(function.apply("TEST")).thenReturn(0);
-        assertThat(adapter.preValidate(validator, function).apply("TEST"), is(0));
+        assertThat(adapter.preValidate(preValidator, function).apply("TEST"), is(0));
     }
 
+    @Test
+    public void testPreAndPostValidate() {
+        when(preValidator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(preContext);
+        when(preContext.isValid()).thenReturn(true);
+        when(postValidator.validate(eq(0), any(ValidationContext.class))).thenReturn(postContext);
+        when(postContext.isValid()).thenReturn(true);
+        when(function.apply("TEST")).thenReturn(0);
+        final Function<String, Integer> f1 = adapter.preValidate(preValidator, function);
+        final Function<String, Integer> f2 = adapter.postValidate(postValidator, f1);
+        assertThat(f1.apply("TEST"), is(0));
+    }
 }
