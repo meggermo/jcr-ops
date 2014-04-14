@@ -1,7 +1,7 @@
 package nl.meg.jcr.mutation.internal;
 
 import nl.meg.function.ValidatingFunction;
-import nl.meg.function.ValidatingFunctionAdapter;
+import nl.meg.function.FunctionAdapter;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
@@ -13,9 +13,9 @@ public final class NodeMethodsImpl implements NodeMethods {
 
     private final INodeValidators nodeValidators;
     private final ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder;
-    private final ValidatingFunctionAdapter<NodeErrorCode, HippoNode, HippoNode> adapter;
+    private final FunctionAdapter<NodeErrorCode, HippoNode, HippoNode> adapter;
 
-    public NodeMethodsImpl(INodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder, ValidatingFunctionAdapter<NodeErrorCode, HippoNode, HippoNode> adapter) {
+    public NodeMethodsImpl(INodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder, FunctionAdapter<NodeErrorCode, HippoNode, HippoNode> adapter) {
         this.nodeValidators = nodeValidators;
         this.validatorBuilder = validatorBuilder;
         this.adapter = adapter;
@@ -27,7 +27,7 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
                 .build();
-        return adapter.adapt(validator, new MoveNodeImpl(newParent));
+        return adapter.preValidate(validator, new MoveNodeImpl(newParent));
     }
 
     @Override
@@ -36,7 +36,7 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
                 .build();
-        return adapter.adapt(validator, new RenameNodeImpl(newName));
+        return adapter.preValidate(validator, new RenameNodeImpl(newName));
     }
 
     @Override
@@ -46,6 +46,6 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.supportsOrdering())
                 .add(nodeValidators.positionInBounds(newPosition))
                 .build();
-        return adapter.adapt(validator, new RepostionNodeImpl(newPosition));
+        return adapter.preValidate(validator, new RepostionNodeImpl(newPosition));
     }
 }

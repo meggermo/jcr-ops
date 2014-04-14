@@ -1,7 +1,7 @@
 package nl.meg.function.internal;
 
 import nl.meg.AbstractMockitoTest;
-import nl.meg.function.ValidatingFunctionAdapter;
+import nl.meg.function.FunctionAdapter;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
@@ -21,13 +21,13 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ValidatingFunctionAdapterImplTest extends AbstractMockitoTest {
+public class FunctionAdapterImplTest extends AbstractMockitoTest {
 
     private enum E {
 
     }
 
-    private ValidatingFunctionAdapter<E, String, Integer> adapter;
+    private FunctionAdapter<E, String, Integer> adapter;
 
     @Mock
     private Supplier<ValidationContext<E, String>> contextSupplier;
@@ -43,7 +43,7 @@ public class ValidatingFunctionAdapterImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.adapter = new ValidatingFunctionAdapterImpl<>(contextSupplier);
+        this.adapter = new FunctionAdapterImpl<>(contextSupplier);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ValidatingFunctionAdapterImplTest extends AbstractMockitoTest {
         when(contextSupplier.get()).thenReturn(context);
         when(validator.validate("TEST", context)).thenReturn(context);
         when(context.isValid()).thenReturn(true);
-        adapter.adapt(validator, function).apply("TEST");
+        adapter.preValidate(validator, function).apply("TEST");
         verify(function).apply("TEST");
     }
 
@@ -65,7 +65,7 @@ public class ValidatingFunctionAdapterImplTest extends AbstractMockitoTest {
         when(context.getErrors()).thenReturn(errors);
 
         try {
-            adapter.adapt(validator, function).apply("TEST");
+            adapter.preValidate(validator, function).apply("TEST");
         } catch (ValidationException e) {
             assertEquals(errors, e.getErrors());
         }
@@ -75,8 +75,9 @@ public class ValidatingFunctionAdapterImplTest extends AbstractMockitoTest {
     public void testValidate() {
         when(contextSupplier.get()).thenReturn(context);
         when(validator.validate("TEST", context)).thenReturn(context);
-        when(context.isValid()).thenReturn(false);
-        assertThat(adapter.adapt(validator, function).validate("TEST").isValid(), is(false));
+        when(context.isValid()).thenReturn(true);
+        when(function.apply("TEST")).thenReturn(0);
+        assertThat(adapter.preValidate(validator, function).apply("TEST"), is(0));
     }
 
 }

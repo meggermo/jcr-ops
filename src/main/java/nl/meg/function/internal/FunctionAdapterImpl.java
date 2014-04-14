@@ -1,7 +1,7 @@
 package nl.meg.function.internal;
 
+import nl.meg.function.FunctionAdapter;
 import nl.meg.function.ValidatingFunction;
-import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.function.ValidationException;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
@@ -9,16 +9,16 @@ import nl.meg.validation.Validator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-final class ValidatingFunctionAdapterImpl<E extends Enum<E>, S, T> implements ValidatingFunctionAdapter<E, S, T> {
+final class FunctionAdapterImpl<E extends Enum<E>, S, T> implements FunctionAdapter<E, S, T> {
 
     private final Supplier<ValidationContext<E, S>> contextSupplier;
 
-    public ValidatingFunctionAdapterImpl(Supplier<ValidationContext<E, S>> contextSupplier) {
+    public FunctionAdapterImpl(Supplier<ValidationContext<E, S>> contextSupplier) {
         this.contextSupplier = contextSupplier;
     }
 
     @Override
-    public ValidatingFunction<S, T> adapt(Validator<E, S> validator, Function<S, T> function) {
+    public ValidatingFunction<S, T> preValidate(Validator<E, S> validator, Function<S, T> function) {
         return new Adapter(contextSupplier, validator, function);
     }
 
@@ -44,8 +44,7 @@ final class ValidatingFunctionAdapterImpl<E extends Enum<E>, S, T> implements Va
             }
         }
 
-        @Override
-        public ValidationContext<E, S> validate(S entity) {
+        private ValidationContext<E, S> validate(S entity) {
             return validator.validate(entity, contextSupplier.get());
         }
     }

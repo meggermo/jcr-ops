@@ -1,8 +1,8 @@
 package nl.meg.jcr.mutation.internal;
 
 import nl.meg.AbstractMockitoTest;
+import nl.meg.function.FunctionAdapter;
 import nl.meg.function.ValidatingFunction;
-import nl.meg.function.ValidatingFunctionAdapter;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
@@ -46,7 +46,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
     private ValidationContext<NodeErrorCode, HippoNode> context;
 
     @Mock
-    private ValidatingFunctionAdapter<NodeErrorCode, HippoNode, HippoNode> validatingFunctionAdapter;
+    private FunctionAdapter<NodeErrorCode, HippoNode, HippoNode> functionAdapter;
 
     @Mock
     private ValidatingFunction<HippoNode, HippoNode> function;
@@ -56,9 +56,9 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
         when(nodeValidators.canAddChild(parent)).thenReturn(validator);
         when(nodeValidators.isNotRoot()).thenReturn(validator);
         when(contextSupplier.get()).thenReturn(context);
-        when(validatingFunctionAdapter.adapt(any(Validator.class), any(Function.class))).thenReturn(function);
+        when(functionAdapter.preValidate(any(Validator.class), any(Function.class))).thenReturn(function);
         when(function.apply(node)).thenReturn(node);
-        this.nodeMethods = new NodeMethodsImpl(nodeValidators, builder(continueValidation), validatingFunctionAdapter);
+        this.nodeMethods = new NodeMethodsImpl(nodeValidators, builder(continueValidation), functionAdapter);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
 
     @Test
     public void testValidateMoveCallsNodeValidators() {
-        nodeMethods.moveFunction(parent).validate(node);
+        nodeMethods.moveFunction(parent).apply(node);
         verify(nodeValidators).isNotRoot();
         verify(nodeValidators).canAddChild(parent);
         verifyNoMoreInteractions(nodeValidators);
@@ -81,7 +81,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
 
     @Test
     public void testValidateRenameCallsNodeValidators() {
-        nodeMethods.renameFunction("newName").validate(node);
+        nodeMethods.renameFunction("newName").apply(node);
         verify(nodeValidators).isNotRoot();
         verify(nodeValidators).canRenameTo("newName");
         verifyNoMoreInteractions(nodeValidators);
