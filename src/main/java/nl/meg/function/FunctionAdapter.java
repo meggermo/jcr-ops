@@ -24,7 +24,7 @@ public final class FunctionAdapter {
                 throw new ValidationException(context.getErrors());
             }
         };
-    };
+    }
 
     /**
      * Returns a function that will post-validate the result after executing the given function.
@@ -44,6 +44,14 @@ public final class FunctionAdapter {
                 throw new ValidationException(context.getErrors());
             }
         };
+    }
+
+    public static <T, R, E extends Exception, RE extends RuntimeException> R relax(EFunction<? super T, ? extends R, E> f, T input, Function<E, ? extends RE> g) {
+        try {
+            return f.apply(input);
+        } catch (Exception e) {
+            throw g.apply((E) e);
+        }
     }
 
 }

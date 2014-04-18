@@ -1,6 +1,8 @@
 package nl.meg.jcr;
 
 
+import nl.meg.jcr.exception.RuntimeRepositoryException;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
@@ -17,45 +19,46 @@ import static java.util.Spliterator.SIZED;
 import static java.util.Spliterators.spliterator;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
-import static nl.meg.jcr.RepoFunctionInvoker.invoke;
+import static nl.meg.function.FunctionAdapter.relax;
 
 public interface HippoNode extends HippoItem<Node> {
 
     default Integer getIndex() {
-        return invoke(Node::getIndex, get());
+        return relax(Node::getIndex, get(), RuntimeRepositoryException::new);
     }
 
     default String getIdentifier() {
-        return invoke(Node::getIdentifier, get());
+        return relax(Node::getIdentifier, get(), RuntimeRepositoryException::new);
     }
 
     default boolean isRoot() {
-        return invoke(n -> n.getSession().getRootNode().isSame(get()), get());
+        return relax(n -> n.getSession().getRootNode().isSame(get()), get(), RuntimeRepositoryException::new);
     }
 
     default boolean isNodeType(String nodeTypeName) {
-        return invoke(n -> n.isNodeType(nodeTypeName), get());
+        return relax(n -> n.isNodeType(nodeTypeName), get(), RuntimeRepositoryException::new);
     }
 
     default NodeType getPrimaryNodeType() {
-        return invoke(Node::getPrimaryNodeType, get());
+        return relax(Node::getPrimaryNodeType, get(), RuntimeRepositoryException::new);
     }
 
     default NodeType[] getMixinNodeTypes() {
-        return invoke(Node::getMixinNodeTypes, get());
+        return relax(Node::getMixinNodeTypes, get(), RuntimeRepositoryException::new);
     }
 
     default Optional<HippoNode> getNode(String name) {
-        return invoke(n -> n.hasNode(name)
+        return relax(n -> n.hasNode(name)
                         ? Optional.of(apply(n.getNode(name)))
                         : Optional.empty(),
-                get()
+                get(),
+                RuntimeRepositoryException::new
         );
     }
 
     @SuppressWarnings("unchecked")
     default List<HippoNode> getNodes() {
-        return invoke(n -> {
+        return relax(n -> {
             if (n.hasNodes()) {
                 final NodeIterator nI = n.getNodes();
                 final Spliterator<Node> sI = spliterator(nI, nI.getSize(), NONNULL | SIZED);
@@ -63,20 +66,20 @@ public interface HippoNode extends HippoItem<Node> {
             } else {
                 return Stream.<Node>empty();
             }
-        }, get()).map(n -> apply(n)).collect(toList());
+        }, get(), RuntimeRepositoryException::new).map(n -> apply(n)).collect(toList());
     }
 
     default Optional<Property> getProperty(String name) {
-        return invoke(n -> n.hasProperty(name)
+        return relax(n -> n.hasProperty(name)
                         ? Optional.of(n.getProperty(name))
                         : Optional.empty(),
-                get()
+                get(), RuntimeRepositoryException::new
         );
     }
 
     @SuppressWarnings("unchecked")
     default List<Property> getProperties() {
-        return invoke(n -> {
+        return relax(n -> {
             if (n.hasProperties()) {
                 final PropertyIterator pI = n.getProperties();
                 final Spliterator<Property> sI = spliterator(pI, pI.getSize(), NONNULL | SIZED);
@@ -84,7 +87,7 @@ public interface HippoNode extends HippoItem<Node> {
             } else {
                 return Collections.emptyList();
             }
-        }, get());
+        }, get(), RuntimeRepositoryException::new);
     }
 
 }

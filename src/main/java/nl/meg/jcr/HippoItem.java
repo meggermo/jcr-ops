@@ -1,5 +1,7 @@
 package nl.meg.jcr;
 
+import nl.meg.jcr.exception.RuntimeRepositoryException;
+
 import javax.jcr.Item;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -8,55 +10,55 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static nl.meg.jcr.RepoFunctionInvoker.invoke;
+import static nl.meg.function.FunctionAdapter.relax;
 
 public interface HippoItem<E extends Item> extends Supplier<E>, Function<Node, HippoNode> {
 
     default String getName() {
-        return invoke(Item::getName, get());
+        return relax(Item::getName, get(), RuntimeRepositoryException::new);
     }
 
     default String getPath() {
-        return invoke(Item::getPath, get());
+        return relax(Item::getPath, get(), RuntimeRepositoryException::new);
     }
 
     default Session getSession() {
-        return invoke(Item::getSession, get());
+        return relax(Item::getSession, get(), RuntimeRepositoryException::new);
     }
 
     default int getDepth() {
-        return invoke(Item::getDepth, get());
+        return relax(Item::getDepth, get(), RuntimeRepositoryException::new);
     }
 
     default boolean isModified() {
-        return invoke(Item::isModified, get());
+        return relax(Item::isModified, get(), RuntimeRepositoryException::new);
     }
 
     default boolean isNew() {
-        return invoke(Item::isNew, get());
+        return relax(Item::isNew, get(), RuntimeRepositoryException::new);
     }
 
     default boolean isNode() {
-        return invoke(Item::isNode, get());
+        return relax(Item::isNode, get(), RuntimeRepositoryException::new);
     }
 
     default boolean isSame(HippoItem<E> other) {
-        return invoke(i -> i.isSame(other.get()), get());
+        return relax(i -> i.isSame(other.get()), get(), RuntimeRepositoryException::new);
     }
 
     default Item getAncestor(int depth) {
-        return invoke(i -> i.getAncestor(depth), get());
+        return relax(i -> i.getAncestor(depth), get(), RuntimeRepositoryException::new);
     }
 
     default Optional<HippoNode> getParent() {
         return Optional.ofNullable(
-                invoke(i -> {
+                relax(i -> {
                     try {
                         return apply(i.getParent());
                     } catch (ItemNotFoundException e) {
                         return null;
                     }
-                }, get())
+                }, get(), RuntimeRepositoryException::new)
         );
     }
 }
