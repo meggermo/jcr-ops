@@ -2,13 +2,13 @@ package nl.meg.jcr.predicate.internal;
 
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 import nl.meg.jcr.predicate.PropertyPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import javax.jcr.RepositoryException;
-import javax.jcr.Value;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -24,10 +24,10 @@ public class PropertyPredicatesImplTest extends AbstractMockitoTest {
     private HippoProperty p;
 
     @Mock
-    private Predicate<Value> vP;
+    private Predicate<HippoValue> vP;
 
     @Mock
-    private Value v;
+    private HippoValue v;
 
     @Before
     public void setUp() {

@@ -3,12 +3,10 @@ package nl.meg.jcr.internal;
 import nl.meg.jcr.HippoItem;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
-import javax.jcr.Item;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.Property;
+import javax.jcr.*;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -19,11 +17,13 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
     private final E node;
     private final Function<Node, HippoNode> hippoNodeFactory;
     private final Function<Property, HippoProperty> hippoPropertyFactory;
+    private final Function<Value, HippoValue> hippoValueFactory;
 
-    AbstractHippoItem(E node, Function<Node, HippoNode> hippoNodeFactory, Function<Property, HippoProperty> hippoPropertyFactory) {
+    AbstractHippoItem(E node) {
         this.node = node;
-        this.hippoNodeFactory = hippoNodeFactory;
-        this.hippoPropertyFactory = hippoPropertyFactory;
+        this.hippoNodeFactory = HippoNodeImpl::new;
+        this.hippoPropertyFactory = HippoPropertyImpl::new;
+        this.hippoValueFactory = HippoValueImpl::new;
     }
 
     @Override
@@ -37,6 +37,10 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
     protected final HippoProperty property(Property property) {
         return hippoPropertyFactory.apply(property);
+    }
+
+    protected final HippoValue value(Value value) {
+        return hippoValueFactory.apply(value);
     }
 
     @Override

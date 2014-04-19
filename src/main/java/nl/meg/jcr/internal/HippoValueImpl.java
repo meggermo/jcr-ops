@@ -14,6 +14,6 @@ final class HippoValueImpl implements HippoValue {
 
     @Override
     public Value get() {
-        return null;
+        return value;
     }
 }

@@ -24,7 +24,7 @@ import static nl.meg.function.FunctionAdapter.relax;
 final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
     HippoNodeImpl(Node node) {
-        super(node, HippoNodeImpl::new, HippoPropertyImpl::new);
+        super(node);
     }
 
     @Override

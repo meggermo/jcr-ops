@@ -2,8 +2,8 @@ package nl.meg.jcr.predicate;
 
 
 import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 
-import javax.jcr.Value;
 import java.util.function.Predicate;
 
 public interface PropertyPredicates {
@@ -12,7 +12,7 @@ public interface PropertyPredicates {
 
     Predicate<HippoProperty> pathIn(String... paths);
 
-    Predicate<HippoProperty> with(Predicate<Value> valuePredicate);
+    Predicate<HippoProperty> with(Predicate<HippoValue> valuePredicate);
 
-    Predicate<HippoProperty> with(String name, Predicate<Value> valuePredicate);
+    Predicate<HippoProperty> with(String name, Predicate<HippoValue> valuePredicate);
 }

@@ -43,7 +43,7 @@ public class HippoPropertyImplTest extends AbstractMockitoTest {
     @Test
     public void testGetValue() throws RepositoryException {
         when(property.getValue()).thenReturn(value);
-        assertThat(hippoProperty.getValue().get(), is(value));
+        assertThat(hippoProperty.getValue().get().get(), is(value));
     }
 
     @Test
