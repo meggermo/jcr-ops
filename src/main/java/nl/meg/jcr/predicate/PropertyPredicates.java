@@ -1,17 +1,18 @@
 package nl.meg.jcr.predicate;
 
 
-import javax.jcr.Property;
+import nl.meg.jcr.HippoProperty;
+
 import javax.jcr.Value;
 import java.util.function.Predicate;
 
 public interface PropertyPredicates {
 
-    Predicate<Property> nameIn(String... names);
+    Predicate<HippoProperty> nameIn(String... names);
 
-    Predicate<Property> pathIn(String... paths);
+    Predicate<HippoProperty> pathIn(String... paths);
 
-    Predicate<Property> with(Predicate<Value> valuePredicate);
+    Predicate<HippoProperty> with(Predicate<Value> valuePredicate);
 
-    Predicate<Property> with(String name, Predicate<Value> valuePredicate);
+    Predicate<HippoProperty> with(String name, Predicate<Value> valuePredicate);
 }

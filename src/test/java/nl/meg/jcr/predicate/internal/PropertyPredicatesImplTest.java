@@ -1,14 +1,15 @@
 package nl.meg.jcr.predicate.internal;
 
 import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.predicate.PropertyPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,7 +21,7 @@ public class PropertyPredicatesImplTest extends AbstractMockitoTest {
     private PropertyPredicates propertyPredicates;
 
     @Mock
-    private Property p;
+    private HippoProperty p;
 
     @Mock
     private Predicate<Value> vP;
@@ -49,7 +50,7 @@ public class PropertyPredicatesImplTest extends AbstractMockitoTest {
 
     @Test
     public void testWithValuePredicate() throws RepositoryException {
-        when(p.getValue()).thenReturn(v);
+        when(p.getValue()).thenReturn(Optional.of(v));
         when(vP.test(v)).thenReturn(true, false);
         assertThat(propertyPredicates.with(vP).test(p), is(true));
         assertThat(propertyPredicates.with(vP).test(p), is(false));
@@ -57,11 +58,10 @@ public class PropertyPredicatesImplTest extends AbstractMockitoTest {
 
     @Test
     public void testWithNamedValue() throws RepositoryException {
-        when(p.getValue()).thenReturn(v);
+        when(p.getValue()).thenReturn(Optional.of(v));
         when(p.getName()).thenReturn("X");
         when(vP.test(v)).thenReturn(true, false);
         assertThat(propertyPredicates.with(vP).test(p), is(true));
         assertThat(propertyPredicates.with("X", vP).test(p), is(false));
-
     }
 }
