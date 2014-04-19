@@ -1,9 +1,9 @@
 package nl.meg.jcr.predicate.internal;
 
 import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.predicate.NodePredicates;
 
-import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
 import java.util.function.Predicate;
 
@@ -33,7 +33,7 @@ final class NodePredicatesImpl implements NodePredicates {
     }
 
     @Override
-    public Predicate<HippoNode> withProperty(final Predicate<Property> predicate) {
+    public Predicate<HippoNode> withProperty(final Predicate<HippoProperty> predicate) {
         return n -> n.getProperties().stream().anyMatch(predicate);
     }
 

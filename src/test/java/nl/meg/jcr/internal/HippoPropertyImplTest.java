@@ -1,11 +1,12 @@
-package nl.meg.jcr;
+package nl.meg.jcr.internal;
 
 import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
@@ -14,7 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-public class HippoPropertyTest extends AbstractMockitoTest {
+public class HippoPropertyImplTest extends AbstractMockitoTest {
 
     private HippoProperty hippoProperty;
 
@@ -30,17 +31,7 @@ public class HippoPropertyTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hippoProperty = new HippoProperty() {
-            @Override
-            public HippoNode apply(Node node) {
-                return hippoNode;
-            }
-
-            @Override
-            public Property get() {
-                return property;
-            }
-        };
+        this.hippoProperty = new HippoPropertyImpl(property);
     }
 
     @Test

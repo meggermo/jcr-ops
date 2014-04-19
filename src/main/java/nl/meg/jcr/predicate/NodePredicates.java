@@ -1,8 +1,8 @@
 package nl.meg.jcr.predicate;
 
 import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
 
-import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
 import java.util.function.Predicate;
 
@@ -16,7 +16,7 @@ public interface NodePredicates {
 
     Predicate<HippoNode> nameIn(String... names);
 
-    Predicate<HippoNode> withProperty(Predicate<Property> predicate);
+    Predicate<HippoNode> withProperty(Predicate<HippoProperty> predicate);
 
     Predicate<HippoNode> withNodeType(Predicate<NodeType> predicate);
 }

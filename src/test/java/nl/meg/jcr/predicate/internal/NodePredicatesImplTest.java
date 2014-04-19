@@ -2,16 +2,15 @@ package nl.meg.jcr.predicate.internal;
 
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.predicate.NodePredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,13 +25,10 @@ public class NodePredicatesImplTest extends AbstractMockitoTest {
     private HippoNode n1, n2;
 
     @Mock
-    private Iterator<Property> p1I;
+    private HippoProperty p1P;
 
     @Mock
-    private Property p1P;
-
-    @Mock
-    private Predicate<Property> pP;
+    private Predicate<HippoProperty> pP;
 
     @Mock
     private Predicate<NodeType> ntP;

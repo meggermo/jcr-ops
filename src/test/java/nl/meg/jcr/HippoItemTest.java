@@ -6,7 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import javax.jcr.*;
+import javax.jcr.Item;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -27,13 +30,12 @@ public class HippoItemTest extends AbstractMockitoTest {
     public void setUp() {
         this.hippoItem = new HippoItem<Item>() {
             @Override
-            public HippoNode apply(Node node) {
-                return hippoNode;
-            }
-
-            @Override
             public Item get() {
                 return item;
+            }
+            @Override
+            public Optional<HippoNode> getParent() {
+                return null;
             }
         };
     }
@@ -94,20 +96,6 @@ public class HippoItemTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testGetParent() throws RepositoryException {
-        final Node node = mock(Node.class);
-        when(item.getParent()).thenReturn(node);
-        when(hippoNode.get()).thenReturn(node);
-        assertThat(hippoItem.getParent().get().get(), is(node));
-    }
-
-    @Test
-    public void testGetParent_IsAbsent() throws RepositoryException {
-        when(item.getParent()).thenThrow(ItemNotFoundException.class);
-        assertThat(hippoItem.getParent().isPresent(), is(false));
-    }
-
-    @Test
     public void testExceptionTranslation() throws RepositoryException {
         final RepositoryException rre = new RepositoryException();
         final Throwable t = rre;
@@ -128,13 +116,6 @@ public class HippoItemTest extends AbstractMockitoTest {
         try {
             when(item.getPath()).thenThrow(rre);
             hippoItem.getPath();
-            shouldHaveThrown();
-        } catch (RuntimeRepositoryException e) {
-            assertThat(e.getCause(), is(t));
-        }
-        try {
-            when(item.getParent()).thenThrow(rre);
-            hippoItem.getParent();
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));

@@ -3,16 +3,13 @@ package nl.meg.jcr;
 import nl.meg.jcr.exception.RuntimeRepositoryException;
 
 import javax.jcr.Item;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
 import javax.jcr.Session;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static nl.meg.function.FunctionAdapter.relax;
 
-public interface HippoItem<E extends Item> extends Supplier<E>, Function<Node, HippoNode> {
+public interface HippoItem<E extends Item> extends Supplier<E> {
 
     default String getName() {
         return relax(Item::getName, get(), RuntimeRepositoryException::new);
@@ -50,15 +47,5 @@ public interface HippoItem<E extends Item> extends Supplier<E>, Function<Node, H
         return relax(i -> i.getAncestor(depth), get(), RuntimeRepositoryException::new);
     }
 
-    default Optional<HippoNode> getParent() {
-        return Optional.ofNullable(
-                relax(i -> {
-                    try {
-                        return apply(i.getParent());
-                    } catch (ItemNotFoundException e) {
-                        return null;
-                    }
-                }, get(), RuntimeRepositoryException::new)
-        );
-    }
+    Optional<HippoNode> getParent();
 }
