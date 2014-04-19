@@ -1,5 +1,6 @@
 package nl.meg.jcr.predicate.internal;
 
+import nl.meg.jcr.HippoValue;
 import nl.meg.jcr.predicate.ValuePredicates;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.RepositoryException;
-import javax.jcr.Value;
 import java.util.GregorianCalendar;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -21,7 +21,7 @@ public class ValuePredicatesImplTest {
     private ValuePredicates valuePredicates;
 
     @Mock
-    private Value value;
+    private HippoValue value;
 
     @Before
     public void setUp() {
@@ -50,7 +50,7 @@ public class ValuePredicatesImplTest {
     }
 
     @Test
-    public void testEqualTo3() throws RepositoryException {
+    public void testEqualToDate() throws RepositoryException {
         final GregorianCalendar calendar = new GregorianCalendar();
         when(value.getDate()).thenReturn(calendar);
         assertThat(valuePredicates.equalTo(calendar).test(value), is(true));
