@@ -78,6 +78,12 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
     }
 
     @Test
+    public void testGetIdentifier() throws RepositoryException {
+        when(node.getIdentifier()).thenReturn("X");
+        assertThat(hippoNode.getIdentifier(), is("X"));
+    }
+
+    @Test
     public void testGetIndex() throws RepositoryException {
         when(node.getIndex()).thenReturn(1);
         assertThat(hippoNode.getIndex(), is(1));
