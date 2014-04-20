@@ -20,6 +20,11 @@ final class HippoPropertyImpl extends AbstractHippoItem<Property> implements Hip
     }
 
     @Override
+    public boolean isMultiple() {
+        return relax(Property::isMultiple, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
     public Optional<HippoValue> getValue() {
         return Optional.ofNullable(
                 relax(p -> p.isMultiple()

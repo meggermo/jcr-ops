@@ -8,6 +8,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.nodetype.NodeType;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,30 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
     HippoNodeImpl(Node node) {
         super(node);
+    }
+
+    public Integer getIndex() {
+        return relax(Node::getIndex, get(), RuntimeRepositoryException::new);
+    }
+
+    public String getIdentifier() {
+        return relax(Node::getIdentifier, get(), RuntimeRepositoryException::new);
+    }
+
+    public boolean isRoot() {
+        return relax(n -> n.getSession().getRootNode().isSame(get()), get(), RuntimeRepositoryException::new);
+    }
+
+    public boolean isNodeType(String nodeTypeName) {
+        return relax(n -> n.isNodeType(nodeTypeName), get(), RuntimeRepositoryException::new);
+    }
+
+    public NodeType getPrimaryNodeType() {
+        return relax(Node::getPrimaryNodeType, get(), RuntimeRepositoryException::new);
+    }
+
+    public NodeType[] getMixinNodeTypes() {
+        return relax(Node::getMixinNodeTypes, get(), RuntimeRepositoryException::new);
     }
 
     @Override

@@ -55,4 +55,50 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
                 }, get(), RuntimeRepositoryException::new)
         );
     }
+
+    @Override
+    public String getName() {
+        return relax(Item::getName, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public String getPath() {
+        return relax(Item::getPath, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public Session getSession() {
+        return relax(Item::getSession, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public int getDepth() {
+        return relax(Item::getDepth, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public boolean isModified() {
+        return relax(Item::isModified, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public boolean isNew() {
+        return relax(Item::isNew, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public boolean isNode() {
+        return relax(Item::isNode, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public boolean isSame(HippoItem<E> other) {
+        return relax(i -> i.isSame(other.get()), get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public Item getAncestor(int depth) {
+        return relax(i -> i.getAncestor(depth), get(), RuntimeRepositoryException::new);
+    }
+
 }
