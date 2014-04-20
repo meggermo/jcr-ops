@@ -2,7 +2,6 @@ package nl.meg.jcr.internal;
 
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -20,7 +19,6 @@ import static java.util.Spliterator.SIZED;
 import static java.util.Spliterators.spliterator;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
-import static nl.meg.function.FunctionAdapter.relax;
 
 final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
@@ -29,42 +27,39 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
     }
 
     public Integer getIndex() {
-        return relax(Node::getIndex, get(), RuntimeRepositoryException::new);
+        return invoke(Node::getIndex);
     }
 
     public String getIdentifier() {
-        return relax(Node::getIdentifier, get(), RuntimeRepositoryException::new);
+        return invoke(Node::getIdentifier);
     }
 
     public boolean isRoot() {
-        return relax(n -> n.getSession().getRootNode().isSame(get()), get(), RuntimeRepositoryException::new);
+        return invoke(n -> n.getSession().getRootNode().isSame(get()));
     }
 
     public boolean isNodeType(String nodeTypeName) {
-        return relax(n -> n.isNodeType(nodeTypeName), get(), RuntimeRepositoryException::new);
+        return invoke(n -> n.isNodeType(nodeTypeName));
     }
 
     public NodeType getPrimaryNodeType() {
-        return relax(Node::getPrimaryNodeType, get(), RuntimeRepositoryException::new);
+        return invoke(Node::getPrimaryNodeType);
     }
 
     public NodeType[] getMixinNodeTypes() {
-        return relax(Node::getMixinNodeTypes, get(), RuntimeRepositoryException::new);
+        return invoke(Node::getMixinNodeTypes);
     }
 
     @Override
     public Optional<HippoNode> getNode(String name) {
-        return relax(n -> n.hasNode(name)
-                        ? Optional.of(node(n.getNode(name)))
-                        : Optional.empty(),
-                get(),
-                RuntimeRepositoryException::new
-        );
+        return invoke(n -> n.hasNode(name)
+                ? Optional.of(node(n.getNode(name)))
+                : Optional.empty());
     }
 
     @Override
     public List<HippoNode> getNodes() {
-        return relax(n -> {
+        return invoke(n -> {
             if (n.hasNodes()) {
                 final NodeIterator nI = n.getNodes();
                 @SuppressWarnings("unchecked")
@@ -73,21 +68,19 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
             } else {
                 return Stream.<Node>empty();
             }
-        }, get(), RuntimeRepositoryException::new).map(this::node).collect(toList());
+        }).map(this::node).collect(toList());
     }
 
     @Override
     public Optional<HippoProperty> getProperty(String name) {
-        return relax(n -> n.hasProperty(name)
-                        ? Optional.of(property(n.getProperty(name)))
-                        : Optional.empty(),
-                get(), RuntimeRepositoryException::new
-        );
+        return invoke(n -> n.hasProperty(name)
+                ? Optional.of(property(n.getProperty(name)))
+                : Optional.empty());
     }
 
     @Override
     public List<HippoProperty> getProperties() {
-        return relax(n -> {
+        return invoke(n -> {
             if (n.hasProperties()) {
                 final PropertyIterator pI = n.getProperties();
                 @SuppressWarnings("unchecked")
@@ -96,7 +89,7 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
             } else {
                 return Collections.emptyList();
             }
-        }, get(), RuntimeRepositoryException::new);
+        });
     }
 
 }

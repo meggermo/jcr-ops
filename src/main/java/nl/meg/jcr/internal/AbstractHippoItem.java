@@ -1,5 +1,6 @@
 package nl.meg.jcr.internal;
 
+import nl.meg.function.EFunction;
 import nl.meg.jcr.HippoItem;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
@@ -46,59 +47,62 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
     @Override
     public Optional<HippoNode> getParent() {
         return Optional.ofNullable(
-                relax(n -> {
+                invoke(n -> {
                     try {
                         return node(n.getParent());
                     } catch (ItemNotFoundException e) {
                         return null;
                     }
-                }, get(), RuntimeRepositoryException::new)
+                })
         );
     }
 
     @Override
     public String getName() {
-        return relax(Item::getName, get(), RuntimeRepositoryException::new);
+        return invoke(Item::getName);
     }
 
     @Override
     public String getPath() {
-        return relax(Item::getPath, get(), RuntimeRepositoryException::new);
+        return invoke(Item::getPath);
     }
 
     @Override
     public Session getSession() {
-        return relax(Item::getSession, get(), RuntimeRepositoryException::new);
+        return invoke(Item::getSession);
     }
 
     @Override
     public int getDepth() {
-        return relax(Item::getDepth, get(), RuntimeRepositoryException::new);
+        return invoke(Item::getDepth);
     }
 
     @Override
     public boolean isModified() {
-        return relax(Item::isModified, get(), RuntimeRepositoryException::new);
+        return invoke(Item::isModified);
     }
 
     @Override
     public boolean isNew() {
-        return relax(Item::isNew, get(), RuntimeRepositoryException::new);
+        return invoke(Item::isNew);
     }
 
     @Override
     public boolean isNode() {
-        return relax(Item::isNode, get(), RuntimeRepositoryException::new);
+        return invoke(Item::isNode);
     }
 
     @Override
     public boolean isSame(HippoItem<E> other) {
-        return relax(i -> i.isSame(other.get()), get(), RuntimeRepositoryException::new);
+        return invoke(i -> i.isSame(other.get()));
     }
 
     @Override
     public Item getAncestor(int depth) {
-        return relax(i -> i.getAncestor(depth), get(), RuntimeRepositoryException::new);
+        return invoke(i -> i.getAncestor(depth));
     }
 
+    protected final <T> T invoke(EFunction<E, T, RepositoryException> f) {
+        return relax(f, get(), RuntimeRepositoryException::new);
+    }
 }
