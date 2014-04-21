@@ -94,6 +94,7 @@
                         <versionTagPrefix>v</versionTagPrefix>
                     </flowInitContext>
                     <enableSshAgent>true</enableSshAgent>
+                    <noDeploy>true</noDeploy>
                 </configuration>
             </plugin>
         </plugins>
