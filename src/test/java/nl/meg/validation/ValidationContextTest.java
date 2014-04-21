@@ -9,7 +9,7 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ValidationContextImplTest {
+public class ValidationContextTest {
 
     enum E {
         A, B
@@ -19,7 +19,7 @@ public class ValidationContextImplTest {
 
     @Before
     public void setUp() {
-        this.context = new ValidationContextImpl<>(E.class);
+        this.context = new ValidationContext<>();
     }
 
     @Test

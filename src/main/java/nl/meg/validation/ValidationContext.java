@@ -1,14 +1,27 @@
 package nl.meg.validation;
 
-import java.util.EnumMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public interface ValidationContext<E extends Enum<E>, T> {
+public class ValidationContext<E extends Enum<E>, T> {
 
-    boolean isValid();
+    private final Map<E, List<Map<String, ?>>> errors = new HashMap<>();
 
-    EnumMap<E, List<Map<String,?>>> getErrors();
+    public boolean isValid() {
+        return errors.isEmpty();
+    }
 
-    ValidationContext<E, T> addError(E error, Map<String, ?> contextParameterMap);
+    public Map<E, List<Map<String, ?>>> getErrors() {
+        return errors;
+    }
+
+    public ValidationContext<E, T> addError(E error, Map<String, ?> contextParameterMap) {
+        if (!errors.containsKey(error)) {
+            errors.put(error, new ArrayList<Map<String, ?>>());
+        }
+        errors.get(error).add(contextParameterMap);
+        return this;
+    }
 }

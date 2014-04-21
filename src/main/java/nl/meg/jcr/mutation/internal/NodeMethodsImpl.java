@@ -1,55 +1,51 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
-import nl.meg.validation.ValidatingFunctionAdapter;
-import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import nl.meg.validation.ValidatorBuilder;
 
-public class NodeMethodsImpl implements NodeMethods {
+import java.util.function.Function;
+
+import static nl.meg.function.FunctionAdapter.preValidate;
+
+public final class NodeMethodsImpl implements NodeMethods {
 
     private final INodeValidators nodeValidators;
-    private final Supplier<ValidationContext<NodeErrorCode, INode>> contextSupplier;
-    private final Predicate<ValidationContext<NodeErrorCode, INode>> continueValidation;
+    private final ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder;
 
-    public NodeMethodsImpl(INodeValidators nodeValidators, Supplier<ValidationContext<NodeErrorCode, INode>> contextSupplier, Predicate<ValidationContext<NodeErrorCode, INode>> continueValidation) {
+    public NodeMethodsImpl(INodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder) {
         this.nodeValidators = nodeValidators;
-        this.contextSupplier = contextSupplier;
-        this.continueValidation = continueValidation;
+        this.validatorBuilder = validatorBuilder;
     }
 
     @Override
-    public INode move(INode node, INode newParent) {
-        final Validator<NodeErrorCode, INode> validator = builder()
+    public Function<HippoNode, HippoNode> moveFunction(HippoNode newParent) {
+        final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
                 .build();
-        final Function<INode, INode> function = new MoveNodeImpl(newParent);
-        return validate(validator, function).apply(node);
+        return preValidate(validator, new MoveNodeImpl(newParent));
     }
 
     @Override
-    public INode rename(INode node, String newName) {
-        final Validator<NodeErrorCode, INode> validator = builder()
+    public Function<HippoNode, HippoNode> renameFunction(String newName) {
+        final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
                 .build();
-        final Function<INode, INode> function = new RenameNodeImpl(newName);
-        return validate(validator, function).apply(node);
+        return preValidate(validator, new RenameNodeImpl(newName));
     }
 
-    private Function<INode, INode> validate(Validator<NodeErrorCode, INode> validator, Function<INode, INode> function) {
-        return new ValidatingFunctionAdapter<>(contextSupplier, validator, function);
+    @Override
+    public Function<HippoNode, HippoNode> repositionFunction(int newPosition) {
+        final Validator<NodeErrorCode, HippoNode> validator = validatorBuilder
+                .add(nodeValidators.isNotRoot())
+                .add(nodeValidators.supportsOrdering())
+                .add(nodeValidators.positionInBounds(newPosition))
+                .build();
+        return preValidate(validator, new RepositionNodeImpl(newPosition));
     }
-
-    private ValidatorBuilder<NodeErrorCode, INode> builder() {
-        return ValidatorBuilder.builder(continueValidation);
-    }
-
 }

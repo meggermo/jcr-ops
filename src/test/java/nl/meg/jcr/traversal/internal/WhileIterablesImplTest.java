@@ -1,27 +1,23 @@
 package nl.meg.jcr.traversal.internal;
 
-import com.google.common.base.Predicate;
+import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.traversal.WhileIterables;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class WhileIterablesImplTest {
+public class WhileIterablesImplTest extends AbstractMockitoTest {
 
     private WhileIterables whileIterables;
 
@@ -42,32 +38,28 @@ public class WhileIterablesImplTest {
 
     @Test
     public void testTakeWhile() {
-        final Predicate<Integer> p = not(equalTo(4));
         final List<Integer> i = asList(1, 2, 3, 4, 5, 4);
-        final List<Integer> j = copyOf(whileIterables.takeWhile(p, i));
-        assertThat(j, is(asList(1,2,3)));
+        final List<Integer> j = copyOf(whileIterables.takeWhile(x -> x != 4, i));
+        assertThat(j, is(asList(1, 2, 3)));
     }
 
     @Test
     public void testDropWhile() {
-        final Predicate<Integer> p = not(equalTo(4));
         final List<Integer> i = asList(1, 2, 3, 4, 5, 4);
-        final List<Integer> j = copyOf(whileIterables.dropWhile(p, i));
+        final List<Integer> j = copyOf(whileIterables.dropWhile(x -> x != 4, i));
         assertThat(j, is(asList(5, 4)));
     }
 
     @Test
     public void testTakeWhile_WithEmptyList() {
-        final Predicate<Integer> p = alwaysTrue();
-        assertThat(whileIterables.takeWhile(p, empty).iterator().hasNext(), is(false));
+        assertThat(whileIterables.takeWhile(x -> true, empty).iterator().hasNext(), is(false));
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testTakeWhile_ThrowsNoSuchElement() {
         when(nullValues.iterator()).thenReturn(iteratorWithNulls);
         when(iteratorWithNulls.hasNext()).thenReturn(false);
-        final Predicate<Integer> p = alwaysTrue();
-        whileIterables.takeWhile(p, nullValues).iterator().next();
+        whileIterables.takeWhile(x -> true, nullValues).iterator().next();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -75,15 +67,13 @@ public class WhileIterablesImplTest {
         when(nullValues.iterator()).thenReturn(iteratorWithNulls);
         when(iteratorWithNulls.hasNext()).thenReturn(true, false);
         when(iteratorWithNulls.next()).thenReturn(1);
-        final Predicate<Integer> p = alwaysTrue();
-        final Iterator<Integer> iterator = whileIterables.takeWhile(p, nullValues).iterator();
+        final Iterator<Integer> iterator = whileIterables.takeWhile(x -> true, nullValues).iterator();
         iterator.next();
         iterator.next();
     }
 
     @Test
     public void testDropWhile_WithEmptyList() {
-        final Predicate<Integer> p = alwaysTrue();
-        assertThat(whileIterables.dropWhile(p, empty).iterator().hasNext(), is(false));
+        assertThat(whileIterables.dropWhile(x -> true, empty).iterator().hasNext(), is(false));
     }
 }

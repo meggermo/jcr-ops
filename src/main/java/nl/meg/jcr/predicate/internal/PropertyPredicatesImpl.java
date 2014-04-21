@@ -1,44 +1,31 @@
 package nl.meg.jcr.predicate.internal;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.ImmutableSet;
-import nl.meg.jcr.function.PropertyFunctions;
+import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 import nl.meg.jcr.predicate.PropertyPredicates;
 
-import javax.jcr.Property;
-import javax.jcr.Value;
-
-import static com.google.common.base.Predicates.compose;
-import static com.google.common.base.Predicates.in;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 final class PropertyPredicatesImpl implements PropertyPredicates {
 
-    private final PropertyFunctions propertyFunctions;
-
-    PropertyPredicatesImpl(PropertyFunctions propertyFunctions) {
-        this.propertyFunctions = propertyFunctions;
+    @Override
+    public Predicate<HippoProperty> nameIn(String... names) {
+        return property -> Stream.of(names).anyMatch(name -> name == property.getName());
     }
 
     @Override
-    public Predicate<Property> nameIn(String... names) {
-        final ImmutableSet<String> strings = ImmutableSet.<String>builder().add(names).build();
-        return compose(in(strings), propertyFunctions.getName());
+    public Predicate<HippoProperty> pathIn(String... paths) {
+        return property -> Stream.of(paths).anyMatch(path -> path == property.getPath());
     }
 
     @Override
-    public Predicate<Property> pathIn(String... paths) {
-        final ImmutableSet<String> strings = ImmutableSet.<String>builder().add(paths).build();
-        return compose(in(strings), propertyFunctions.getPath());
+    public Predicate<HippoProperty> with(Predicate<HippoValue> valuePredicate) {
+        return property -> valuePredicate.test(property.getValue().get());
     }
 
     @Override
-    public Predicate<Property> with(Predicate<Value> valuePredicate) {
-        return compose(valuePredicate, propertyFunctions.getValue());
-    }
-
-    @Override
-    public Predicate<Property> with(String name, Predicate<Value> valuePredicate) {
-        return Predicates.and(nameIn(name), with(valuePredicate));
+    public Predicate<HippoProperty> with(String name, Predicate<HippoValue> valuePredicate) {
+        return property -> nameIn(name).test(property) && with(valuePredicate).test(property);
     }
 }

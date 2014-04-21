@@ -1,11 +1,12 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Predicate;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.PredicateBasedValidatorImpl;
 
-final class IsNotRootValidator extends PredicateBasedValidatorImpl<NodeErrorCode, INode> {
+import java.util.function.Predicate;
+
+final class IsNotRootValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
 
     IsNotRootValidator() {
         super(IS_NOT_ROOT);
@@ -16,11 +17,6 @@ final class IsNotRootValidator extends PredicateBasedValidatorImpl<NodeErrorCode
         return NodeErrorCode.NODE_CANNOT_BE_ROOT;
     }
 
-    private static final Predicate<INode> IS_NOT_ROOT = new Predicate<INode>() {
-        @Override
-        public boolean apply(INode node) {
-            return !node.isRoot();
-        }
-    };
+    private static final Predicate<HippoNode> IS_NOT_ROOT = node -> !node.isRoot();
 
 }

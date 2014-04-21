@@ -1,11 +1,11 @@
 package nl.meg.jcr.traversal.internal;
 
-import com.google.common.base.Predicate;
 import nl.meg.jcr.traversal.WhileIterables;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 final class WhileIterablesImpl implements WhileIterables {
 
@@ -23,7 +23,7 @@ final class WhileIterablesImpl implements WhileIterables {
     @Override
     public <X> Iterable<X> dropWhile(final Predicate<X> p, Iterable<X> iterable) {
         final Iterator<X> i = iterable.iterator();
-        for (; i.hasNext() && p.apply(i.next()); ) ;
+        for (; i.hasNext() && p.test(i.next()); ) ;
         return new Iterable<X>() {
             @Override
             public Iterator<X> iterator() {
@@ -46,7 +46,7 @@ final class WhileIterablesImpl implements WhileIterables {
 
         @Override
         public boolean hasNext() {
-            return p.apply(value);
+            return p.test(value);
         }
 
         @Override

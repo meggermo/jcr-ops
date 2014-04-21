@@ -1,9 +1,7 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
-import nl.meg.jcr.INode;
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
@@ -11,24 +9,40 @@ import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static org.mockito.Mockito.when;
+import static nl.meg.validation.ValidatorBuilder.builder;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class NodeMethodsImplTest {
+public class NodeMethodsImplTest extends AbstractMockitoTest {
 
     private NodeMethods nodeMethods;
 
     @Mock
-    private INode node, parent;
+    private HippoNode node0, parent, node1, node2;
+
+    @Mock
+    private INodeValidators nodeValidators;
+
+    @Mock
+    private Predicate<ValidationContext<NodeErrorCode, HippoNode>> continueValidation;
+
+    @Mock
+    private Validator<NodeErrorCode, HippoNode> validator;
+
+    @Mock
+    private Function<HippoNode, HippoNode> function;
 
     @Mock
     private Session session;
@@ -37,58 +51,58 @@ public class NodeMethodsImplTest {
     private NodeType nodeType;
 
     @Mock
-    private Node n;
-
-    @Mock
-    private INodeValidators nodeValidators;
-
-    @Mock
-    private Predicate<ValidationContext<NodeErrorCode, INode>> continueValidation;
-
-    @Mock
-    private Supplier<ValidationContext<NodeErrorCode, INode>> contextSupplier;
-
-    @Mock
-    private Validator<NodeErrorCode, INode> validator;
-    @Mock
-    private ValidationContext<NodeErrorCode, INode> context;
+    private Node parentNode;
 
     @Before
     public void setUp() {
+        when(node0.getSession()).thenReturn(session);
+        when(node0.getParent()).thenReturn(Optional.of(parent));
         when(nodeValidators.canAddChild(parent)).thenReturn(validator);
         when(nodeValidators.isNotRoot()).thenReturn(validator);
-        when(contextSupplier.get()).thenReturn(context);
-
-        this.nodeMethods = new NodeMethodsImpl(nodeValidators, contextSupplier, continueValidation);
+        when(function.apply(node0)).thenReturn(node0);
+        this.nodeMethods = new NodeMethodsImpl(nodeValidators, builder(continueValidation));
     }
 
     @Test
     public void testMove() {
-        when(node.getSession()).thenReturn(session);
-        when(context.isValid()).thenReturn(true);
-        nodeMethods.move(node, parent);
+        assertThat(nodeMethods.moveFunction(parent).apply(node0), is(node0));
     }
 
+    @Test
+    public void testValidateMoveCallsNodeValidators() {
+        nodeMethods.moveFunction(parent).apply(node0);
+        verify(nodeValidators).isNotRoot();
+        verify(nodeValidators).canAddChild(parent);
+        verifyNoMoreInteractions(nodeValidators);
+    }
 
     @Test
     public void testRename() {
-        when(node.getParent()).thenReturn(Optional.of(parent));
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
-        when(node.getSession()).thenReturn(session);
-        when(context.isValid()).thenReturn(true);
-        nodeMethods.rename(node, "newName");
+        when(nodeType.hasOrderableChildNodes()).thenReturn(true);
+        assertThat(nodeMethods.renameFunction("newName").apply(node0), is(node0));
     }
 
     @Test
-    public void testRenameWithReordering() {
-        when(node.getParent()).thenReturn(Optional.of(parent));
+    public void testValidateRenameCallsNodeValidators() {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
-        when(parent.getNodes()).thenReturn(Arrays.asList(node, node).iterator());
-        when(node.getName()).thenReturn("name");
-        when(node.getSession()).thenReturn(session);
-        when(parent.get()).thenReturn(n);
-        when(context.isValid()).thenReturn(true);
-        nodeMethods.rename(node, "newName");
+        nodeMethods.renameFunction("newName").apply(node0);
+        verify(nodeValidators).isNotRoot();
+        verify(nodeValidators).canRenameTo("newName");
+        verifyNoMoreInteractions(nodeValidators);
     }
+
+    @Test
+    public void testReposition() throws RepositoryException {
+        when(node0.getName()).thenReturn("name");
+        when(node1.getName()).thenReturn("node1");
+        when(node2.getName()).thenReturn("node2");
+        when(parent.getNodes()).thenReturn(Arrays.asList(node0, node1, node2));
+        when(parent.get()).thenReturn(parentNode);
+        assertThat(nodeMethods.repositionFunction(1).apply(node0), is(node0));
+        verify(parentNode).orderBefore("name","node2");
+    }
+
+
 }

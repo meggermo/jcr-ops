@@ -1,19 +1,12 @@
 package nl.meg.jcr.traversal.internal;
 
 import com.google.common.collect.TreeTraverser;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 
-import java.util.Iterator;
-
-class DescendantTraverserImpl extends TreeTraverser<INode> {
+class DescendantTraverserImpl extends TreeTraverser<HippoNode> {
 
     @Override
-    public Iterable<INode> children(final INode root) {
-        return new Iterable<INode>() {
-            @Override
-            public Iterator<INode> iterator() {
-                return root.getNodes();
-            }
-        };
+    public Iterable<HippoNode> children(final HippoNode root) {
+        return root.getNodes();
     }
 }

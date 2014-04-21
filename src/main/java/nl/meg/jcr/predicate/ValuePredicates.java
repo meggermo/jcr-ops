@@ -1,18 +1,18 @@
 package nl.meg.jcr.predicate;
 
-import com.google.common.base.Predicate;
+import nl.meg.jcr.HippoValue;
 
-import javax.jcr.Value;
 import java.util.Calendar;
+import java.util.function.Predicate;
 
 public interface ValuePredicates {
 
-    Predicate<Value> equalTo(String value);
+    Predicate<HippoValue> equalTo(String value);
 
-    Predicate<Value> equalTo(Long value);
+    Predicate<HippoValue> equalTo(Long value);
 
-    Predicate<Value> equalTo(Calendar value);
+    Predicate<HippoValue> equalTo(Calendar value);
 
-    Predicate<Value> equalTo(Boolean value);
+    Predicate<HippoValue> equalTo(Boolean value);
 
 }

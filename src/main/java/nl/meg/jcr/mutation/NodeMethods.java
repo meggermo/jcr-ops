@@ -1,11 +1,14 @@
 package nl.meg.jcr.mutation;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
+
+import java.util.function.Function;
 
 public interface NodeMethods {
 
-    INode move(INode node, INode newParent);
+    Function<HippoNode, HippoNode> moveFunction(HippoNode newParent);
 
-    INode rename(INode node, String newName);
+    Function<HippoNode, HippoNode> renameFunction(String newName);
 
+    Function<HippoNode, HippoNode> repositionFunction(int newPosition);
 }

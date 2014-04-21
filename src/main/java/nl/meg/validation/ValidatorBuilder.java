@@ -1,16 +1,15 @@
 package nl.meg.validation;
 
-import com.google.common.base.Predicate;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ValidatorBuilder<E extends Enum<E>, T> {
 
     private final List<Validator<E, T>> validators;
     private final Predicate<ValidationContext<E, T>> continuePredicate;
 
-    public static <X extends Enum<X>, Y> ValidatorBuilder<X,Y> builder(Predicate<ValidationContext<X, Y>> continuePredicate) {
+    public static <X extends Enum<X>, Y> ValidatorBuilder<X, Y> builder(Predicate<ValidationContext<X, Y>> continuePredicate) {
         return new ValidatorBuilder<>(continuePredicate);
     }
 
