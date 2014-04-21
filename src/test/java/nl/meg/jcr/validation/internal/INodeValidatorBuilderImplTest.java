@@ -1,34 +1,31 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Optional;
-import nl.meg.jcr.INode;
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.ValidationContext;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.nodetype.NodeType;
-
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.Matchers.anyMapOf;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class INodeValidatorBuilderImplTest {
+public class INodeValidatorBuilderImplTest extends AbstractMockitoTest {
 
     private INodeValidators iNodeValidators;
 
     @Mock
-    private INode iNode, parent;
+    private HippoNode iNode, parent;
 
     @Mock
-    private ValidationContext<NodeErrorCode, INode> context;
+    private ValidationContext<NodeErrorCode, HippoNode> context;
 
     @Mock
     private NodeType nodeType;
@@ -63,7 +60,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testCanRenameTo() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNode("name")).thenReturn(Optional.<INode>absent());
+        when(parent.getNode("name")).thenReturn(Optional.<HippoNode>empty());
         iNodeValidators.canRenameTo("name").validate(iNode, context);
         verifyZeroInteractions(context);
     }
@@ -98,7 +95,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testPositionInBounds() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodes()).thenReturn(Arrays.asList(iNode).iterator());
+        when(parent.getNodes()).thenReturn(Arrays.asList(iNode));
         iNodeValidators.positionInBounds(0).validate(iNode, context);
         verifyZeroInteractions(context);
     }
@@ -106,7 +103,7 @@ public class INodeValidatorBuilderImplTest {
     @Test
     public void testPositionInBounds_ValidationError() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodes()).thenReturn(Arrays.asList(iNode).iterator());
+        when(parent.getNodes()).thenReturn(Arrays.asList(iNode));
         iNodeValidators.positionInBounds(2).validate(iNode, context);
         verify(context).addError(eq(NodeErrorCode.POSITION_OUT_OF_RANGE), anyMapOf(String.class, Object.class));
     }

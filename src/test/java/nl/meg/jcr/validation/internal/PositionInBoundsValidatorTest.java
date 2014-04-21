@@ -1,27 +1,26 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Optional;
-import nl.meg.jcr.INode;
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PositionInBoundsValidatorTest {
+public class PositionInBoundsValidatorTest extends AbstractMockitoTest {
 
     private PositionInBoundsValidator validator;
 
     @Mock
-    private INode entity, parent;
+    private HippoNode entity, parent;
 
     @Before
     public void setUp() {
@@ -31,9 +30,10 @@ public class PositionInBoundsValidatorTest {
     @Test
     public void testGetContextMap() {
         when(entity.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodes()).thenReturn(Arrays.asList(entity).iterator());
-        assertThat(validator.getContextMap(entity).containsKey("min"), is(true));
-        assertThat(validator.getContextMap(entity).containsKey("max"), is(true));
+        when(parent.getNodes()).thenReturn(Arrays.asList(entity));
+        final Map<String, ?> contextMap = validator.getContextMap(entity);
+        assertThat(contextMap.containsKey("min"), is(true));
+        assertThat(contextMap.containsKey("max"), is(true));
     }
 
     @Test

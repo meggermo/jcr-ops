@@ -1,38 +1,30 @@
 package nl.meg.jcr.predicate.internal;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import nl.meg.jcr.function.ValueFunctions;
+import nl.meg.jcr.HippoValue;
 import nl.meg.jcr.predicate.ValuePredicates;
 
-import javax.jcr.Value;
 import java.util.Calendar;
+import java.util.function.Predicate;
 
 final class ValuePredicatesImpl implements ValuePredicates {
 
-    private final ValueFunctions valueFunctions;
-
-    public ValuePredicatesImpl(ValueFunctions valueFunctions) {
-        this.valueFunctions = valueFunctions;
+    @Override
+    public Predicate<HippoValue> equalTo(String value) {
+        return val -> value.equals(val.getString());
     }
 
     @Override
-    public Predicate<Value> equalTo(String value) {
-        return Predicates.compose(Predicates.equalTo(value), valueFunctions.getString());
+    public Predicate<HippoValue> equalTo(Long value) {
+        return val -> value.equals(val.getLong());
     }
 
     @Override
-    public Predicate<Value> equalTo(Long value) {
-        return Predicates.compose(Predicates.equalTo(value), valueFunctions.getLong());
+    public Predicate<HippoValue> equalTo(Boolean value) {
+        return val -> value.equals(val.getBoolean());
     }
 
     @Override
-    public Predicate<Value> equalTo(Boolean value) {
-        return Predicates.compose(Predicates.equalTo(value), valueFunctions.getBoolean());
-    }
-
-    @Override
-    public Predicate<Value> equalTo(Calendar value) {
-        return Predicates.compose(Predicates.equalTo(value), valueFunctions.getDate());
+    public Predicate<HippoValue> equalTo(Calendar value) {
+        return val -> value.equals(val.getDate());
     }
 }

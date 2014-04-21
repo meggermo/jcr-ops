@@ -1,34 +1,27 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.PredicateBasedValidatorImpl;
 
+import java.util.HashMap;
 import java.util.Map;
 
-final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCode, INode> {
+final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
 
     private String name;
 
     CanRenameToValidator(final String name) {
-        super(new Predicate<INode>() {
-            @Override
-            public boolean apply(INode input) {
-                return !input.getParent().get().getNode(name).isPresent();
-            }
-        });
+        super(input -> !input.getParent().get().getNode(name).isPresent());
         this.name = name;
     }
 
     @Override
-    protected Map<String, ?> getContextMap(INode entity) {
-        final ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
-        return builder
-                .put("path", entity.getParent().get().getPath())
-                .put("name", name)
-                .build();
+    protected Map<String, ?> getContextMap(HippoNode entity) {
+        final Map<String, Object> map = new HashMap<>();
+        map.put("path", entity.getParent().get().getPath());
+        map.put("name", name);
+        return map;
     }
 
     @Override

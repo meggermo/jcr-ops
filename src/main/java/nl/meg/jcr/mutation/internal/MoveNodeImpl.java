@@ -1,18 +1,19 @@
 package nl.meg.jcr.mutation.internal;
 
-import com.google.common.base.Function;
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 
-final class MoveNodeImpl implements Function<INode, INode> {
+import java.util.function.Function;
 
-    private final INode newParent;
+final class MoveNodeImpl implements Function<HippoNode, HippoNode> {
 
-    MoveNodeImpl(INode newParent) {
+    private final HippoNode newParent;
+
+    MoveNodeImpl(HippoNode newParent) {
         this.newParent = newParent;
     }
 
     @Override
-    public INode apply(INode node) {
+    public HippoNode apply(HippoNode node) {
         return new RenameNodeImpl(node.getName()).move(newParent, node);
     }
 }

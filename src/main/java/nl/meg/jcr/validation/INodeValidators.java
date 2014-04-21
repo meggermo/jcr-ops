@@ -1,17 +1,17 @@
 package nl.meg.jcr.validation;
 
-import nl.meg.jcr.INode;
+import nl.meg.jcr.HippoNode;
 import nl.meg.validation.Validator;
 
 public interface INodeValidators {
 
-    Validator<NodeErrorCode, INode> isNotRoot();
+    Validator<NodeErrorCode, HippoNode> isNotRoot();
 
-    Validator<NodeErrorCode, INode> canAddChild(INode parent);
+    Validator<NodeErrorCode, HippoNode> canAddChild(HippoNode parent);
 
-    Validator<NodeErrorCode, INode> canRenameTo(String name);
+    Validator<NodeErrorCode, HippoNode> canRenameTo(String name);
 
-    Validator<NodeErrorCode,INode> positionInBounds(int newPosition);
+    Validator<NodeErrorCode, HippoNode> positionInBounds(int newPosition);
 
-    Validator<NodeErrorCode,INode> supportsOrdering();
+    Validator<NodeErrorCode, HippoNode> supportsOrdering();
 }

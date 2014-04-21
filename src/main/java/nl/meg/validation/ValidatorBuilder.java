@@ -1,9 +1,8 @@
 package nl.meg.validation;
 
-import com.google.common.base.Predicate;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ValidatorBuilder<E extends Enum<E>, T> {
 

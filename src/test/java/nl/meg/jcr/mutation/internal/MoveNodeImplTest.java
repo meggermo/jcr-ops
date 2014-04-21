@@ -1,11 +1,10 @@
 package nl.meg.jcr.mutation.internal;
 
-import nl.meg.jcr.INode;
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -15,13 +14,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MoveNodeImplTest {
+public class MoveNodeImplTest extends AbstractMockitoTest {
 
     private MoveNodeImpl moveNode;
 
     @Mock
-    private INode node, parent;
+    private HippoNode node, parent;
 
     @Mock
     private Session session;

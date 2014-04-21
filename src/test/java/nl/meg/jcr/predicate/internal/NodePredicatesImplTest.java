@@ -1,57 +1,37 @@
 package nl.meg.jcr.predicate.internal;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import nl.meg.jcr.INode;
-import nl.meg.jcr.function.NodeFunctions;
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.predicate.NodePredicates;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.function.Predicate;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class NodePredicatesImplTest {
+public class NodePredicatesImplTest extends AbstractMockitoTest {
 
     private NodePredicates nP;
 
     @Mock
-    private NodeFunctions nodeFunctions;
+    private HippoNode n1, n2;
 
     @Mock
-    private INode n1, n2;
+    private HippoProperty p1P;
 
     @Mock
-    private Function<INode, Iterator<Property>> pF;
-    @Mock
-    private Function<INode, String> idF, nameF;
-    @Mock
-    private Iterator<Property> p1I;
-    @Mock
-    private Property p1P;
-
-    @Mock
-    private Predicate<Property> pP;
+    private Predicate<HippoProperty> pP;
 
     @Mock
     private Predicate<NodeType> ntP;
-
-    @Mock
-    private Function<INode, Iterator<NodeType>> mntF;
-
-    @Mock
-    private Function<INode, NodeType> pntF;
 
     @Mock
     private NodeType nodeType;
@@ -61,60 +41,53 @@ public class NodePredicatesImplTest {
 
     @Before
     public void setUp() {
-        nP = new NodePredicatesImpl(nodeFunctions);
-        when(nodeFunctions.getIdentifier()).thenReturn(idF);
-        when(nodeFunctions.getName()).thenReturn(nameF);
+        nP = new NodePredicatesImpl();
     }
 
     @Test
     public void testIsSame() throws RepositoryException {
-        when(n1.isSame(n2)).thenReturn(true);
-        when(n2.isSame(n1)).thenReturn(false);
-        assertThat(nP.isSame(n1).apply(n2), is(true));
-        assertThat(nP.isSame(n2).apply(n1), is(false));
+        when(n1.isSame(n2)).thenReturn(false);
+        when(n2.isSame(n1)).thenReturn(true);
+        assertThat(nP.isSame(n1).test(n2), is(true));
+        assertThat(nP.isSame(n2).test(n1), is(false));
     }
 
     @Test
     public void testIsNodeType() throws RepositoryException {
         when(n1.isNodeType("X")).thenReturn(true);
         when(n1.isNodeType("Y")).thenReturn(false);
-        assertThat(nP.isNodeType("X").apply(n1), is(true));
-        assertThat(nP.isNodeType("Y").apply(n1), is(false));
+        assertThat(nP.isNodeType("X").test(n1), is(true));
+        assertThat(nP.isNodeType("Y").test(n1), is(false));
     }
 
     @Test
     public void testIdentifierIn() {
-        when(idF.apply(n1)).thenReturn("A");
-        assertThat(nP.identifierIn("A", "B").apply(n1), is(true));
-        assertThat(nP.identifierIn("X", "Y").apply(n1), is(false));
+        when(n1.getIdentifier()).thenReturn("A");
+        assertThat(nP.identifierIn("A", "B").test(n1), is(true));
+        assertThat(nP.identifierIn("X", "Y").test(n1), is(false));
     }
 
     @Test
     public void testNameIn() {
-        when(nameF.apply(n1)).thenReturn("B");
-        assertThat(nP.nameIn("A", "B").apply(n1), is(true));
-        assertThat(nP.nameIn("X", "Y").apply(n1), is(false));
+        when(n1.getName()).thenReturn("B");
+        assertThat(nP.nameIn("A", "B").test(n1), is(true));
+        assertThat(nP.nameIn("X", "Y").test(n1), is(false));
     }
 
     @Test
     public void testWithProperty() throws RepositoryException {
-        when(nodeFunctions.getProperties()).thenReturn(pF);
-        when(pF.apply(n1)).thenReturn(p1I);
-        when(p1I.hasNext()).thenReturn(true, false);
-        when(p1I.next()).thenReturn(p1P);
-        when(pP.apply(p1P)).thenReturn(true);
-        assertThat(nP.withProperty(pP).apply(n1), is(true));
+        when(n1.getProperties()).thenReturn(Arrays.asList(p1P));
+        when(pP.test(p1P)).thenReturn(true);
+        assertThat(nP.withProperty(pP).test(n1), is(true));
     }
 
     @Test
     public void testWithNodeType() {
-        when(nodeFunctions.getMixinNodeTypes()).thenReturn(mntF);
-        when(mntF.apply(n1)).thenReturn(Iterators.<NodeType>emptyIterator());
-        when(nodeFunctions.getPrimaryNodeType()).thenReturn(pntF);
-        when(pntF.apply(n1)).thenReturn(nodeType);
-        when(ntP.apply(nodeType)).thenReturn(true, false);
-        assertThat(nP.withNodeType(ntP).apply(n1), is(true));
-        assertThat(nP.withNodeType(ntP).apply(n1), is(false));
+        when(n1.getPrimaryNodeType()).thenReturn(nodeType);
+        when(n1.getMixinNodeTypes()).thenReturn(new NodeType[]{});
+        when(ntP.test(nodeType)).thenReturn(true, false);
+        assertThat(nP.withNodeType(ntP).test(n1), is(true));
+        assertThat(nP.withNodeType(ntP).test(n1), is(false));
     }
 
 }

@@ -1,84 +1,67 @@
 package nl.meg.jcr.predicate.internal;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import nl.meg.jcr.function.PropertyFunctions;
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 import nl.meg.jcr.predicate.PropertyPredicates;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.jcr.Property;
-import javax.jcr.Value;
+import javax.jcr.RepositoryException;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PropertyPredicatesImplTest {
+public class PropertyPredicatesImplTest extends AbstractMockitoTest {
 
     private PropertyPredicates propertyPredicates;
 
     @Mock
-    private PropertyFunctions pF;
+    private HippoProperty p;
 
     @Mock
-    private Property p;
+    private Predicate<HippoValue> vP;
 
     @Mock
-    private Function<Property, String> nameF;
-
-    @Mock
-    private Predicate<Value> vP;
-
-    @Mock
-    private Function<Property, Value> vF;
-
-    @Mock
-    private Value v;
+    private HippoValue v;
 
     @Before
     public void setUp() {
-        propertyPredicates = new PropertyPredicatesImpl(pF);
+        propertyPredicates = new PropertyPredicatesImpl();
     }
 
     @Test
-    public void testNameIn() {
-        when(pF.getName()).thenReturn(nameF);
-        when(nameF.apply(p)).thenReturn("X");
-        assertThat(propertyPredicates.nameIn("X", "Y").apply(p), is(true));
-        assertThat(propertyPredicates.nameIn("A", "B").apply(p), is(false));
+    public void testNameIn() throws RepositoryException {
+        when(p.getName()).thenReturn("X");
+        assertThat(propertyPredicates.nameIn("X", "Y").test(p), is(true));
+        assertThat(propertyPredicates.nameIn("A", "B").test(p), is(false));
     }
 
     @Test
-    public void testPathIn() {
-        when(pF.getPath()).thenReturn(nameF);
-        when(nameF.apply(p)).thenReturn("X");
-        assertThat(propertyPredicates.pathIn("X", "Y").apply(p), is(true));
-        assertThat(propertyPredicates.pathIn("A", "B").apply(p), is(false));
+    public void testPathIn() throws RepositoryException {
+        when(p.getPath()).thenReturn("X");
+        assertThat(propertyPredicates.pathIn("X", "Y").test(p), is(true));
+        assertThat(propertyPredicates.pathIn("A", "B").test(p), is(false));
     }
 
     @Test
-    public void testWithValuePredicate() {
-        when(pF.getValue()).thenReturn(vF);
-        when(vF.apply(p)).thenReturn(v);
-        when(vP.apply(v)).thenReturn(true, false);
-        assertThat(propertyPredicates.with(vP).apply(p), is(true));
-        assertThat(propertyPredicates.with(vP).apply(p), is(false));
+    public void testWithValuePredicate() throws RepositoryException {
+        when(p.getValue()).thenReturn(Optional.of(v));
+        when(vP.test(v)).thenReturn(true, false);
+        assertThat(propertyPredicates.with(vP).test(p), is(true));
+        assertThat(propertyPredicates.with(vP).test(p), is(false));
     }
 
     @Test
-    public void testWithNamedValue() {
-        when(pF.getName()).thenReturn(nameF);
-        when(nameF.apply(p)).thenReturn("X");
-        when(pF.getValue()).thenReturn(vF);
-        when(vF.apply(p)).thenReturn(v);
-        when(vP.apply(v)).thenReturn(true, false);
-        assertThat(propertyPredicates.with(vP).apply(p), is(true));
-        assertThat(propertyPredicates.with("X", vP).apply(p), is(false));
-
+    public void testWithNamedValue() throws RepositoryException {
+        when(p.getValue()).thenReturn(Optional.of(v));
+        when(p.getName()).thenReturn("X");
+        when(vP.test(v)).thenReturn(true, false);
+        assertThat(propertyPredicates.with(vP).test(p), is(true));
+        assertThat(propertyPredicates.with("X", vP).test(p), is(false));
     }
 }
