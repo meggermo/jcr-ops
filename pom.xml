@@ -95,6 +95,7 @@
                     </flowInitContext>
                     <enableSshAgent>true</enableSshAgent>
                     <noDeploy>true</noDeploy>
+                    <useReleaseProfile>false</useReleaseProfile>
                 </configuration>
             </plugin>
         </plugins>
