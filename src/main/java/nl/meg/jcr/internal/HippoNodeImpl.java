@@ -8,8 +8,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.nodetype.NodeType;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.stream.Stream;
@@ -17,7 +15,6 @@ import java.util.stream.Stream;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.SIZED;
 import static java.util.Spliterators.spliterator;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
@@ -79,17 +76,17 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
     }
 
     @Override
-    public List<HippoProperty> getProperties() {
+    public Stream<HippoProperty> getPropertiesAsStream() {
         return invoke(n -> {
             if (n.hasProperties()) {
                 final PropertyIterator pI = n.getProperties();
                 @SuppressWarnings("unchecked")
                 final Spliterator<Property> sI = spliterator(pI, pI.getSize(), NONNULL | SIZED);
-                return stream(sI, false).map(this::property).collect(toList());
+                return stream(sI, false);
             } else {
-                return Collections.emptyList();
+                return Stream.<Property>empty();
             }
-        });
+        }).map(this::property);
     }
 
 }

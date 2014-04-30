@@ -3,7 +3,6 @@ package nl.meg.jcr;
 
 import javax.jcr.Node;
 import javax.jcr.nodetype.NodeType;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -27,5 +26,5 @@ public interface HippoNode extends HippoItem<Node> {
 
     Optional<HippoProperty> getProperty(String name);
 
-    List<HippoProperty> getProperties();
+    Stream<HippoProperty> getPropertiesAsStream();
 }

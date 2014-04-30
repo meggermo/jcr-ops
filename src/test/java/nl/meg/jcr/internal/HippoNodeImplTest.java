@@ -133,14 +133,14 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
     @Test
     public void testGetProperties_Empty() throws RepositoryException {
         when(node.hasProperties()).thenReturn(false);
-        assertThat(hippoNode.getProperties().isEmpty(), is(true));
+        assertThat(hippoNode.getPropertiesAsStream().collect(toList()).isEmpty(), is(true));
     }
 
     @Test
     public void testGetProperties() throws RepositoryException {
         when(node.hasProperties()).thenReturn(true);
         when(node.getProperties()).thenReturn(getPropertyIterator(property));
-        final HippoProperty p = hippoNode.getProperties().get(0);
+        final HippoProperty p = hippoNode.getPropertiesAsStream().collect(toList()).get(0);
         assertThat(p.get(), is(property));
     }
 
@@ -214,7 +214,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         try {
             when(node.hasProperties()).thenReturn(true);
             when(node.getProperties()).thenThrow(e);
-            hippoNode.getProperties();
+            hippoNode.getPropertiesAsStream();
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));

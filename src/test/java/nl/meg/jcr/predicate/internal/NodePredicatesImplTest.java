@@ -10,8 +10,8 @@ import org.mockito.Mock;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
-import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -76,7 +76,7 @@ public class NodePredicatesImplTest extends AbstractMockitoTest {
 
     @Test
     public void testWithProperty() throws RepositoryException {
-        when(n1.getProperties()).thenReturn(Arrays.asList(p1P));
+        when(n1.getPropertiesAsStream()).thenReturn(Stream.of(p1P));
         when(pP.test(p1P)).thenReturn(true);
         assertThat(nP.withProperty(pP).test(n1), is(true));
     }
