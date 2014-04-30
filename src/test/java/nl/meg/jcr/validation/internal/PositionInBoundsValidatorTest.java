@@ -7,9 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -30,7 +30,7 @@ public class PositionInBoundsValidatorTest extends AbstractMockitoTest {
     @Test
     public void testGetContextMap() {
         when(entity.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodes()).thenReturn(Arrays.asList(entity));
+        when(parent.getNodesAsStream()).thenReturn(Stream.of(entity));
         final Map<String, ?> contextMap = validator.getContextMap(entity);
         assertThat(contextMap.containsKey("min"), is(true));
         assertThat(contextMap.containsKey("max"), is(true));

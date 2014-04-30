@@ -8,9 +8,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import javax.jcr.RepositoryException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -32,12 +31,12 @@ public class DescendantTraverserImplTest extends AbstractMockitoTest {
 
         this.traverser = new DescendantTraverserImpl();
 
-        when(n0.getNodes()).thenReturn(Arrays.asList(n1, n2, n3));
-        when(n1.getNodes()).thenReturn(Collections.emptyList());
-        when(n2.getNodes()).thenReturn(Arrays.asList(n4, n5));
-        when(n3.getNodes()).thenReturn(Collections.emptyList());
-        when(n4.getNodes()).thenReturn(Collections.emptyList());
-        when(n5.getNodes()).thenReturn(Collections.emptyList());
+        when(n0.getNodesAsStream()).thenReturn(Stream.of(n1, n2, n3));
+        when(n1.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
+        when(n2.getNodesAsStream()).thenReturn(Stream.of(n4, n5));
+        when(n3.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
+        when(n4.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
+        when(n5.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
     }
 
     @Test

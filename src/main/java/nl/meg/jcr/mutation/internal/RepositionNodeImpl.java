@@ -7,6 +7,8 @@ import javax.jcr.RepositoryException;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.util.stream.Collectors.toList;
+
 final class RepositionNodeImpl implements Function<HippoNode, HippoNode> {
 
     private final int newPosition;
@@ -18,7 +20,7 @@ final class RepositionNodeImpl implements Function<HippoNode, HippoNode> {
     @Override
     public HippoNode apply(final HippoNode node) {
         final HippoNode parent = node.getParent().get();
-        final List<HippoNode> nodes = parent.getNodes();
+        final List<HippoNode> nodes = parent.getNodesAsStream().collect(toList());
         final String sourceName = node.getName();
         final String targetName = getTargetName(node, nodes, nodes.indexOf(node));
         try {

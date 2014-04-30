@@ -8,6 +8,8 @@ import nl.meg.validation.PredicateBasedValidatorImpl;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
 
     private final int newPosition;
@@ -22,7 +24,7 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
         final Map<String, Object> map = new HashMap<>();
         map.put("min", 0);
         map.put("position", newPosition);
-        map.put("max", entity.getParent().get().getNodes().size() - 1);
+        map.put("max", entity.getParent().get().getNodesAsStream().collect(toList()).size() - 1);
         return map;
     }
 
@@ -32,6 +34,6 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<NodeEr
     }
 
     private static boolean positionInRange(HippoNode node, int postion) {
-        return Range.closedOpen(0, node.getNodes().size()).contains(postion);
+        return Range.closedOpen(0, node.getNodesAsStream().collect(toList()).size()).contains(postion);
     }
 }

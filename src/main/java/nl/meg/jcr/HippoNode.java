@@ -5,6 +5,7 @@ import javax.jcr.Node;
 import javax.jcr.nodetype.NodeType;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface HippoNode extends HippoItem<Node> {
 
@@ -22,7 +23,7 @@ public interface HippoNode extends HippoItem<Node> {
 
     Optional<HippoNode> getNode(String name);
 
-    List<HippoNode> getNodes();
+    Stream<HippoNode> getNodesAsStream();
 
     Optional<HippoProperty> getProperty(String name);
 

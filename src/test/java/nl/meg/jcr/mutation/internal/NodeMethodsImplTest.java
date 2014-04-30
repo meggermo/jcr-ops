@@ -15,10 +15,10 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static nl.meg.validation.ValidatorBuilder.builder;
 import static org.hamcrest.CoreMatchers.is;
@@ -80,6 +80,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
     public void testRename() {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
+        when(parent.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
         assertThat(nodeMethods.renameFunction("newName").apply(node0), is(node0));
     }
 
@@ -87,6 +88,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
     public void testValidateRenameCallsNodeValidators() {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
+        when(parent.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
         nodeMethods.renameFunction("newName").apply(node0);
         verify(nodeValidators).isNotRoot();
         verify(nodeValidators).canRenameTo("newName");
@@ -98,7 +100,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
         when(node0.getName()).thenReturn("name");
         when(node1.getName()).thenReturn("node1");
         when(node2.getName()).thenReturn("node2");
-        when(parent.getNodes()).thenReturn(Arrays.asList(node0, node1, node2));
+        when(parent.getNodesAsStream()).thenReturn(Stream.of(node0, node1, node2));
         when(parent.get()).thenReturn(parentNode);
         assertThat(nodeMethods.repositionFunction(1).apply(node0), is(node0));
         verify(parentNode).orderBefore("name","node2");

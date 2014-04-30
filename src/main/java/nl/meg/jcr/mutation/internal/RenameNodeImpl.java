@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
 
@@ -40,7 +41,7 @@ final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
     }
 
     private HippoNode moveAndReorder(HippoNode parent, HippoNode node) {
-        final List<HippoNode> nodes = parent.getNodes();
+        final List<HippoNode> nodes = parent.getNodesAsStream().collect(toList());
         final int nodeIndex = nodes.indexOf(node);
         move(parent, node);
         if (nodeIndex < nodes.size() - 1) {

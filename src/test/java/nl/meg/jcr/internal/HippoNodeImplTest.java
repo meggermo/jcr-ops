@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -106,13 +107,13 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
     public void testGetNodes() throws RepositoryException {
         when(node.hasNodes()).thenReturn(true);
         when(node.getNodes()).thenReturn(getNodeIterator(node));
-        assertThat(hippoNode.getNodes().get(0).get(), is(node));
+        assertThat(hippoNode.getNodesAsStream().collect(toList()).get(0).get(), is(node));
     }
 
     @Test
     public void testGetNodes_Empty() throws RepositoryException {
         when(node.hasNodes()).thenReturn(false);
-        assertThat(hippoNode.getNodes().isEmpty(), is(true));
+        assertThat(hippoNode.getNodesAsStream().collect(toList()).isEmpty(), is(true));
     }
 
     @Test
@@ -184,7 +185,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         }
         try {
             when(node.hasNodes()).thenThrow(e);
-            hippoNode.getNodes();
+            hippoNode.getNodesAsStream().collect(toList());
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));

@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
-import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -51,7 +51,7 @@ public class RenameNodeImplTest extends AbstractMockitoTest {
         when(node.getParent()).thenReturn(Optional.of(parent));
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
-        when(parent.getNodes()).thenReturn(Arrays.asList(node, node));
+        when(parent.getNodesAsStream()).thenReturn(Stream.of(node, node));
         when(node.getName()).thenReturn("name");
         when(node.getSession()).thenReturn(session);
         when(parent.get()).thenReturn(n);
