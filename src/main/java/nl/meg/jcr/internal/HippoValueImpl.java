@@ -8,7 +8,8 @@ import javax.jcr.Value;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-import static nl.meg.function.FunctionAdapter.relax;
+import static nl.meg.function.FunctionSupport.relax;
+
 
 final class HippoValueImpl implements HippoValue {
 

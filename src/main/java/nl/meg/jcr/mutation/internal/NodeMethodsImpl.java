@@ -9,7 +9,7 @@ import nl.meg.validation.ValidatorBuilder;
 
 import java.util.function.Function;
 
-import static nl.meg.function.FunctionAdapter.preValidate;
+import static nl.meg.validation.ValidationSupport.preValidate;
 
 public final class NodeMethodsImpl implements NodeMethods {
 

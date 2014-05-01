@@ -11,7 +11,7 @@ import javax.jcr.*;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static nl.meg.function.FunctionAdapter.relax;
+import static nl.meg.function.FunctionSupport.relax;
 
 abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
