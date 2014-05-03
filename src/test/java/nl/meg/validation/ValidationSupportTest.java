@@ -12,7 +12,7 @@ import java.util.function.Function;
 import static nl.meg.validation.ValidationSupport.postValidate;
 import static nl.meg.validation.ValidationSupport.preValidate;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -59,7 +59,7 @@ public class ValidationSupportTest extends AbstractMockitoTest {
         try {
             preValidate(preValidator, function).apply("TEST");
         } catch (ValidationException e) {
-            assertEquals(errors, e.getErrors());
+            assertSame(errors, e.getErrors());
         }
     }
 

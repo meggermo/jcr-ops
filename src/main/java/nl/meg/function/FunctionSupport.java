@@ -17,7 +17,7 @@ public class FunctionSupport {
      * @return result of f applied to input
      */
     @SuppressWarnings("unchecked")
-    public static <T, R, E extends Exception, F extends EFunction<? super T, ? extends R, E>, RE extends RuntimeException> R relax(F f, T input, Function<E, ? extends RE> g) {
+    public static <T, R, E extends Exception, RE extends RuntimeException> R relax(EFunction<? super T, ? extends R, E> f, T input, Function<E, ? extends RE> g) {
         try {
             return f.apply(input);
         } catch (Exception e) {

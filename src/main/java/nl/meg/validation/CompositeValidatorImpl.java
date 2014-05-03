@@ -16,7 +16,7 @@ public final class CompositeValidatorImpl<E extends Enum<E>, T> implements Valid
     }
 
     public CompositeValidatorImpl(Iterable<Validator<E, T>> validators) {
-        this(validators, c -> c.isValid());
+        this(validators, ValidationContext::isValid);
     }
 
     @Override

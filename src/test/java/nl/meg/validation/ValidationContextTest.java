@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 public class ValidationContextTest {
 
     enum E {
-        A, B
+        A
     }
 
     private ValidationContext<E,String> context;

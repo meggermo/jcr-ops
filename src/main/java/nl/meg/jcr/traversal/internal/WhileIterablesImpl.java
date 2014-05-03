@@ -24,12 +24,7 @@ final class WhileIterablesImpl implements WhileIterables {
     public <X> Iterable<X> dropWhile(final Predicate<X> p, Iterable<X> iterable) {
         final Iterator<X> i = iterable.iterator();
         for (; i.hasNext() && p.test(i.next()); ) ;
-        return new Iterable<X>() {
-            @Override
-            public Iterator<X> iterator() {
-                return i;
-            }
-        };
+        return () -> i;
     }
 
     private static class TakeWhileIterator<S> implements Iterator<S> {

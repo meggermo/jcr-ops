@@ -19,7 +19,7 @@ public class ValidationContext<E extends Enum<E>, T> {
 
     public ValidationContext<E, T> addError(E error, Map<String, ?> contextParameterMap) {
         if (!errors.containsKey(error)) {
-            errors.put(error, new ArrayList<Map<String, ?>>());
+            errors.put(error, new ArrayList<>());
         }
         errors.get(error).add(contextParameterMap);
         return this;

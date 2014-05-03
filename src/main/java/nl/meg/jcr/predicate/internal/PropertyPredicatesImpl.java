@@ -11,12 +11,12 @@ final class PropertyPredicatesImpl implements PropertyPredicates {
 
     @Override
     public Predicate<HippoProperty> nameIn(String... names) {
-        return property -> Stream.of(names).anyMatch(name -> name == property.getName());
+        return property -> Stream.of(names).anyMatch(name -> name.equals(property.getName()));
     }
 
     @Override
     public Predicate<HippoProperty> pathIn(String... paths) {
-        return property -> Stream.of(paths).anyMatch(path -> path == property.getPath());
+        return property -> Stream.of(paths).anyMatch(path -> path.equals(property.getPath()));
     }
 
     @Override

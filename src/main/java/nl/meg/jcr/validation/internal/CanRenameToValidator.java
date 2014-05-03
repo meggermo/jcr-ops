@@ -9,7 +9,7 @@ import java.util.Map;
 
 final class CanRenameToValidator extends PredicateBasedValidatorImpl<NodeErrorCode, HippoNode> {
 
-    private String name;
+    private final String name;
 
     CanRenameToValidator(final String name) {
         super(input -> !input.getParent().get().getNode(name).isPresent());

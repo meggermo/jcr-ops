@@ -13,8 +13,6 @@ import javax.jcr.nodetype.NodeType;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class INodeValidatorBuilderImplTest extends AbstractMockitoTest {
@@ -103,7 +101,7 @@ public class INodeValidatorBuilderImplTest extends AbstractMockitoTest {
     @Test
     public void testPositionInBounds_ValidationError() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodesAsStream()).thenReturn(Stream.of(iNode),Stream.of(iNode));
+        when(parent.getNodesAsStream()).thenReturn(Stream.of(iNode), Stream.of(iNode));
         iNodeValidators.positionInBounds(2).validate(iNode, context);
         verify(context).addError(eq(NodeErrorCode.POSITION_OUT_OF_RANGE), anyMapOf(String.class, Object.class));
     }

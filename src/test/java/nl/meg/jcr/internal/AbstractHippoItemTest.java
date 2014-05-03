@@ -114,8 +114,4 @@ public class AbstractHippoItemTest extends AbstractMockitoTest {
         assertThat(hippoItem.getAncestor(10), is(item));
     }
 
-    @Test
-    public void testInvoke() {
-
-    }
 }
