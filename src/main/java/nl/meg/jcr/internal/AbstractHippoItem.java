@@ -1,11 +1,7 @@
 package nl.meg.jcr.internal;
 
 import nl.meg.function.EFunction;
-import nl.meg.jcr.HippoItem;
-import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.HippoProperty;
-import nl.meg.jcr.HippoValue;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.*;
 
 import javax.jcr.*;
 import java.util.Optional;

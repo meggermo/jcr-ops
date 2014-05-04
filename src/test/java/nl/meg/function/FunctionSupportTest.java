@@ -1,7 +1,7 @@
 package nl.meg.function;
 
 import nl.meg.AbstractMockitoTest;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.RuntimeRepositoryException;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -16,10 +16,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class FunctionSupportTest extends AbstractMockitoTest {
-
-    private enum E {
-
-    }
 
     @Mock
     private Function<String, Integer> function;

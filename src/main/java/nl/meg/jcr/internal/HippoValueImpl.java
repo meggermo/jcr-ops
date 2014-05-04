@@ -1,7 +1,7 @@
 package nl.meg.jcr.internal;
 
 import nl.meg.jcr.HippoValue;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.RuntimeRepositoryException;
 
 import javax.jcr.Binary;
 import javax.jcr.Value;

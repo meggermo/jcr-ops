@@ -1,7 +1,7 @@
 package nl.meg.jcr.mutation.internal;
 
 import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.RuntimeRepositoryException;
 
 import javax.jcr.RepositoryException;
 import java.util.List;

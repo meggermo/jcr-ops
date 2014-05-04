@@ -3,7 +3,7 @@ package nl.meg.jcr.internal;
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
-import nl.meg.jcr.exception.RuntimeRepositoryException;
+import nl.meg.jcr.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
