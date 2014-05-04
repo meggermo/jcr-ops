@@ -4,7 +4,7 @@ package nl.meg.validation;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public final class CompositeValidatorImpl<E extends Enum<E>, T> implements Validator<E, T> {
+public final class CompositeValidatorImpl<E, T> implements Validator<E, T> {
 
     private final Iterable<Validator<E, T>> validators;
 

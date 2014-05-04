@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ValidationContext<E extends Enum<E>, T> {
+public class ValidationContext<E, T> {
 
     private final Map<E, List<Map<String, ?>>> errors = new HashMap<>();
 

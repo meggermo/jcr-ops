@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class ValidationException extends RuntimeException {
 
-    private final Map<? extends Enum<?>, List<Map<String, ?>>> errors;
+    private final Map<?, List<Map<String, ?>>> errors;
 
-    public ValidationException(Map<? extends Enum<?>, List<Map<String, ?>>> errors) {
+    public ValidationException(Map<?, List<Map<String, ?>>> errors) {
         this.errors = errors;
     }
 
-    public Map<? extends Enum, List<Map<String, ?>>> getErrors() {
+    public Map<?, List<Map<String, ?>>> getErrors() {
         return errors;
     }
 }
