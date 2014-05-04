@@ -3,8 +3,8 @@ package nl.meg.jcr.mutation.internal;
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
-import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
+import nl.meg.jcr.validation.NodeValidators;
 import nl.meg.validation.ValidationContext;
 import nl.meg.validation.Validator;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
     private HippoNode node0, parent, node1, node2;
 
     @Mock
-    private INodeValidators nodeValidators;
+    private NodeValidators nodeValidators;
 
     @Mock
     private Predicate<ValidationContext<NodeErrorCode, HippoNode>> continueValidation;

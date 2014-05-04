@@ -2,8 +2,8 @@ package nl.meg.jcr.mutation.internal;
 
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.mutation.NodeMethods;
-import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
+import nl.meg.jcr.validation.NodeValidators;
 import nl.meg.validation.Validator;
 import nl.meg.validation.ValidatorBuilder;
 
@@ -13,10 +13,10 @@ import static nl.meg.validation.ValidationSupport.preValidate;
 
 public final class NodeMethodsImpl implements NodeMethods {
 
-    private final INodeValidators nodeValidators;
+    private final NodeValidators nodeValidators;
     private final ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder;
 
-    public NodeMethodsImpl(INodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder) {
+    public NodeMethodsImpl(NodeValidators nodeValidators, ValidatorBuilder<NodeErrorCode, HippoNode> validatorBuilder) {
         this.nodeValidators = nodeValidators;
         this.validatorBuilder = validatorBuilder;
     }

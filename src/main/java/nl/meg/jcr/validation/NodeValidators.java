@@ -3,7 +3,7 @@ package nl.meg.jcr.validation;
 import nl.meg.jcr.HippoNode;
 import nl.meg.validation.Validator;
 
-public interface INodeValidators {
+public interface NodeValidators {
 
     Validator<NodeErrorCode, HippoNode> isNotRoot();
 

@@ -1,11 +1,11 @@
 package nl.meg.jcr.validation.internal;
 
 import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.validation.INodeValidators;
 import nl.meg.jcr.validation.NodeErrorCode;
+import nl.meg.jcr.validation.NodeValidators;
 import nl.meg.validation.Validator;
 
-public final class INodeValidatorsImpl implements INodeValidators {
+public final class NodeValidatorsImpl implements NodeValidators {
 
     private static final Validator<NodeErrorCode, HippoNode> IS_NOT_ROOT = new IsNotRootValidator();
     private static final Validator<NodeErrorCode, HippoNode> SUPPORTS_ORDERING = new SupportsOrderingValidator();
