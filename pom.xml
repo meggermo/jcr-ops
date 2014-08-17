@@ -4,13 +4,22 @@
 
     <groupId>nl.meg</groupId>
     <artifactId>jcr-ops</artifactId>
+    <packaging>pom</packaging>
     <version>1.0.1-SNAPSHOT</version>
+
     <name>JCR Operations</name>
     <description>
         Functional immutable operations on the The Content repository API for Java.
     </description>
     <inceptionYear>2014</inceptionYear>
-    <url>https://github.com/meggermo/jcr-ops</url>
+    <url>https://github.com/meggermo/nl.meg.jcr-ops</url>
+
+    <modules>
+        <module>validation-api</module>
+        <module>jcr-api</module>
+        <module>validation-impl</module>
+        <module>jcr-impl</module>
+    </modules>
 
     <developers>
         <developer>
@@ -22,19 +31,19 @@
     </developers>
 
     <scm>
-        <url>https://github.com/meggermo/jcr-ops</url>
-        <connection>scm:git:git://github.com/meggermo/jcr-ops.git</connection>
-        <developerConnection>scm:git:git@github.com/meggermo/jcr-ops.git</developerConnection>
+        <url>https://github.com/meggermo/nl.meg.jcr-ops</url>
+        <connection>scm:git:git://github.com/meggermo/nl.meg.jcr-ops.git</connection>
+        <developerConnection>scm:git:git@github.com/meggermo/nl.meg.jcr-ops.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/meggermo/jcr-ops/issues</url>
+        <url>https://github.com/meggermo/nl.meg.jcr-ops/issues</url>
         <system>github</system>
     </issueManagement>
 
     <ciManagement>
         <system>Travis</system>
-        <url>https://travis-ci.org/meggermo/jcr-ops</url>
+        <url>https://travis-ci.org/meggermo/nl.meg.jcr-ops</url>
     </ciManagement>
 
     <properties>
@@ -46,17 +55,26 @@
         <guava.version>16.0.1</guava.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.nl.meg.jcr</groupId>
+                <artifactId>nl.meg.jcr</artifactId>
+                <version>${jcr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.jcr</groupId>
+                <artifactId>jcr</artifactId>
+                <version>2.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>javax.jcr</groupId>
-            <artifactId>jcr</artifactId>
-            <version>${jcr.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
