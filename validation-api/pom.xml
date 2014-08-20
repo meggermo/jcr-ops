@@ -11,5 +11,33 @@
     </parent>
 
     <artifactId>validation-api</artifactId>
+    <packaging>bundle</packaging>
+
+    <description>
+        An API for validation
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>biz.aQute.bnd</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>nl.meg.validation;provide:=true,nl.meg.validation.impl</Export-Package>
+                        <build>${maven.build.timestamp}</build>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

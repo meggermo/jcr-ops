@@ -11,6 +11,11 @@
     </parent>
 
     <artifactId>validation-impl</artifactId>
+    <packaging>bundle</packaging>
+
+    <description>
+        An implementation of the validation API, targeted at JCR
+    </description>
 
     <dependencies>
         <dependency>
@@ -18,6 +23,26 @@
             <artifactId>validation-api</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>biz.aQute.bnd</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>nl.meg.validation.impl</Export-Package>
+                        <build>${maven.build.timestamp}</build>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
