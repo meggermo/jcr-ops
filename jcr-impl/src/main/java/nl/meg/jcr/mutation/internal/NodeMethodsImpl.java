@@ -32,7 +32,7 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canAddChild(newParent))
                 .build(terminationPredicate);
-        return preValidate(new MoveNodeImpl(newParent),validator);
+        return preValidate(validator, new MoveNodeImpl(newParent));
     }
 
     @Override
@@ -41,7 +41,7 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.isNotRoot())
                 .add(nodeValidators.canRenameTo(newName))
                 .build(terminationPredicate);
-        return preValidate(new RenameNodeImpl(newName),validator);
+        return preValidate(validator, new RenameNodeImpl(newName));
     }
 
     @Override
@@ -51,6 +51,6 @@ public final class NodeMethodsImpl implements NodeMethods {
                 .add(nodeValidators.supportsOrdering())
                 .add(nodeValidators.positionInBounds(newPosition))
                 .build(terminationPredicate);
-        return preValidate(new RepositionNodeImpl(newPosition),validator);
+        return preValidate(validator, new RepositionNodeImpl(newPosition));
     }
 }

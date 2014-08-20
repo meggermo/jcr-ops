@@ -42,7 +42,7 @@ public class ValidatingFunctionSupportTest extends AbstractMockitoTest {
     public void testPreValidate() {
         when(preValidator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(preContext);
         when(preContext.hasErrors()).thenReturn(false);
-        preValidate(function, preValidator).apply("TEST");
+        preValidate(preValidator, function).apply("TEST");
         verify(function).apply("TEST");
     }
 
@@ -55,7 +55,7 @@ public class ValidatingFunctionSupportTest extends AbstractMockitoTest {
         when(preContext.getErrorMap()).thenReturn(errors);
 
         try {
-            preValidate(function, preValidator).apply("TEST");
+            preValidate(preValidator, function).apply("TEST");
             shouldHaveThrown(PreValidationException.class);
         } catch (ValidationException e) {
             assertSame(errors, e.getErrorMap());
@@ -84,7 +84,7 @@ public class ValidatingFunctionSupportTest extends AbstractMockitoTest {
         when(preValidator.validate(eq("TEST"), any(ValidationContext.class))).thenReturn(preContext);
         when(preContext.hasErrors()).thenReturn(false);
         when(function.apply("TEST")).thenReturn(0);
-        assertThat(preValidate(function, preValidator).apply("TEST"), is(0));
+        assertThat(preValidate(preValidator, function).apply("TEST"), is(0));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ValidatingFunctionSupportTest extends AbstractMockitoTest {
         when(postValidator.validate(eq(0), any(ValidationContext.class))).thenReturn(postContext);
         when(postContext.hasErrors()).thenReturn(false);
         when(function.apply("TEST")).thenReturn(0);
-        final Function<String, Integer> f1 = preValidate(function, preValidator);
+        final Function<String, Integer> f1 = preValidate(preValidator, function);
         final Function<String, Integer> f2 = postValidate(f1, postValidator);
         assertThat(f2.apply("TEST"), is(0));
     }
