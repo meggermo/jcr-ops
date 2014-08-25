@@ -56,20 +56,20 @@ public class HippoPropertyImplTest extends AbstractMockitoTest {
     public void testGetValues() throws RepositoryException {
         when(property.isMultiple()).thenReturn(true);
         when(property.getValues()).thenReturn(new Value[]{value});
-        assertThat(hippoProperty.getValues().size(), is(1));
+        assertThat(hippoProperty.getValues().count(), is(1L));
     }
 
     @Test
     public void testGetValues_NotMultiple() throws RepositoryException {
         when(property.isMultiple()).thenReturn(false);
-        assertThat(hippoProperty.getValues().isEmpty(), is(true));
+        assertThat(hippoProperty.getValues().count(), is(0L));
     }
 
     @Test
     public void testGetValues_EmptyArray() throws RepositoryException {
         when(property.isMultiple()).thenReturn(true);
         when(property.getValues()).thenReturn(new Value[0]);
-        assertThat(hippoProperty.getValues().isEmpty(), is(true));
+        assertThat(hippoProperty.getValues().count(), is(0L));
     }
 
 }

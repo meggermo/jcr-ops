@@ -4,6 +4,9 @@ import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.HippoValue;
 
 import javax.jcr.Property;
+import javax.jcr.Value;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,10 +35,11 @@ final class HippoPropertyImpl extends AbstractHippoItem<Property> implements Hip
     }
 
     @Override
-    public List<HippoValue> getValues() {
+    public Stream<HippoValue> getValues() {
         return invoke(p -> p.isMultiple()
-                ? Stream.of(p.getValues()).map(HippoValueImpl::new).collect(Collectors.toList())
-                : emptyList());
+                ? Arrays.stream(p.getValues())
+                : Stream.<Value>empty())
+        .map(HippoValueImpl::new);
     }
 
 }

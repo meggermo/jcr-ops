@@ -1,8 +1,8 @@
 package nl.meg.jcr;
 
 import javax.jcr.Property;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface HippoProperty extends HippoItem<Property> {
 
@@ -10,6 +10,6 @@ public interface HippoProperty extends HippoItem<Property> {
 
     Optional<HippoValue> getValue();
 
-    List<HippoValue> getValues();
+    Stream<HippoValue> getValues();
 
 }
