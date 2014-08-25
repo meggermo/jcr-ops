@@ -21,7 +21,6 @@
         <dependency>
             <groupId>nl.meg</groupId>
             <artifactId>validation-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>biz.aQute.bnd</groupId>

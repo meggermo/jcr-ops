@@ -52,14 +52,14 @@
         <maven.build.timestamp.format>yyyyMMddHHmmzzz</maven.build.timestamp.format>
         <!-- Library versions -->
         <jcr.version>2.0</jcr.version>
-        <guava.version>17.0</guava.version>
+        <guava.version>15.0</guava.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>javax.nl.meg.jcr</groupId>
-                <artifactId>nl.meg.jcr</artifactId>
+                <groupId>javax.jcr</groupId>
+                <artifactId>jcr</artifactId>
                 <version>${jcr.version}</version>
             </dependency>
             <dependency>
@@ -68,15 +68,30 @@
                 <version>${guava.version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.jcr</groupId>
-                <artifactId>jcr</artifactId>
-                <version>2.0</version>
-            </dependency>
-            <dependency>
                 <groupId>biz.aQute.bnd</groupId>
                 <artifactId>annotation</artifactId>
                 <version>2.3.0</version>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>validation-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>jcr-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>jcr-impl</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -121,6 +136,11 @@
                     <noDeploy>true</noDeploy>
                     <useReleaseProfile>false</useReleaseProfile>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
             </plugin>
         </plugins>
         <pluginManagement>
