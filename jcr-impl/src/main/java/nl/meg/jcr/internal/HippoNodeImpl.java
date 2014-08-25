@@ -51,7 +51,7 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
     public Optional<HippoNode> getNode(String name) {
         return invoke(n -> n.hasNode(name)
                 ? Optional.of(node(n.getNode(name)))
-                : Optional.empty());
+                : Optional.<HippoNode>empty());
     }
 
     @Override
@@ -72,7 +72,7 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
     public Optional<HippoProperty> getProperty(String name) {
         return invoke(n -> n.hasProperty(name)
                 ? Optional.of(property(n.getProperty(name)))
-                : Optional.empty());
+                : Optional.<HippoProperty>empty());
     }
 
     @Override
