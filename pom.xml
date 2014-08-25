@@ -4,13 +4,21 @@
 
     <groupId>nl.meg</groupId>
     <artifactId>jcr-ops</artifactId>
-    <version>1.0.0</version>
-    <name>JCR Operations</name>
+    <packaging>pom</packaging>
+    <version>1.0.1</version>
+
     <description>
         Functional immutable operations on the The Content repository API for Java.
     </description>
     <inceptionYear>2014</inceptionYear>
-    <url>https://github.com/meggermo/jcr-ops</url>
+    <url>https://github.com/meggermo/nl.meg.jcr-ops</url>
+
+    <modules>
+        <module>validation-api</module>
+        <module>jcr-api</module>
+        <module>validation-impl</module>
+        <module>jcr-impl</module>
+    </modules>
 
     <developers>
         <developer>
@@ -22,41 +30,72 @@
     </developers>
 
     <scm>
-        <url>https://github.com/meggermo/jcr-ops</url>
-        <connection>scm:git:git://github.com/meggermo/jcr-ops.git</connection>
-        <developerConnection>scm:git:git@github.com/meggermo/jcr-ops.git</developerConnection>
+        <url>https://github.com/meggermo/nl.meg.jcr-ops</url>
+        <connection>scm:git://github.com/meggermo/jcr-ops.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/meggermo/jcr-ops.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/meggermo/jcr-ops/issues</url>
+        <url>https://github.com/meggermo/nl.meg.jcr-ops/issues</url>
         <system>github</system>
     </issueManagement>
 
     <ciManagement>
         <system>Travis</system>
-        <url>https://travis-ci.org/meggermo/jcr-ops</url>
+        <url>https://travis-ci.org/meggermo/nl.meg.jcr-ops</url>
     </ciManagement>
 
     <properties>
         <!-- project configuration -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
+        <maven.build.timestamp.format>yyyyMMddHHmmzzz</maven.build.timestamp.format>
         <!-- Library versions -->
         <jcr.version>2.0</jcr.version>
-        <guava.version>16.0.1</guava.version>
+        <guava.version>15.0</guava.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.jcr</groupId>
+                <artifactId>jcr</artifactId>
+                <version>${jcr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>annotation</artifactId>
+                <version>2.3.0</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>validation-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>jcr-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>nl.meg</groupId>
+                <artifactId>jcr-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>javax.jcr</groupId>
-            <artifactId>jcr</artifactId>
-            <version>${jcr.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -85,7 +124,7 @@
             <plugin>
                 <groupId>external.atlassian.jgitflow</groupId>
                 <artifactId>jgitflow-maven-plugin</artifactId>
-                <version>1.0-m1</version>
+                <version>1.0-m3</version>
                 <configuration>
                     <flowInitContext>
                         <masterBranchName>master</masterBranchName>
@@ -98,7 +137,22 @@
                     <useReleaseProfile>false</useReleaseProfile>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.5.0</version>
+                    <extensions>true</extensions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
