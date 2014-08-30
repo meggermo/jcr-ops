@@ -15,6 +15,7 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static java.util.Arrays.stream;
 import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.SIZED;
 import static java.util.Spliterators.spliterator;
@@ -149,11 +150,11 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
 
     @Override
     public Stream<String> getVersionLabels() {
-        return null;
+        return stream(invoke(vh -> vh.getVersionLabels()));
     }
 
     @Override
     public Stream<String> getVersionLabels(Version version) {
-        return null;
+        return stream(invoke(vh -> vh.getVersionLabels(version)));
     }
 }
