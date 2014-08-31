@@ -83,7 +83,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
     public void testRename() {
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
-        when(parent.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
+        when(parent.getNodes()).thenReturn(Stream.<HippoNode>empty());
         when(nodeValidators.canRenameTo("newName")).thenReturn(validator);
         assertThat(nodeMethods.renameFunction("newName").apply(node0), is(node0));
     }
@@ -93,7 +93,7 @@ public class NodeMethodsImplTest extends AbstractMockitoTest {
         when(node0.getName()).thenReturn("name");
         when(node1.getName()).thenReturn("node1");
         when(node2.getName()).thenReturn("node2");
-        when(parent.getNodesAsStream()).thenReturn(Stream.of(node0, node1, node2));
+        when(parent.getNodes()).thenReturn(Stream.of(node0, node1, node2));
         when(parent.get()).thenReturn(parentNode);
         when(nodeValidators.supportsOrdering()).thenReturn(validator);
         when(nodeValidators.positionInBounds(1)).thenReturn(validator);

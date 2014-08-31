@@ -31,12 +31,12 @@ public class DescendantTraverserImplTest extends AbstractMockitoTest {
 
         this.traverser = new DescendantTraverserImpl();
 
-        when(n0.getNodesAsStream()).thenReturn(Stream.of(n1, n2, n3));
-        when(n1.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
-        when(n2.getNodesAsStream()).thenReturn(Stream.of(n4, n5));
-        when(n3.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
-        when(n4.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
-        when(n5.getNodesAsStream()).thenReturn(Stream.<HippoNode>empty());
+        when(n0.getNodes()).thenReturn(Stream.of(n1, n2, n3));
+        when(n1.getNodes()).thenReturn(Stream.<HippoNode>empty());
+        when(n2.getNodes()).thenReturn(Stream.of(n4, n5));
+        when(n3.getNodes()).thenReturn(Stream.<HippoNode>empty());
+        when(n4.getNodes()).thenReturn(Stream.<HippoNode>empty());
+        when(n5.getNodes()).thenReturn(Stream.<HippoNode>empty());
     }
 
     @Test

@@ -41,7 +41,7 @@ final class RenameNodeImpl implements Function<HippoNode, HippoNode> {
     }
 
     private HippoNode moveAndReorder(HippoNode parent, HippoNode node) {
-        final List<HippoNode> nodes = parent.getNodesAsStream().collect(toList());
+        final List<HippoNode> nodes = parent.getNodes().collect(toList());
         final int nodeIndex = nodes.indexOf(node);
         move(parent, node);
         if (nodeIndex < nodes.size() - 1) {

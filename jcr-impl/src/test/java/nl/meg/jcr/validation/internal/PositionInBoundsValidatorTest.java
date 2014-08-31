@@ -30,7 +30,7 @@ public class PositionInBoundsValidatorTest extends AbstractMockitoTest {
     @Test
     public void testGetContextMap() {
         when(entity.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodesAsStream()).thenReturn(Stream.of(entity));
+        when(parent.getNodes()).thenReturn(Stream.of(entity));
         final Map<String, ?> contextMap = validator.getContextMap(entity);
         assertThat(contextMap.containsKey("min"), is(true));
         assertThat(contextMap.containsKey("max"), is(true));

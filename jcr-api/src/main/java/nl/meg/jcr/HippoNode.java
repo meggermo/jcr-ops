@@ -22,9 +22,9 @@ public interface HippoNode extends HippoItem<Node> {
 
     Optional<HippoNode> getNode(String name);
 
-    Stream<HippoNode> getNodesAsStream();
+    Stream<HippoNode> getNodes();
 
     Optional<HippoProperty> getProperty(String name);
 
-    Stream<HippoProperty> getPropertiesAsStream();
+    Stream<HippoProperty> getProperties();
 }

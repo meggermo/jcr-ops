@@ -51,7 +51,7 @@ public class RenameNodeImplTest extends AbstractMockitoTest {
         when(node.getParent()).thenReturn(Optional.of(parent));
         when(parent.getPrimaryNodeType()).thenReturn(nodeType);
         when(nodeType.hasOrderableChildNodes()).thenReturn(true);
-        when(parent.getNodesAsStream()).thenReturn(Stream.of(node, node));
+        when(parent.getNodes()).thenReturn(Stream.of(node, node));
         when(node.getName()).thenReturn("name");
         when(node.getSession()).thenReturn(session);
         when(parent.get()).thenReturn(n);

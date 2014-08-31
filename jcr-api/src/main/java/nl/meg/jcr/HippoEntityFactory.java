@@ -3,6 +3,8 @@ package nl.meg.jcr;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Value;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 
 public interface HippoEntityFactory {
 
@@ -11,4 +13,8 @@ public interface HippoEntityFactory {
     HippoProperty property(Property property);
 
     HippoNode node(Node node);
+
+    HippoVersion version(Version version);
+
+    HippoVersionHistory versionHistory(VersionHistory versionHistory);
 }

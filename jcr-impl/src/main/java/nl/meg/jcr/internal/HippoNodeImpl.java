@@ -55,7 +55,7 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
     }
 
     @Override
-    public Stream<HippoNode> getNodesAsStream() {
+    public Stream<HippoNode> getNodes() {
         return invoke(n -> {
             if (n.hasNodes()) {
                 final NodeIterator nI = n.getNodes();
@@ -76,7 +76,7 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
     }
 
     @Override
-    public Stream<HippoProperty> getPropertiesAsStream() {
+    public Stream<HippoProperty> getProperties() {
         return invoke(n -> {
             if (n.hasProperties()) {
                 final PropertyIterator pI = n.getProperties();

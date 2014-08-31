@@ -10,6 +10,6 @@ class DescendantTraverserImpl extends TreeTraverser<HippoNode> implements NodeTr
 
     @Override
     public Iterable<HippoNode> children(final HippoNode root) {
-        return root.getNodesAsStream().collect(toList());
+        return root.getNodes().collect(toList());
     }
 }

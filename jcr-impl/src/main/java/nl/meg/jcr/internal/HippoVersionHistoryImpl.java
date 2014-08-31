@@ -94,7 +94,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     public HippoVersionHistory addVersionLabel(String versionName, String label) throws VersionException, LabelExistsVersionException {
         try {
             get().addVersionLabel(versionName, label, false);
-            return new HippoVersionHistoryImpl(get());
+            return versionHistory(get());
         } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -106,7 +106,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     public HippoVersionHistory addOrMoveVersionLabel(String versionName, String label) throws VersionException {
         try {
             get().addVersionLabel(versionName, label, true);
-            return new HippoVersionHistoryImpl(get());
+            return versionHistory(get());
         } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -118,7 +118,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     public HippoVersionHistory removeVersion(String versionName) throws UnsupportedRepositoryOperationException, VersionException {
         try {
             get().removeVersion(versionName);
-            return new HippoVersionHistoryImpl(get());
+            return versionHistory(get());
         } catch (UnsupportedRepositoryOperationException | VersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -130,7 +130,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     public HippoVersionHistory removeVersionLabel(String label) throws VersionException {
         try {
             get().removeVersionLabel(label);
-            return new HippoVersionHistoryImpl(get());
+            return versionHistory(get());
         } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -144,8 +144,8 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     }
 
     @Override
-    public boolean hasVersionLabel(Version version, String label) {
-        return invoke(vh -> vh.hasVersionLabel(version, label));
+    public boolean hasVersionLabel(HippoVersion version, String label) {
+        return invoke(vh -> vh.hasVersionLabel(version.get(), label));
     }
 
     @Override
@@ -154,7 +154,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     }
 
     @Override
-    public Stream<String> getVersionLabels(Version version) {
-        return stream(invoke(vh -> vh.getVersionLabels(version)));
+    public Stream<String> getVersionLabels(HippoVersion version) {
+        return stream(invoke(vh -> vh.getVersionLabels(version.get())));
     }
 }

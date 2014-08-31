@@ -5,46 +5,43 @@ import nl.meg.jcr.*;
 
 import javax.jcr.*;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static nl.meg.function.FunctionSupport.relax;
 
 abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
-    private final E node;
-    private final Function<Node, HippoNode> hippoNodeFactory;
-    private final Function<Property, HippoProperty> hippoPropertyFactory;
-    private final Function<Value, HippoValue> hippoValueFactory;
-    private final Function<Version, HippoVersion> hippoVersionFactory;
+    private final E item;
+    private final HippoEntityFactory hippoEntityFactory = new HippoEntityFactoryImpl();
 
-    AbstractHippoItem(E node) {
-        this.node = node;
-        this.hippoNodeFactory = HippoNodeImpl::new;
-        this.hippoPropertyFactory = HippoPropertyImpl::new;
-        this.hippoValueFactory = HippoValueImpl::new;
-        this.hippoVersionFactory = HippoVersionImpl::new;
+    AbstractHippoItem(E item) {
+        this.item = item;
     }
 
     @Override
     public final E get() {
-        return node;
+        return item;
     }
 
     protected final HippoNode node(Node node) {
-        return hippoNodeFactory.apply(node);
+        return hippoEntityFactory.node(node);
     }
 
     protected final HippoProperty property(Property property) {
-        return hippoPropertyFactory.apply(property);
+        return hippoEntityFactory.property(property);
     }
 
     protected final HippoValue value(Value value) {
-        return hippoValueFactory.apply(value);
+        return hippoEntityFactory.value(value);
     }
 
     protected final HippoVersion version(Version version) {
-        return hippoVersionFactory.apply(version);
+        return hippoEntityFactory.version(version);
+    }
+
+    protected final HippoVersionHistory versionHistory(VersionHistory versionHistory) {
+        return hippoEntityFactory.versionHistory(versionHistory);
     }
 
     @Override

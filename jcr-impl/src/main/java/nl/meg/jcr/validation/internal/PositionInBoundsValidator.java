@@ -34,11 +34,11 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<HippoN
         final Map<String, Object> map = new HashMap<>();
         map.put("min", 0);
         map.put("position", newPosition);
-        map.put("max", entity.getParent().get().getNodesAsStream().collect(toList()).size() - 1);
+        map.put("max", entity.getParent().get().getNodes().collect(toList()).size() - 1);
         return map;
     }
 
     private static boolean positionInRange(HippoNode node, int postion) {
-        return Range.closedOpen(0, node.getNodesAsStream().collect(toList()).size()).contains(postion);
+        return Range.closedOpen(0, node.getNodes().collect(toList()).size()).contains(postion);
     }
 }

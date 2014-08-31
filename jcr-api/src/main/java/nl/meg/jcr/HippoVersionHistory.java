@@ -2,7 +2,6 @@ package nl.meg.jcr;
 
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.LabelExistsVersionException;
-import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import java.util.Optional;
@@ -36,10 +35,10 @@ public interface HippoVersionHistory extends HippoItem<VersionHistory> {
 
     boolean hasVersionLabel(String label);
 
-    boolean hasVersionLabel(Version version, String label);
+    boolean hasVersionLabel(HippoVersion version, String label);
 
     Stream<String> getVersionLabels();
 
-    Stream<String> getVersionLabels(Version version);
+    Stream<String> getVersionLabels(HippoVersion version);
 
 }

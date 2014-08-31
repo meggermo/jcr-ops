@@ -76,7 +76,7 @@ public class NodePredicatesImplTest extends AbstractMockitoTest {
 
     @Test
     public void testWithProperty() throws RepositoryException {
-        when(n1.getPropertiesAsStream()).thenReturn(Stream.of(p1P));
+        when(n1.getProperties()).thenReturn(Stream.of(p1P));
         when(pP.test(p1P)).thenReturn(true);
         assertThat(nP.withProperty(pP).test(n1), is(true));
     }
