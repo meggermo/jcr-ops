@@ -10,9 +10,6 @@ import org.mockito.Mock;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
@@ -237,80 +234,4 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
     }
 
 
-    private void shouldHaveThrown() {
-        shouldHaveThrown(RuntimeRepositoryException.class);
-    }
-
-    private NodeIterator getNodeIterator(final Node... nodes) {
-
-        return new NodeIterator() {
-            final AtomicInteger i = new AtomicInteger();
-            final List<Node> nodeList = Arrays.asList(nodes);
-            @Override
-            public Node nextNode() {
-                return nodeList.get(i.getAndIncrement());
-            }
-
-            @Override
-            public void skip(long skipNum) {
-                i.addAndGet((int)skipNum);
-            }
-
-            @Override
-            public long getSize() {
-                return nodeList.size();
-            }
-
-            @Override
-            public long getPosition() {
-                return i.get();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return i.get() < getSize();
-            }
-
-            @Override
-            public Object next() {
-                return nextNode();
-            }
-        };
-    }
-
-    private PropertyIterator getPropertyIterator(Property... properties) {
-        return new PropertyIterator() {
-            private final AtomicInteger i = new AtomicInteger();
-            private final List<Property> propertyList = Arrays.asList(properties);
-            @Override
-            public Property nextProperty() {
-                return propertyList.get(i.getAndIncrement());
-            }
-
-            @Override
-            public void skip(long skipNum) {
-                i.addAndGet((int)skipNum);
-            }
-
-            @Override
-            public long getSize() {
-                return propertyList.size();
-            }
-
-            @Override
-            public long getPosition() {
-                return i.get();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return i.get() < propertyList.size();
-            }
-
-            @Override
-            public Object next() {
-                return nextProperty();
-            }
-        };
-    }
 }

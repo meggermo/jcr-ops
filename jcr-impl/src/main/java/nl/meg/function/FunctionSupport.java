@@ -4,10 +4,6 @@ import java.util.function.Function;
 
 public final class FunctionSupport {
 
-    private FunctionSupport() {
-
-    }
-
     /**
      * Calls a function that throws a checked {@link Exception} of type E and returns the result if no exception occurs. If calling the function results in an exception
      * then the given function g is used to throw an unchecked exception instead.
@@ -21,8 +17,18 @@ public final class FunctionSupport {
      * @param <RE>  type of unchecked exception
      * @return result of f applied to input
      */
-    @SuppressWarnings("unchecked")
     public static <T, R, E extends Exception, RE extends RuntimeException> R relax(EFunction<? super T, ? extends R, E> f, T input, Function<E, ? extends RE> g) {
+        return FS.doRelax(f, input, g);
+    }
+
+    private static final FunctionSupport FS = new FunctionSupport();
+
+    private FunctionSupport() {
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T, R, E extends Exception, RE extends RuntimeException> R doRelax(EFunction<? super T, ? extends R, E> f, T input, Function<E, ? extends RE> g) {
         try {
             return f.apply(input);
         } catch (Exception e) {
