@@ -4,6 +4,7 @@ import nl.meg.function.EFunction;
 import nl.meg.jcr.*;
 
 import javax.jcr.*;
+import javax.jcr.version.Version;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -15,12 +16,14 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
     private final Function<Node, HippoNode> hippoNodeFactory;
     private final Function<Property, HippoProperty> hippoPropertyFactory;
     private final Function<Value, HippoValue> hippoValueFactory;
+    private final Function<Version, HippoVersion> hippoVersionFactory;
 
     AbstractHippoItem(E node) {
         this.node = node;
         this.hippoNodeFactory = HippoNodeImpl::new;
         this.hippoPropertyFactory = HippoPropertyImpl::new;
         this.hippoValueFactory = HippoValueImpl::new;
+        this.hippoVersionFactory = HippoVersionImpl::new;
     }
 
     @Override
@@ -38,6 +41,10 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
     protected final HippoValue value(Value value) {
         return hippoValueFactory.apply(value);
+    }
+
+    protected final HippoVersion version(Version version) {
+        return hippoVersionFactory.apply(version);
     }
 
     @Override
