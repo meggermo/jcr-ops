@@ -11,7 +11,7 @@
         Functional immutable operations on the The Content repository API for Java.
     </description>
     <inceptionYear>2014</inceptionYear>
-    <url>https://github.com/meggermo/nl.meg.jcr-ops</url>
+    <url>https://github.com/meggermo/jcr-ops</url>
 
     <modules>
         <module>validation-api</module>
@@ -30,19 +30,19 @@
     </developers>
 
     <scm>
-        <url>https://github.com/meggermo/nl.meg.jcr-ops</url>
+        <url>https://github.com/meggermo/jcr-ops</url>
         <connection>scm:git://github.com/meggermo/jcr-ops.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/meggermo/jcr-ops.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/meggermo/nl.meg.jcr-ops/issues</url>
+        <url>https://github.com/meggermo/jcr-ops/issues</url>
         <system>github</system>
     </issueManagement>
 
     <ciManagement>
         <system>Travis</system>
-        <url>https://travis-ci.org/meggermo/nl.meg.jcr-ops</url>
+        <url>https://travis-ci.org/meggermo/jcr-ops</url>
     </ciManagement>
 
     <properties>
