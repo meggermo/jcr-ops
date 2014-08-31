@@ -22,8 +22,8 @@ import static java.util.Spliterators.spliterator;
 
 public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> implements HippoVersionHistory {
 
-    HippoVersionHistoryImpl(VersionHistory node) {
-        super(node);
+    HippoVersionHistoryImpl(VersionHistory versionHistory) {
+        super(versionHistory);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
             final VersionIterator vi = vh.getAllLinearVersions();
             final Spliterator<Version> sI = spliterator(vi, vi.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(HippoVersionImpl::new);
+        }).map(this::version);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
             final VersionIterator vi = vh.getAllVersions();
             final Spliterator<Version> sI = spliterator(vi, vi.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(HippoVersionImpl::new);
+        }).map(this::version);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
             final NodeIterator ni = vh.getAllLinearFrozenNodes();
             final Spliterator<Node> sI = spliterator(ni, ni.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(HippoNodeImpl::new);
+        }).map(this::node);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
             final NodeIterator ni = vh.getAllFrozenNodes();
             final Spliterator<Node> sI = spliterator(ni, ni.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(HippoNodeImpl::new);
+        }).map(this::node);
     }
 
     @Override
@@ -81,13 +81,13 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
                 return null;
             }
         });
-        return v != null ? Optional.of(new HippoVersionImpl(v)) : Optional.empty();
+        return v != null ? Optional.of(version(v)) : Optional.empty();
     }
 
     @Override
     public Optional<HippoVersion> getVersionByLabel(String label) {
         final Version v = invoke(vh -> vh.hasVersionLabel(label) ? vh.getVersionByLabel(label) : null);
-        return v != null ? Optional.of(new HippoVersionImpl(v)) : Optional.empty();
+        return v != null ? Optional.of(version(v)) : Optional.empty();
     }
 
     @Override
