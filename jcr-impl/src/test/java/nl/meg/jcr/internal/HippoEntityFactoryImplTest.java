@@ -48,4 +48,29 @@ public class HippoEntityFactoryImplTest extends AbstractMockitoTest {
     public void testNode() {
         assertThat(factory.node(node), isA(HippoNode.class));
     }
+
+    @Test(expected = AssertionError.class)
+    public void testValue_throws_assertion_error_on_null_arg() {
+        factory.value(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testProperty_throws_assertion_error_on_null_arg() {
+        factory.property(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testNode_throws_assertion_error_on_null_arg() {
+        factory.node(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testVersion_throws_assertion_error_on_null_arg() {
+        factory.version(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testVersionHistory_throws_assertion_error_on_null_arg() {
+        factory.versionHistory(null);
+    }
 }

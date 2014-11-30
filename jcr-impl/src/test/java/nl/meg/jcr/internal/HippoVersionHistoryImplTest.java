@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.LabelExistsVersionException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
@@ -129,13 +130,13 @@ public class HippoVersionHistoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testRemoveVersion() {
-        // TODO
+    public void testRemoveVersion() throws VersionException, UnsupportedRepositoryOperationException {
+        hvh.removeVersion("X");
     }
 
     @Test
-    public void testRemoveVersionLabel() {
-        // TODO
+    public void testRemoveVersionLabel() throws VersionException {
+        hvh.removeVersionLabel("X");
     }
 
     @Test
