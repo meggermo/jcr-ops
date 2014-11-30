@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 
-public class HippoVersionImpl extends AbstractHippoItem<Version> implements HippoVersion {
+final class HippoVersionImpl extends AbstractHippoItem<Version> implements HippoVersion {
 
     HippoVersionImpl(Version version) {
         super(version);
@@ -20,7 +20,7 @@ public class HippoVersionImpl extends AbstractHippoItem<Version> implements Hipp
 
     @Override
     public HippoVersionHistory getContainingHistory() {
-        return new HippoVersionHistoryImpl(invoke(Version::getContainingHistory));
+        return versionHistory(invoke(Version::getContainingHistory));
     }
 
     @Override
@@ -30,42 +30,38 @@ public class HippoVersionImpl extends AbstractHippoItem<Version> implements Hipp
 
     @Override
     public Optional<HippoVersion> getLinearSuccessor() {
-        final Version succ = invoke(v -> {
+        return Optional.ofNullable(invoke(v -> {
             try {
-                return v.getLinearSuccessor();
-
+                return version(v.getLinearSuccessor());
             } catch (VersionException e) {
                 return null;
             }
-        });
-        return succ != null ? Optional.of(new HippoVersionImpl(succ)) : Optional.empty();
+        }));
     }
 
     @Override
     public Stream<HippoVersion> getSuccessors() {
-        return stream(invoke(Version::getSuccessors)).map(HippoVersionImpl::new);
+        return stream(invoke(Version::getSuccessors)).map(this::version);
     }
 
     @Override
     public Optional<HippoVersion> getLinearPredecessor() {
-        final Version pred = invoke(v -> {
+        return Optional.ofNullable(invoke(v -> {
             try {
-                return v.getLinearPredecessor();
-
+                return version(v.getLinearPredecessor());
             } catch (VersionException e) {
                 return null;
             }
-        });
-        return pred != null ? Optional.of(new HippoVersionImpl(pred)) : Optional.empty();
+        }));
     }
 
     @Override
     public Stream<HippoVersion> getPredecessors() {
-        return stream(invoke(Version::getPredecessors)).map(HippoVersionImpl::new);
+        return stream(invoke(Version::getPredecessors)).map(this::version);
     }
 
     @Override
     public HippoNode getFrozenNode() {
-        return new HippoNodeImpl(invoke(Version::getFrozenNode));
+        return node(invoke(Version::getFrozenNode));
     }
 }

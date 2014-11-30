@@ -96,7 +96,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetNode_Absent() throws RepositoryException {
-        when(node.hasNode("X")).thenReturn(false);
+        when(node.getNode("X")).thenThrow(new ItemNotFoundException());
         assertThat(hippoNode.getNode("X").isPresent(), is(false));
     }
 
@@ -123,7 +123,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetAbsentProperty() throws RepositoryException {
-        when(node.hasProperty("X")).thenReturn(false);
+        when(node.getProperty("X")).thenThrow(new PathNotFoundException());
         assertThat(hippoNode.getProperty("X").isPresent(), is(false));
     }
 
@@ -188,7 +188,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
             assertThat(e.getCause(), is(t));
         }
         try {
-            when(node.hasNode("X")).thenThrow(e);
+            when(node.getNode("X")).thenThrow(e);
             hippoNode.getNode("X");
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {

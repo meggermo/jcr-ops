@@ -3,10 +3,7 @@ package nl.meg.jcr.internal;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
+import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -49,9 +46,13 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
     @Override
     public Optional<HippoNode> getNode(String name) {
-        return invoke(n -> n.hasNode(name)
-                ? Optional.of(node(n.getNode(name)))
-                : Optional.<HippoNode>empty());
+        return invoke(n -> {
+            try {
+                return Optional.of(node(n.getNode(name)));
+            } catch (ItemNotFoundException e) {
+                return Optional.<HippoNode>empty();
+            }
+        });
     }
 
     @Override
@@ -70,9 +71,13 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
     @Override
     public Optional<HippoProperty> getProperty(String name) {
-        return invoke(n -> n.hasProperty(name)
-                ? Optional.of(property(n.getProperty(name)))
-                : Optional.<HippoProperty>empty());
+        return invoke(n -> {
+            try {
+                return Optional.of(property(n.getProperty(name)));
+            } catch (PathNotFoundException e) {
+                return Optional.<HippoProperty>empty();
+            }
+        });
     }
 
     @Override

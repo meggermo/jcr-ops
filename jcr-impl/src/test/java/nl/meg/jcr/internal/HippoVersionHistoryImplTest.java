@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.version.LabelExistsVersionException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
@@ -76,6 +77,7 @@ public class HippoVersionHistoryImplTest extends AbstractMockitoTest {
     @Test
     public void testGetVersion() throws RepositoryException {
         when(versionHistory.getVersion("id")).thenReturn(version);
+        when(versionHistory.getVersion("some-other-id")).thenThrow(VersionException.class);
         assertThat(hvh.getVersion("id").get().get(), is(version));
         assertThat(hvh.getVersion("some-other-id").isPresent(), is(false));
     }
@@ -97,7 +99,7 @@ public class HippoVersionHistoryImplTest extends AbstractMockitoTest {
 
     @Test(expected = VersionException.class)
     public void testAddVersionLabel_For_Existing_Label() throws RepositoryException {
-        doThrow(VersionException.class).when(versionHistory).addVersionLabel("id", "X", false);
+        doThrow(LabelExistsVersionException.class).when(versionHistory).addVersionLabel("id", "X", false);
         hvh.addVersionLabel("id", "X");
     }
 

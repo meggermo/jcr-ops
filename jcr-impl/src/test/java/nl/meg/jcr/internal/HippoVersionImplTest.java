@@ -16,7 +16,6 @@ import java.util.Calendar;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class HippoVersionImplTest extends AbstractMockitoTest {
@@ -39,9 +38,8 @@ public class HippoVersionImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetContainingHistory() throws RepositoryException {
+        when(version.getContainingHistory()).thenReturn(versionHistory);
         assertThat(hippoVersion.getContainingHistory(), is(notNullValue()));
-        verify(version).getContainingHistory();
-
     }
 
     @Test

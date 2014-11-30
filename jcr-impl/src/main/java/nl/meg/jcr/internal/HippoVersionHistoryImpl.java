@@ -8,7 +8,6 @@ import nl.meg.jcr.RuntimeRepositoryException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.*;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -20,7 +19,7 @@ import static java.util.Spliterator.NONNULL;
 import static java.util.Spliterator.SIZED;
 import static java.util.Spliterators.spliterator;
 
-public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> implements HippoVersionHistory {
+final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> implements HippoVersionHistory {
 
     HippoVersionHistoryImpl(VersionHistory versionHistory) {
         super(versionHistory);
@@ -33,7 +32,7 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
 
     @Override
     public HippoVersion getRootVersion() {
-        return new HippoVersionImpl(invoke(VersionHistory::getRootVersion));
+        return version(invoke(VersionHistory::getRootVersion));
     }
 
     @Override
@@ -74,28 +73,26 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
 
     @Override
     public Optional<HippoVersion> getVersion(String versionName) {
-        final Version v = invoke(vh -> {
+        return Optional.ofNullable(invoke(vh -> {
             try {
-                return vh.getVersion(versionName);
+                return version(vh.getVersion(versionName));
             } catch (VersionException e) {
                 return null;
             }
-        });
-        return v != null ? Optional.of(version(v)) : Optional.empty();
+        }));
     }
 
     @Override
     public Optional<HippoVersion> getVersionByLabel(String label) {
-        final Version v = invoke(vh -> vh.hasVersionLabel(label) ? vh.getVersionByLabel(label) : null);
-        return v != null ? Optional.of(version(v)) : Optional.empty();
+        return Optional.ofNullable(invoke(vh -> vh.hasVersionLabel(label) ? version(vh.getVersionByLabel(label)) : null));
     }
 
     @Override
-    public HippoVersionHistory addVersionLabel(String versionName, String label) throws VersionException, LabelExistsVersionException {
+    public HippoVersionHistory addVersionLabel(String versionName, String label) throws LabelExistsVersionException {
         try {
             get().addVersionLabel(versionName, label, false);
             return versionHistory(get());
-        } catch (VersionException e) {
+        } catch (LabelExistsVersionException e) {
             throw e;
         } catch (RepositoryException e) {
             throw new RuntimeRepositoryException(e);
@@ -115,11 +112,11 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
     }
 
     @Override
-    public HippoVersionHistory removeVersion(String versionName) throws UnsupportedRepositoryOperationException, VersionException {
+    public HippoVersionHistory removeVersion(String versionName) throws VersionException {
         try {
             get().removeVersion(versionName);
             return versionHistory(get());
-        } catch (UnsupportedRepositoryOperationException | VersionException e) {
+        } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {
             throw new RuntimeRepositoryException(e);
@@ -150,11 +147,13 @@ public class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> i
 
     @Override
     public Stream<String> getVersionLabels() {
-        return stream(invoke(vh -> vh.getVersionLabels()));
+        final String[] labels = invoke(vh -> vh.getVersionLabels());
+        return stream(labels);
     }
 
     @Override
     public Stream<String> getVersionLabels(HippoVersion version) {
-        return stream(invoke(vh -> vh.getVersionLabels(version.get())));
+        final String[] labels = invoke(vh -> vh.getVersionLabels(version.get()));
+        return stream(labels);
     }
 }
