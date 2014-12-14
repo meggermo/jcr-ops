@@ -49,7 +49,7 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
         return invoke(n -> {
             try {
                 return Optional.of(node(n.getNode(name)));
-            } catch (ItemNotFoundException e) {
+            } catch (ItemNotFoundException | PathNotFoundException e) {
                 return Optional.<HippoNode>empty();
             }
         });

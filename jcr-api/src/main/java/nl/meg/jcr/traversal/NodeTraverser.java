@@ -1,8 +1,10 @@
 package nl.meg.jcr.traversal;
 
-/**
- * Created by michiel on 8/17/14.
- */
 public interface NodeTraverser<T> {
-    public Iterable<T> children(final T root);
+
+    Iterable<T> preOrderTraversal(T root);
+
+    Iterable<T> postOrderTraversal(T root);
+
+    Iterable<T> breadthFirstTraversal(T root);
 }
