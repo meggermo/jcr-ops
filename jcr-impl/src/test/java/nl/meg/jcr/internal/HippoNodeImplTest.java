@@ -245,6 +245,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         when(value.getString()).thenReturn(null, "string");
         assertThat(hippoNode.getString("empty").isPresent(), is(false));
         assertThat(hippoNode.getString("present").get(), is("string"));
+        assertThat(hippoNode.getStrings("present").count(), is(0L));
     }
 
     @Test
@@ -264,5 +265,18 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         when(value.getDate()).thenReturn(null, someDate);
         assertThat(hippoNode.getDate("empty").isPresent(), is(false));
         assertThat(hippoNode.getDate("present").get(), is(someDate));
+        assertThat(hippoNode.getDate("present").get(), is(someDate));
     }
+
+    @Test
+    public void testGetEnum() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        when(value.getString()).thenReturn(null, "A");
+        assertThat(hippoNode.getEnum("empty", TEST.class).isPresent(), is(false));
+        assertThat(hippoNode.getEnum("present", TEST.class).get(), is(TEST.A));
+        assertThat(hippoNode.getEnums("x", TEST.class).count(), is(0L));
+    }
+
+    enum TEST{A}
 }

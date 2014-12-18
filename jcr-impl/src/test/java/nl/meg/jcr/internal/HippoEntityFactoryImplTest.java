@@ -1,10 +1,7 @@
 package nl.meg.jcr.internal;
 
 import nl.meg.AbstractMockitoTest;
-import nl.meg.jcr.HippoEntityFactory;
-import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.HippoProperty;
-import nl.meg.jcr.HippoValue;
+import nl.meg.jcr.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -47,6 +44,11 @@ public class HippoEntityFactoryImplTest extends AbstractMockitoTest {
     @Test
     public void testNode() {
         assertThat(factory.node(node), isA(HippoNode.class));
+    }
+
+    @Test
+    public void testMutableNode() {
+        assertThat(factory.mutableNode(node), isA(MutableHippoNode.class));
     }
 
     @Test(expected = AssertionError.class)
