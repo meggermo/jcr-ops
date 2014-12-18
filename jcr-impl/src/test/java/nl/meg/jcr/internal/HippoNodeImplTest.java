@@ -10,10 +10,12 @@ import org.mockito.Mock;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
+import java.util.Calendar;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class HippoNodeImplTest extends AbstractMockitoTest {
@@ -31,6 +33,9 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Mock
     private Property property;
+
+    @Mock
+    private Value value;
 
     @Mock
     private RepositoryException e;
@@ -233,5 +238,31 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         }
     }
 
+    @Test
+    public void testGetString() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        when(value.getString()).thenReturn(null, "string");
+        assertThat(hippoNode.getString("empty").isPresent(), is(false));
+        assertThat(hippoNode.getString("present").get(), is("string"));
+    }
 
+    @Test
+    public void testGetBoolean() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        when(value.getBoolean()).thenReturn(false, true);
+        assertThat(hippoNode.getBoolean("empty"), is(false));
+        assertThat(hippoNode.getBoolean("empty"), is(true));
+    }
+
+    @Test
+    public void testGetDate() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        final Calendar someDate = Calendar.getInstance();
+        when(value.getDate()).thenReturn(null, someDate);
+        assertThat(hippoNode.getDate("empty").isPresent(), is(false));
+        assertThat(hippoNode.getDate("present").get(), is(someDate));
+    }
 }

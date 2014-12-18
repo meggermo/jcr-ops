@@ -2,9 +2,11 @@ package nl.meg.jcr.internal;
 
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.stream.Stream;
@@ -94,4 +96,43 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
         }).map(this::property);
     }
 
+    @Override
+    public Optional<String> getString(String name) {
+        return getValue(name).map(HippoValue::getString);
+    }
+
+    @Override
+    public <E extends Enum<E>> Optional<E> getEnum(String name, Class<E> enumType) {
+        return getString(name).map(v -> Enum.valueOf(enumType, v));
+    }
+
+    @Override
+    public boolean getBoolean(String name) {
+        return getValue(name).map(HippoValue::getBoolean).orElse(false);
+    }
+
+    @Override
+    public Optional<Calendar> getDate(String name) {
+        return getValue(name).map(HippoValue::getDate);
+    }
+
+    private Optional<HippoValue> getValue(String propertyName) {
+        return getProperty(propertyName)
+                .map(HippoProperty::getValue)
+                .orElse(Optional.<HippoValue>empty());
+    }
+
+    @Override
+    public Stream<String> getStrings(String name) {
+        return getValues(name).map(HippoValue::getString);
+    }
+
+    @Override
+    public <E extends Enum<E>> Stream<E> getEnums(String name, Class<E> enumType) {
+        return getValues(name).map(v -> v.getEnum(enumType));
+    }
+
+    private Stream<HippoValue> getValues(String propertyName) {
+        return getProperty(propertyName).map(HippoProperty::getValues).orElse(Stream.empty());
+    }
 }

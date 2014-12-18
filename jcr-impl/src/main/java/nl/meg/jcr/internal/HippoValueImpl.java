@@ -25,7 +25,7 @@ final class HippoValueImpl implements HippoValue {
     }
 
     @Override
-    public Boolean getBoolean() {
+    public boolean getBoolean() {
         return relax(Value::getBoolean, get(), RuntimeRepositoryException::new);
     }
 
@@ -52,6 +52,11 @@ final class HippoValueImpl implements HippoValue {
     @Override
     public String getString() {
         return relax(Value::getString, get(), RuntimeRepositoryException::new);
+    }
+
+    @Override
+    public <E extends Enum<E>> E getEnum(Class<E> enumType) {
+        return Enum.valueOf(enumType, getString());
     }
 
     @Override

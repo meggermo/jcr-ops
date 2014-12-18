@@ -17,4 +17,6 @@ public interface HippoEntityFactory {
     HippoVersion version(Version version);
 
     HippoVersionHistory versionHistory(VersionHistory versionHistory);
+
+    MutableHippoNode mutableNode(Node node);
 }

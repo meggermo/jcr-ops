@@ -39,4 +39,10 @@ public final class HippoEntityFactoryImpl implements HippoEntityFactory {
         assert versionHistory != null : "versionHistory cannot be null";
         return new HippoVersionHistoryImpl(versionHistory);
     }
+
+    @Override
+    public MutableHippoNode mutableNode(Node node) {
+        assert node != null : "node cannot be null";
+        return new MutableHippoNodeImpl(node);
+    }
 }
