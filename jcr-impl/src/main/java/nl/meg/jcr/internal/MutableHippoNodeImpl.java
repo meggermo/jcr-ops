@@ -32,7 +32,7 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     }
 
     @Override
-    public HippoNode setProperty(String name, String... values) {
+    public HippoNode setString(String name, String... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
@@ -46,7 +46,7 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     }
 
     @Override
-    public HippoNode setProperty(String name, Boolean... values) {
+    public HippoNode setBoolean(String name, Boolean... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
@@ -60,7 +60,7 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     }
 
     @Override
-    public HippoNode setProperty(String name, Long... values) {
+    public HippoNode setLong(String name, Long... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
@@ -74,7 +74,7 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     }
 
     @Override
-    public HippoNode setProperty(String name, Calendar... values) {
+    public HippoNode setDate(String name, Calendar... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
@@ -88,37 +88,42 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     }
 
     @Override
-    public <E extends Enum<E>> HippoNode setProperty(String name, E... values) {
+    public <E extends Enum<E>> HippoNode setEnum(String name, E... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0].name());
                     return node(n);
                 default:
-                    n.setProperty(name, Stream.of(values).map(Enum::name).<String>toArray(String[]::new));
+                    n.setProperty(name, Stream.of(values).map(Enum::name).toArray(String[]::new));
                     return node(n);
             }
         });
     }
 
+    @Override
+    public HippoNode addNode(String name) {
+        return invoke(n -> node(n.addNode(name)));
+    }
+
     private Value[] booleanValues(Boolean... values) {
         return invoke(n -> {
             final ValueFactory factory = n.getSession().getValueFactory();
-            return Stream.of(values).map(b -> factory.createValue(b)).toArray(Value[]::new);
+            return Stream.of(values).map(factory::createValue).toArray(Value[]::new);
         });
     }
 
     private Value[] longValues(Long... values) {
         return invoke(n -> {
             final ValueFactory factory = n.getSession().getValueFactory();
-            return Stream.of(values).map(b -> factory.createValue(b)).toArray(Value[]::new);
+            return Stream.of(values).map(factory::createValue).toArray(Value[]::new);
         });
     }
 
     private Value[] calendarValues(Calendar... values) {
         return invoke(n -> {
             final ValueFactory factory = n.getSession().getValueFactory();
-            return Stream.of(values).map(b -> factory.createValue(b)).toArray(size -> new Value[size]);
+            return Stream.of(values).map(factory::createValue).toArray(Value[]::new);
         });
     }
 }

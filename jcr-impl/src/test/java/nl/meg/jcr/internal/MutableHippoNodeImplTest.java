@@ -2,6 +2,7 @@ package nl.meg.jcr.internal;
 
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.MutableHippoNode;
+import nl.meg.jcr.RuntimeRepositoryException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -47,35 +48,47 @@ public class MutableHippoNodeImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testSetBooleanProperty() {
-        assertThat(mutableHippoNode.setProperty("test", true).get(), is(node));
-        assertThat(mutableHippoNode.setProperty("test", true, false).get(), is(node));
+    public void testSetBoolean() {
+        assertThat(mutableHippoNode.setBoolean("test", true).get(), is(node));
+        assertThat(mutableHippoNode.setBoolean("test", true, false).get(), is(node));
     }
 
     @Test
-    public void testSetStringProperty() {
-        assertThat(mutableHippoNode.setProperty("test", "test").get(), is(node));
-        assertThat(mutableHippoNode.setProperty("test", "test1", "test2").get(), is(node));
+    public void testSetString() {
+        assertThat(mutableHippoNode.setString("test", "test").get(), is(node));
+        assertThat(mutableHippoNode.setString("test", "test1", "test2").get(), is(node));
     }
 
     @Test
-    public void testSetCalendarProperty() {
+    public void testSetCalendar() {
         final Calendar instance = Calendar.getInstance();
-        assertThat(mutableHippoNode.setProperty("test", instance).get(), is(node));
-        assertThat(mutableHippoNode.setProperty("test", instance, instance).get(), is(node));
+        assertThat(mutableHippoNode.setDate("test", instance).get(), is(node));
+        assertThat(mutableHippoNode.setDate("test", instance, instance).get(), is(node));
     }
 
     @Test
-    public void testSetLongProperty() {
-        assertThat(mutableHippoNode.setProperty("test", 1L).get(), is(node));
-        assertThat(mutableHippoNode.setProperty("test", 1L, 2L).get(), is(node));
+    public void testSetLong() {
+        assertThat(mutableHippoNode.setLong("test", 1L).get(), is(node));
+        assertThat(mutableHippoNode.setLong("test", 1L, 2L).get(), is(node));
     }
 
     @Test
-    public void testSetProperty4() {
-        assertThat(mutableHippoNode.setProperty("test", TEST.A).get(), is(node));
-        assertThat(mutableHippoNode.setProperty("test", TEST.A, TEST.A).get(), is(node));
+    public void testSetEnum() {
+        assertThat(mutableHippoNode.setEnum("test", TEST.A).get(), is(node));
+        assertThat(mutableHippoNode.setEnum("test", TEST.A, TEST.A).get(), is(node));
     }
 
-    enum TEST {A};
+    @Test
+    public void testAddNode() throws RepositoryException {
+        when(node.addNode("test")).thenReturn(node);
+        assertThat(mutableHippoNode.addNode("test").get(), is(node));
+    }
+
+    @Test(expected = RuntimeRepositoryException.class)
+    public void testAddNode_throws() throws RepositoryException {
+        when(node.addNode("test")).thenThrow(RepositoryException.class);
+        assertThat(mutableHippoNode.addNode("test").get(), is(node));
+    }
+
+    enum TEST {A}
 }

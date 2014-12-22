@@ -8,13 +8,15 @@ public interface MutableHippoNode {
 
     HippoNode addMixinType(String mixinTypeName);
 
-    HippoNode setProperty(String name, String... values);
+    HippoNode setString(String name, String... values);
 
-    HippoNode setProperty(String name, Boolean... values);
+    HippoNode setBoolean(String name, Boolean... values);
 
-    HippoNode setProperty(String name, Long... values);
+    HippoNode setLong(String name, Long... values);
 
-    HippoNode setProperty(String name, Calendar... values);
+    HippoNode setDate(String name, Calendar... values);
 
-    <E extends Enum<E>> HippoNode setProperty(String name, E... values);
+    <E extends Enum<E>> HippoNode setEnum(String name, E... values);
+
+    HippoNode addNode(String name);
 }
