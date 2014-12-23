@@ -28,6 +28,10 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
         return hippoEntityFactory.node(node);
     }
 
+    protected final MutableHippoNode mutableNode(Node node) {
+        return hippoEntityFactory.mutableNode(node);
+    }
+
     protected final HippoProperty property(Property property) {
         return hippoEntityFactory.property(property);
     }

@@ -16,87 +16,87 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     }
 
     @Override
-    public HippoNode setPrimaryType(String primaryTypeName) {
+    public MutableHippoNode setPrimaryType(String primaryTypeName) {
         return invoke(n -> {
             n.setPrimaryType(primaryTypeName);
-            return node(n);
+            return mutableNode(n);
         });
     }
 
     @Override
-    public HippoNode addMixinType(String mixin) {
+    public MutableHippoNode addMixinType(String mixin) {
         return invoke(n -> {
             n.addMixin(mixin);
-            return node(n);
+            return mutableNode(n);
         });
     }
 
     @Override
-    public HippoNode setString(String name, String... values) {
+    public MutableHippoNode setString(String name, String... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return node(n);
+                    return mutableNode(n);
                 default:
                     n.setProperty(name, values);
-                    return node(n);
+                    return mutableNode(n);
             }
         });
     }
 
     @Override
-    public HippoNode setBoolean(String name, Boolean... values) {
+    public MutableHippoNode setBoolean(String name, Boolean... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return node(n);
+                    return mutableNode(n);
                 default:
                     n.setProperty(name, booleanValues(values));
-                    return node(n);
+                    return mutableNode(n);
             }
         });
     }
 
     @Override
-    public HippoNode setLong(String name, Long... values) {
+    public MutableHippoNode setLong(String name, Long... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return node(n);
+                    return mutableNode(n);
                 default:
                     n.setProperty(name, longValues(values));
-                    return node(n);
+                    return mutableNode(n);
             }
         });
     }
 
     @Override
-    public HippoNode setDate(String name, Calendar... values) {
+    public MutableHippoNode setDate(String name, Calendar... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return node(n);
+                    return mutableNode(n);
                 default:
                     n.setProperty(name, calendarValues(values));
-                    return node(n);
+                    return mutableNode(n);
             }
         });
     }
 
     @Override
-    public <E extends Enum<E>> HippoNode setEnum(String name, E... values) {
+    public <E extends Enum<E>> MutableHippoNode setEnum(String name, E... values) {
         return invoke(n -> {
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0].name());
-                    return node(n);
+                    return mutableNode(n);
                 default:
                     n.setProperty(name, Stream.of(values).map(Enum::name).toArray(String[]::new));
-                    return node(n);
+                    return mutableNode(n);
             }
         });
     }

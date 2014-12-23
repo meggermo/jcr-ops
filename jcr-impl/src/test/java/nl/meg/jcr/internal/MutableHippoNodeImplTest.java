@@ -15,6 +15,7 @@ import java.util.Calendar;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MutableHippoNodeImplTest extends AbstractMockitoTest {
@@ -57,6 +58,12 @@ public class MutableHippoNodeImplTest extends AbstractMockitoTest {
     public void testSetString() {
         assertThat(mutableHippoNode.setString("test", "test").get(), is(node));
         assertThat(mutableHippoNode.setString("test", "test1", "test2").get(), is(node));
+    }
+
+    @Test
+    public void testSetString_without_args() throws RepositoryException {
+        assertThat(mutableHippoNode.setString("test").get(), is(node));
+        verify(node).setProperty("test", new String[0]);
     }
 
     @Test
