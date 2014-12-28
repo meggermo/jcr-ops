@@ -19,10 +19,6 @@
             <groupId>nl.meg</groupId>
             <artifactId>jcr-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

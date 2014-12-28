@@ -1,21 +1,17 @@
 package nl.meg.jcr.traversal.internal;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.TreeTraverser;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.traversal.NodeTraverser;
 
-import java.util.Optional;
-
-import static com.google.common.collect.Iterators.singletonIterator;
+import java.util.stream.Stream;
 
 final class AncestorTraverserImpl extends TreeTraverser<HippoNode> implements NodeTraverser<HippoNode> {
 
     @Override
-    public Iterable<HippoNode> children(final HippoNode root) {
-        return () -> {
-            final Optional<HippoNode> parent = root.getParent();
-            return parent.isPresent() ? singletonIterator(parent.get()) : Iterators.<HippoNode>emptyIterator();
-        };
+    public Stream<HippoNode> children(HippoNode root) {
+        return root.getParent()
+                .map(Stream::of)
+                .orElse(Stream.empty());
     }
+
 }

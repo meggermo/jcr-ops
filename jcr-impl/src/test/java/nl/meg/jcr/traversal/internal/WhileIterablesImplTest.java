@@ -11,8 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.google.common.collect.ImmutableList.copyOf;
 import static java.util.Arrays.asList;
+import static java.util.Spliterators.spliteratorUnknownSize;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -39,14 +41,14 @@ public class WhileIterablesImplTest extends AbstractMockitoTest {
     @Test
     public void testTakeWhile() {
         final List<Integer> i = asList(1, 2, 3, 4, 5, 4);
-        final List<Integer> j = copyOf(whileIterables.takeWhile(x -> x != 4, i));
+        final List<Integer> j = stream(spliteratorUnknownSize(whileIterables.takeWhile(x -> x != 4, i).iterator(), 0), false).collect(toList());
         assertThat(j, is(asList(1, 2, 3)));
     }
 
     @Test
     public void testDropWhile() {
         final List<Integer> i = asList(1, 2, 3, 4, 5, 4);
-        final List<Integer> j = copyOf(whileIterables.dropWhile(x -> x != 4, i));
+        final List<Integer> j = stream(spliteratorUnknownSize(whileIterables.dropWhile(x -> x != 4, i).iterator(), 0), false).collect(toList());
         assertThat(j, is(asList(5, 4)));
     }
 
