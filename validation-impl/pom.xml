@@ -20,10 +20,6 @@
             <groupId>nl.meg</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>biz.aQute.bnd</groupId>
-            <artifactId>annotation</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
