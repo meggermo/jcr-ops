@@ -33,7 +33,7 @@ public class MutableHippoNodeImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() throws RepositoryException {
-        this.mutableHippoNode = new MutableHippoNodeImpl(node);
+        this.mutableHippoNode = new MutableHippoNodeImpl(node, new HippoEntityFactoryImpl());
         when(node.getSession()).thenReturn(session);
         when(session.getValueFactory()).thenReturn(factory);
     }

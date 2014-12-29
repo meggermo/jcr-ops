@@ -1,5 +1,6 @@
 package nl.meg.jcr.internal;
 
+import nl.meg.jcr.HippoEntityFactory;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.MutableHippoNode;
 
@@ -11,15 +12,15 @@ import java.util.stream.Stream;
 
 final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements MutableHippoNode {
 
-    public MutableHippoNodeImpl(Node node) {
-        super(node);
+    public MutableHippoNodeImpl(Node node, HippoEntityFactory hippoEntityFactory) {
+        super(node, hippoEntityFactory);
     }
 
     @Override
     public MutableHippoNode setPrimaryType(String primaryTypeName) {
         return invoke(n -> {
             n.setPrimaryType(primaryTypeName);
-            return mutableNode(n);
+            return factory().mutableNode(n);
         });
     }
 
@@ -27,7 +28,7 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
     public MutableHippoNode addMixinType(String mixin) {
         return invoke(n -> {
             n.addMixin(mixin);
-            return mutableNode(n);
+            return factory().mutableNode(n);
         });
     }
 
@@ -37,10 +38,10 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
                 default:
                     n.setProperty(name, values);
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
             }
         });
     }
@@ -51,10 +52,10 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
                 default:
                     n.setProperty(name, booleanValues(values));
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
             }
         });
     }
@@ -65,10 +66,10 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
                 default:
                     n.setProperty(name, longValues(values));
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
             }
         });
     }
@@ -79,10 +80,10 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0]);
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
                 default:
                     n.setProperty(name, calendarValues(values));
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
             }
         });
     }
@@ -93,17 +94,17 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
             switch (values.length) {
                 case 1:
                     n.setProperty(name, values[0].name());
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
                 default:
                     n.setProperty(name, Stream.of(values).map(Enum::name).toArray(String[]::new));
-                    return mutableNode(n);
+                    return factory().mutableNode(n);
             }
         });
     }
 
     @Override
     public HippoNode addNode(String name) {
-        return invoke(n -> node(n.addNode(name)));
+        return invoke(n -> factory().node(n.addNode(name)));
     }
 
     private Value[] booleanValues(Boolean... values) {
@@ -126,4 +127,5 @@ final class MutableHippoNodeImpl extends AbstractHippoItem<Node> implements Muta
             return Stream.of(values).map(factory::createValue).toArray(Value[]::new);
         });
     }
+
 }

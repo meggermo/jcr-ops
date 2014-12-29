@@ -1,9 +1,6 @@
 package nl.meg.jcr.internal;
 
-import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.HippoVersion;
-import nl.meg.jcr.HippoVersionHistory;
-import nl.meg.jcr.RuntimeRepositoryException;
+import nl.meg.jcr.*;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -21,8 +18,8 @@ import static java.util.Spliterators.spliterator;
 
 final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> implements HippoVersionHistory {
 
-    HippoVersionHistoryImpl(VersionHistory versionHistory) {
-        super(versionHistory);
+    HippoVersionHistoryImpl(VersionHistory versionHistory, HippoEntityFactory hippoEntityFactory) {
+        super(versionHistory, hippoEntityFactory);
     }
 
     @Override
@@ -32,7 +29,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
 
     @Override
     public HippoVersion getRootVersion() {
-        return version(invoke(VersionHistory::getRootVersion));
+        return factory().version(invoke(VersionHistory::getRootVersion));
     }
 
     @Override
@@ -41,7 +38,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
             final VersionIterator vi = vh.getAllLinearVersions();
             final Spliterator<Version> sI = spliterator(vi, vi.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(this::version);
+        }).map(factory()::version);
     }
 
     @Override
@@ -50,7 +47,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
             final VersionIterator vi = vh.getAllVersions();
             final Spliterator<Version> sI = spliterator(vi, vi.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(this::version);
+        }).map(factory()::version);
     }
 
     @Override
@@ -59,7 +56,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
             final NodeIterator ni = vh.getAllLinearFrozenNodes();
             final Spliterator<Node> sI = spliterator(ni, ni.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(this::node);
+        }).map(factory()::node);
     }
 
     @Override
@@ -68,14 +65,14 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
             final NodeIterator ni = vh.getAllFrozenNodes();
             final Spliterator<Node> sI = spliterator(ni, ni.getSize(), NONNULL | SIZED);
             return StreamSupport.stream(sI, false);
-        }).map(this::node);
+        }).map(factory()::node);
     }
 
     @Override
     public Optional<HippoVersion> getVersion(String versionName) {
         return Optional.ofNullable(invoke(vh -> {
             try {
-                return version(vh.getVersion(versionName));
+                return factory().version(vh.getVersion(versionName));
             } catch (VersionException e) {
                 return null;
             }
@@ -84,14 +81,14 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
 
     @Override
     public Optional<HippoVersion> getVersionByLabel(String label) {
-        return Optional.ofNullable(invoke(vh -> vh.hasVersionLabel(label) ? version(vh.getVersionByLabel(label)) : null));
+        return Optional.ofNullable(invoke(vh -> vh.hasVersionLabel(label) ? factory().version(vh.getVersionByLabel(label)) : null));
     }
 
     @Override
     public HippoVersionHistory addVersionLabel(String versionName, String label) throws LabelExistsVersionException {
         try {
             get().addVersionLabel(versionName, label, false);
-            return versionHistory(get());
+            return factory().versionHistory(get());
         } catch (LabelExistsVersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -103,7 +100,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
     public HippoVersionHistory addOrMoveVersionLabel(String versionName, String label) throws VersionException {
         try {
             get().addVersionLabel(versionName, label, true);
-            return versionHistory(get());
+            return factory().versionHistory(get());
         } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -115,7 +112,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
     public HippoVersionHistory removeVersion(String versionName) throws VersionException {
         try {
             get().removeVersion(versionName);
-            return versionHistory(get());
+            return factory().versionHistory(get());
         } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {
@@ -127,7 +124,7 @@ final class HippoVersionHistoryImpl extends AbstractHippoItem<VersionHistory> im
     public HippoVersionHistory removeVersionLabel(String label) throws VersionException {
         try {
             get().removeVersionLabel(label);
-            return versionHistory(get());
+            return factory().versionHistory(get());
         } catch (VersionException e) {
             throw e;
         } catch (RepositoryException e) {

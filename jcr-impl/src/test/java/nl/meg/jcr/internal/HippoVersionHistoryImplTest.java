@@ -36,7 +36,7 @@ public class HippoVersionHistoryImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hvh = new HippoVersionHistoryImpl(versionHistory);
+        this.hvh = new HippoVersionHistoryImpl(versionHistory, new HippoEntityFactoryImpl());
     }
 
     @Test
@@ -149,8 +149,8 @@ public class HippoVersionHistoryImplTest extends AbstractMockitoTest {
     @Test
     public void testHasVersionLabel_For_Version() throws RepositoryException {
         when(versionHistory.hasVersionLabel(version, "X")).thenReturn(true);
-        assertThat(hvh.hasVersionLabel(new HippoVersionImpl(version), "X"), is(true));
-        assertThat(hvh.hasVersionLabel(new HippoVersionImpl(version), "Y"), is(false));
+        assertThat(hvh.hasVersionLabel(new HippoVersionImpl(version, new HippoEntityFactoryImpl()), "X"), is(true));
+        assertThat(hvh.hasVersionLabel(new HippoVersionImpl(version, new HippoEntityFactoryImpl()), "Y"), is(false));
     }
 
     @Test
@@ -162,6 +162,6 @@ public class HippoVersionHistoryImplTest extends AbstractMockitoTest {
     @Test
     public void testGetVersionLabels_For_Version() throws RepositoryException {
         when(versionHistory.getVersionLabels(version)).thenReturn(new String[]{"x"});
-        assertThat(hvh.getVersionLabels(new HippoVersionImpl(version)).collect(toList()), is(Arrays.asList("x")));
+        assertThat(hvh.getVersionLabels(new HippoVersionImpl(version, new HippoEntityFactoryImpl())).collect(toList()), is(Arrays.asList("x")));
     }
 }

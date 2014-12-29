@@ -46,7 +46,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hippoNode = new HippoNodeImpl(node);
+        this.hippoNode = new HippoNodeImpl(node, new HippoEntityFactoryImpl());
     }
 
     @Test

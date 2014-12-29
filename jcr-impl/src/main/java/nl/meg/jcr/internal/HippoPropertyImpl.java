@@ -1,5 +1,6 @@
 package nl.meg.jcr.internal;
 
+import nl.meg.jcr.HippoEntityFactory;
 import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.HippoValue;
 
@@ -11,8 +12,8 @@ import java.util.stream.Stream;
 
 final class HippoPropertyImpl extends AbstractHippoItem<Property> implements HippoProperty {
 
-    HippoPropertyImpl(Property property) {
-        super(property);
+    HippoPropertyImpl(Property property, HippoEntityFactory hippoEntityFactory) {
+        super(property, hippoEntityFactory);
     }
 
     @Override
@@ -25,7 +26,7 @@ final class HippoPropertyImpl extends AbstractHippoItem<Property> implements Hip
         return Optional.ofNullable(
                 invoke(p -> p.isMultiple()
                         ? null
-                        : value(p.getValue()))
+                        : factory().value(p.getValue()))
         );
     }
 
@@ -34,7 +35,7 @@ final class HippoPropertyImpl extends AbstractHippoItem<Property> implements Hip
         return invoke(p -> p.isMultiple()
                 ? Arrays.stream(p.getValues())
                 : Stream.<Value>empty())
-                .map(this::value);
+                .map(factory()::value);
     }
 
 }

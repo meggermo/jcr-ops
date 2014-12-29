@@ -30,27 +30,13 @@ public class AbstractHippoItemTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hippoItem = new AbstractHippoItem<Item>(item) {};
+        this.hippoItem = new AbstractHippoItem<Item>(item, new HippoEntityFactoryImpl()) {
+        };
     }
 
     @Test
     public void testGet() {
         assertThat(hippoItem.get(), is(item));
-    }
-
-    @Test
-    public void testNode() {
-        assertThat(hippoItem.node(node).get(), is(node));
-    }
-
-    @Test
-    public void testProperty() {
-        assertThat(hippoItem.property(property).get(), is(property));
-    }
-
-    @Test
-    public void testValue() {
-        assertThat(hippoItem.value(value).get(), is(value));
     }
 
     @Test

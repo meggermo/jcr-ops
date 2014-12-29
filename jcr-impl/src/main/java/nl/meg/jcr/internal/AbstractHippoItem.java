@@ -1,11 +1,15 @@
 package nl.meg.jcr.internal;
 
 import nl.meg.function.EFunction;
-import nl.meg.jcr.*;
+import nl.meg.jcr.HippoEntityFactory;
+import nl.meg.jcr.HippoItem;
+import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.RuntimeRepositoryException;
 
-import javax.jcr.*;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionHistory;
+import javax.jcr.Item;
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import java.util.Optional;
 
 import static nl.meg.function.FunctionSupport.relax;
@@ -13,10 +17,11 @@ import static nl.meg.function.FunctionSupport.relax;
 abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
     private final E item;
-    private final HippoEntityFactory hippoEntityFactory = new HippoEntityFactoryImpl();
+    private final HippoEntityFactory hippoEntityFactory;
 
-    AbstractHippoItem(E item) {
+    AbstractHippoItem(E item, HippoEntityFactory hippoEntityFactory) {
         this.item = item;
+        this.hippoEntityFactory = hippoEntityFactory;
     }
 
     @Override
@@ -24,28 +29,8 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
         return item;
     }
 
-    protected final HippoNode node(Node node) {
-        return hippoEntityFactory.node(node);
-    }
-
-    protected final MutableHippoNode mutableNode(Node node) {
-        return hippoEntityFactory.mutableNode(node);
-    }
-
-    protected final HippoProperty property(Property property) {
-        return hippoEntityFactory.property(property);
-    }
-
-    protected final HippoValue value(Value value) {
-        return hippoEntityFactory.value(value);
-    }
-
-    protected final HippoVersion version(Version version) {
-        return hippoEntityFactory.version(version);
-    }
-
-    protected final HippoVersionHistory versionHistory(VersionHistory versionHistory) {
-        return hippoEntityFactory.versionHistory(versionHistory);
+    protected final HippoEntityFactory factory() {
+        return hippoEntityFactory;
     }
 
     @Override
@@ -53,7 +38,7 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
         return Optional.ofNullable(
                 invoke(n -> {
                     try {
-                        return node(n.getParent());
+                        return factory().node(n.getParent());
                     } catch (ItemNotFoundException e) {
                         return null;
                     }

@@ -33,7 +33,7 @@ public class HippoVersionImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hippoVersion = new HippoVersionImpl(version);
+        this.hippoVersion = new HippoVersionImpl(version, new HippoEntityFactoryImpl());
     }
 
     @Test

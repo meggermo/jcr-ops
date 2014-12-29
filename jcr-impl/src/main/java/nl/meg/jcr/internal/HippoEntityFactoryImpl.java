@@ -19,30 +19,30 @@ public final class HippoEntityFactoryImpl implements HippoEntityFactory {
     @Override
     public HippoProperty property(Property property) {
         assert property != null : "property cannot be null";
-        return new HippoPropertyImpl(property);
+        return new HippoPropertyImpl(property, this);
     }
 
     @Override
     public HippoNode node(Node node) {
         assert node != null : "node cannot be null";
-        return new HippoNodeImpl(node);
+        return new HippoNodeImpl(node, this);
     }
 
     @Override
     public HippoVersion version(Version version) {
         assert version != null : "version cannot be null";
-        return new HippoVersionImpl(version);
+        return new HippoVersionImpl(version, this);
     }
 
     @Override
     public HippoVersionHistory versionHistory(VersionHistory versionHistory) {
         assert versionHistory != null : "versionHistory cannot be null";
-        return new HippoVersionHistoryImpl(versionHistory);
+        return new HippoVersionHistoryImpl(versionHistory, this);
     }
 
     @Override
     public MutableHippoNode mutableNode(Node node) {
         assert node != null : "node cannot be null";
-        return new MutableHippoNodeImpl(node);
+        return new MutableHippoNodeImpl(node, this);
     }
 }

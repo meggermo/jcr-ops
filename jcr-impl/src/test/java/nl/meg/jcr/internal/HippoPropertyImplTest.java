@@ -31,7 +31,7 @@ public class HippoPropertyImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hippoProperty = new HippoPropertyImpl(property);
+        this.hippoProperty = new HippoPropertyImpl(property, new HippoEntityFactoryImpl());
     }
 
     @Test
