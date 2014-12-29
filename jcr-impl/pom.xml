@@ -19,6 +19,12 @@
             <groupId>nl.meg</groupId>
             <artifactId>jcr-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>biz.aQute</groupId>
+            <artifactId>bndlib</artifactId>
+            <version>1.50.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -30,6 +36,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>nl.meg.jcr.*</Export-Package>
+                        <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>
             </plugin>
