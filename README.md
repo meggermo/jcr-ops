@@ -6,3 +6,6 @@ Functional immutable operations on the [The Content repository API for Java](htt
 A library that helps iterating over child and parent nodes by implementing
 useful Functions, Predicates and TreeTraversers
 
+## License
+This library is licensed under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
+The full license text is available in [LICENSE.txt](https://github.com/meggermo/dotfiles/blob/master/LICENSE.txt).

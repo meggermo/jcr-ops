@@ -13,6 +13,13 @@
     <inceptionYear>2014</inceptionYear>
     <url>https://github.com/meggermo/jcr-ops</url>
 
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>http://en.wikipedia.org/wiki/MIT_License</url>
+        </license>
+    </licenses>
+
     <modules>
         <module>validation-api</module>
         <module>jcr-api</module>
