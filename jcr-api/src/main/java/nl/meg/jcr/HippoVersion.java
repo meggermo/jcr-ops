@@ -7,17 +7,17 @@ import java.util.stream.Stream;
 
 public interface HippoVersion extends HippoItem<Version> {
 
-    public HippoVersionHistory getContainingHistory();
+    HippoVersionHistory getContainingHistory();
 
-    public Calendar getCreated();
+    Calendar getCreated();
 
-    public Optional<HippoVersion> getLinearSuccessor();
+    Optional<HippoVersion> getLinearSuccessor();
 
-    public Stream<HippoVersion> getSuccessors();
+    Stream<HippoVersion> getSuccessors();
 
-    public Optional<HippoVersion> getLinearPredecessor();
+    Optional<HippoVersion> getLinearPredecessor();
 
-    public Stream<HippoVersion> getPredecessors();
+    Stream<HippoVersion> getPredecessors();
 
-    public HippoNode getFrozenNode();
+    HippoNode getFrozenNode();
 }
