@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static nl.meg.validation.impl.ValidatingFunctionSupport.postValidate;
-import static nl.meg.validation.impl.ValidatingFunctionSupport.preValidate;
+import static nl.meg.validation.impl.ValidatingFunctionSupport.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
@@ -94,9 +93,8 @@ public class ValidatingFunctionSupportTest extends AbstractMockitoTest {
         when(postValidator.validate(eq(0), any(ValidationContext.class))).thenReturn(postContext);
         when(postContext.hasErrors()).thenReturn(false);
         when(function.apply("TEST")).thenReturn(0);
-        final Function<String, Integer> f1 = preValidate(preValidator, function);
-        final Function<String, Integer> f2 = postValidate(f1, postValidator);
-        assertThat(f2.apply("TEST"), is(0));
+        final Function<String, Integer> f1 = preAndPostValidate(preValidator, function, postValidator);
+        assertThat(f1.apply("TEST"), is(0));
     }
 
 }

@@ -1,13 +1,13 @@
 package nl.meg.jcr.internal;
 
+import nl.meg.jcr.HippoEntityFactory;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
+import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.stream.Stream;
@@ -19,8 +19,8 @@ import static java.util.stream.StreamSupport.stream;
 
 final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
-    HippoNodeImpl(Node node) {
-        super(node);
+    HippoNodeImpl(Node node, HippoEntityFactory hippoEntityFactory) {
+        super(node, hippoEntityFactory);
     }
 
     public Integer getIndex() {
@@ -49,13 +49,17 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
 
     @Override
     public Optional<HippoNode> getNode(String name) {
-        return invoke(n -> n.hasNode(name)
-                ? Optional.of(node(n.getNode(name)))
-                : Optional.<HippoNode>empty());
+        return invoke(n -> {
+            try {
+                return Optional.of(factory().node(n.getNode(name)));
+            } catch (ItemNotFoundException | PathNotFoundException e) {
+                return Optional.<HippoNode>empty();
+            }
+        });
     }
 
     @Override
-    public Stream<HippoNode> getNodesAsStream() {
+    public Stream<HippoNode> getNodes() {
         return invoke(n -> {
             if (n.hasNodes()) {
                 final NodeIterator nI = n.getNodes();
@@ -65,18 +69,22 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
             } else {
                 return Stream.<Node>empty();
             }
-        }).map(this::node);
+        }).map(factory()::node);
     }
 
     @Override
     public Optional<HippoProperty> getProperty(String name) {
-        return invoke(n -> n.hasProperty(name)
-                ? Optional.of(property(n.getProperty(name)))
-                : Optional.<HippoProperty>empty());
+        return invoke(n -> {
+            try {
+                return Optional.of(factory().property(n.getProperty(name)));
+            } catch (PathNotFoundException e) {
+                return Optional.<HippoProperty>empty();
+            }
+        });
     }
 
     @Override
-    public Stream<HippoProperty> getPropertiesAsStream() {
+    public Stream<HippoProperty> getProperties() {
         return invoke(n -> {
             if (n.hasProperties()) {
                 final PropertyIterator pI = n.getProperties();
@@ -86,7 +94,47 @@ final class HippoNodeImpl extends AbstractHippoItem<Node> implements HippoNode {
             } else {
                 return Stream.<Property>empty();
             }
-        }).map(this::property);
+        }).map(factory()::property);
+    }
+
+    @Override
+    public Optional<String> getString(String name) {
+        return getValue(name).map(HippoValue::getString);
+    }
+
+    @Override
+    public <E extends Enum<E>> Optional<E> getEnum(String name, Class<E> enumType) {
+        return getString(name).map(v -> Enum.valueOf(enumType, v));
+    }
+
+    @Override
+    public boolean getBoolean(String name) {
+        return getValue(name).map(HippoValue::getBoolean).orElse(false);
+    }
+
+    @Override
+    public Optional<Calendar> getDate(String name) {
+        return getValue(name).map(HippoValue::getDate);
+    }
+
+    private Optional<HippoValue> getValue(String propertyName) {
+        return getProperty(propertyName)
+                .map(HippoProperty::getValue)
+                .orElse(Optional.<HippoValue>empty());
+    }
+
+    @Override
+    public Stream<String> getStrings(String name) {
+        return getValues(name).map(HippoValue::getString);
+    }
+
+    @Override
+    public <E extends Enum<E>> Stream<E> getEnums(String name, Class<E> enumType) {
+        return getValues(name).map(v -> v.getEnum(enumType));
+    }
+
+    private Stream<HippoValue> getValues(String propertyName) {
+        return getProperty(propertyName).map(HippoProperty::getValues).orElse(Stream.empty());
     }
 
 }

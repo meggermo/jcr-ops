@@ -20,7 +20,7 @@ final class RepositionNodeImpl implements Function<HippoNode, HippoNode> {
     @Override
     public HippoNode apply(final HippoNode node) {
         final HippoNode parent = node.getParent().get();
-        final List<HippoNode> nodes = parent.getNodesAsStream().collect(toList());
+        final List<HippoNode> nodes = parent.getNodes().collect(toList());
         final String sourceName = node.getName();
         final String targetName = getTargetName(node, nodes, nodes.indexOf(node));
         try {

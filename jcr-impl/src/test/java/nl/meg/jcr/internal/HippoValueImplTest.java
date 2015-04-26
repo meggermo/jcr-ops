@@ -76,7 +76,15 @@ public class HippoValueImplTest extends AbstractMockitoTest {
     }
 
     @Test
+    public void testGetEnum() throws RepositoryException {
+        when(value.getString()).thenReturn("A");
+        assertThat(hippoValue.getEnum(TEST.class), is(TEST.A));
+    }
+
+    @Test
     public void testGet() {
         assertThat(hippoValue.get(), is(value));
     }
+
+    enum TEST {A}
 }

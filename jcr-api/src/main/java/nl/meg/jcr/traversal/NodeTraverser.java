@@ -1,8 +1,12 @@
 package nl.meg.jcr.traversal;
 
-/**
- * Created by michiel on 8/17/14.
- */
+import java.util.stream.Stream;
+
 public interface NodeTraverser<T> {
-    public Iterable<T> children(final T root);
+
+    Stream<T> preOrderTraversal(T root);
+
+    Stream<T> postOrderTraversal(T root);
+
+    Stream<T> breadthFirstTraversal(T root);
 }

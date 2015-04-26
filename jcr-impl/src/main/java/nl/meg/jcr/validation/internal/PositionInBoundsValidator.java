@@ -1,12 +1,12 @@
 package nl.meg.jcr.validation.internal;
 
-import com.google.common.collect.Range;
 import nl.meg.jcr.HippoNode;
 import nl.meg.jcr.validation.NodeErrorCode;
 import nl.meg.validation.impl.PredicateBasedValidatorImpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.LongStream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,11 +34,11 @@ final class PositionInBoundsValidator extends PredicateBasedValidatorImpl<HippoN
         final Map<String, Object> map = new HashMap<>();
         map.put("min", 0);
         map.put("position", newPosition);
-        map.put("max", entity.getParent().get().getNodesAsStream().collect(toList()).size() - 1);
+        map.put("max", entity.getParent().get().getNodes().collect(toList()).size() - 1);
         return map;
     }
 
-    private static boolean positionInRange(HippoNode node, int postion) {
-        return Range.closedOpen(0, node.getNodesAsStream().collect(toList()).size()).contains(postion);
+    private static boolean positionInRange(HippoNode node, int position) {
+        return LongStream.rangeClosed(0L, node.getNodes().count()).anyMatch(i -> i == position);
     }
 }

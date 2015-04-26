@@ -1,43 +1,36 @@
 package nl.meg.jcr.internal;
 
 import nl.meg.function.EFunction;
-import nl.meg.jcr.*;
+import nl.meg.jcr.HippoEntityFactory;
+import nl.meg.jcr.HippoItem;
+import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.RuntimeRepositoryException;
 
-import javax.jcr.*;
+import javax.jcr.Item;
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static nl.meg.function.FunctionSupport.relax;
 
 abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
 
-    private final E node;
-    private final Function<Node, HippoNode> hippoNodeFactory;
-    private final Function<Property, HippoProperty> hippoPropertyFactory;
-    private final Function<Value, HippoValue> hippoValueFactory;
+    private final E item;
+    private final HippoEntityFactory hippoEntityFactory;
 
-    AbstractHippoItem(E node) {
-        this.node = node;
-        this.hippoNodeFactory = HippoNodeImpl::new;
-        this.hippoPropertyFactory = HippoPropertyImpl::new;
-        this.hippoValueFactory = HippoValueImpl::new;
+    AbstractHippoItem(E item, HippoEntityFactory hippoEntityFactory) {
+        this.item = item;
+        this.hippoEntityFactory = hippoEntityFactory;
     }
 
     @Override
     public final E get() {
-        return node;
+        return item;
     }
 
-    protected final HippoNode node(Node node) {
-        return hippoNodeFactory.apply(node);
-    }
-
-    protected final HippoProperty property(Property property) {
-        return hippoPropertyFactory.apply(property);
-    }
-
-    protected final HippoValue value(Value value) {
-        return hippoValueFactory.apply(value);
+    protected final HippoEntityFactory factory() {
+        return hippoEntityFactory;
     }
 
     @Override
@@ -45,7 +38,7 @@ abstract class AbstractHippoItem<E extends Item> implements HippoItem<E> {
         return Optional.ofNullable(
                 invoke(n -> {
                     try {
-                        return node(n.getParent());
+                        return factory().node(n.getParent());
                     } catch (ItemNotFoundException e) {
                         return null;
                     }

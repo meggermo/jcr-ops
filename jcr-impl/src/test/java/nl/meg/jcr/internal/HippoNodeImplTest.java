@@ -10,13 +10,12 @@ import org.mockito.Mock;
 
 import javax.jcr.*;
 import javax.jcr.nodetype.NodeType;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Calendar;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class HippoNodeImplTest extends AbstractMockitoTest {
@@ -36,6 +35,9 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
     private Property property;
 
     @Mock
+    private Value value;
+
+    @Mock
     private RepositoryException e;
 
     @Mock
@@ -44,7 +46,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.hippoNode = new HippoNodeImpl(node);
+        this.hippoNode = new HippoNodeImpl(node, new HippoEntityFactoryImpl());
     }
 
     @Test
@@ -99,7 +101,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetNode_Absent() throws RepositoryException {
-        when(node.hasNode("X")).thenReturn(false);
+        when(node.getNode("X")).thenThrow(new ItemNotFoundException());
         assertThat(hippoNode.getNode("X").isPresent(), is(false));
     }
 
@@ -107,13 +109,13 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
     public void testGetNodes() throws RepositoryException {
         when(node.hasNodes()).thenReturn(true);
         when(node.getNodes()).thenReturn(getNodeIterator(node));
-        assertThat(hippoNode.getNodesAsStream().collect(toList()).get(0).get(), is(node));
+        assertThat(hippoNode.getNodes().collect(toList()).get(0).get(), is(node));
     }
 
     @Test
     public void testGetNodes_Empty() throws RepositoryException {
         when(node.hasNodes()).thenReturn(false);
-        assertThat(hippoNode.getNodesAsStream().collect(toList()).isEmpty(), is(true));
+        assertThat(hippoNode.getNodes().collect(toList()).isEmpty(), is(true));
     }
 
     @Test
@@ -126,21 +128,21 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetAbsentProperty() throws RepositoryException {
-        when(node.hasProperty("X")).thenReturn(false);
+        when(node.getProperty("X")).thenThrow(new PathNotFoundException());
         assertThat(hippoNode.getProperty("X").isPresent(), is(false));
     }
 
     @Test
     public void testGetProperties_Empty() throws RepositoryException {
         when(node.hasProperties()).thenReturn(false);
-        assertThat(hippoNode.getPropertiesAsStream().collect(toList()).isEmpty(), is(true));
+        assertThat(hippoNode.getProperties().collect(toList()).isEmpty(), is(true));
     }
 
     @Test
     public void testGetProperties() throws RepositoryException {
         when(node.hasProperties()).thenReturn(true);
         when(node.getProperties()).thenReturn(getPropertyIterator(property));
-        final HippoProperty p = hippoNode.getPropertiesAsStream().collect(toList()).get(0);
+        final HippoProperty p = hippoNode.getProperties().collect(toList()).get(0);
         assertThat(p.get(), is(property));
     }
 
@@ -185,13 +187,13 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         }
         try {
             when(node.hasNodes()).thenThrow(e);
-            hippoNode.getNodesAsStream().collect(toList());
+            hippoNode.getNodes().collect(toList());
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
         }
         try {
-            when(node.hasNode("X")).thenThrow(e);
+            when(node.getNode("X")).thenThrow(e);
             hippoNode.getNode("X");
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
@@ -214,7 +216,7 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         try {
             when(node.hasProperties()).thenReturn(true);
             when(node.getProperties()).thenThrow(e);
-            hippoNode.getPropertiesAsStream();
+            hippoNode.getProperties();
             shouldHaveThrown();
         } catch (RuntimeRepositoryException e) {
             assertThat(e.getCause(), is(t));
@@ -236,81 +238,45 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
         }
     }
 
-
-    private void shouldHaveThrown() {
-        shouldHaveThrown(RuntimeRepositoryException.class);
+    @Test
+    public void testGetString() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        when(value.getString()).thenReturn(null, "string");
+        assertThat(hippoNode.getString("empty").isPresent(), is(false));
+        assertThat(hippoNode.getString("present").get(), is("string"));
+        assertThat(hippoNode.getStrings("present").count(), is(0L));
     }
 
-    private NodeIterator getNodeIterator(final Node... nodes) {
-
-        return new NodeIterator() {
-            final AtomicInteger i = new AtomicInteger();
-            final List<Node> nodeList = Arrays.asList(nodes);
-            @Override
-            public Node nextNode() {
-                return nodeList.get(i.getAndIncrement());
-            }
-
-            @Override
-            public void skip(long skipNum) {
-                i.addAndGet((int)skipNum);
-            }
-
-            @Override
-            public long getSize() {
-                return nodeList.size();
-            }
-
-            @Override
-            public long getPosition() {
-                return i.get();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return i.get() < getSize();
-            }
-
-            @Override
-            public Object next() {
-                return nextNode();
-            }
-        };
+    @Test
+    public void testGetBoolean() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        when(value.getBoolean()).thenReturn(false, true);
+        assertThat(hippoNode.getBoolean("empty"), is(false));
+        assertThat(hippoNode.getBoolean("empty"), is(true));
     }
 
-    private PropertyIterator getPropertyIterator(Property... properties) {
-        return new PropertyIterator() {
-            private final AtomicInteger i = new AtomicInteger();
-            private final List<Property> propertyList = Arrays.asList(properties);
-            @Override
-            public Property nextProperty() {
-                return propertyList.get(i.getAndIncrement());
-            }
-
-            @Override
-            public void skip(long skipNum) {
-                i.addAndGet((int)skipNum);
-            }
-
-            @Override
-            public long getSize() {
-                return propertyList.size();
-            }
-
-            @Override
-            public long getPosition() {
-                return i.get();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return i.get() < propertyList.size();
-            }
-
-            @Override
-            public Object next() {
-                return nextProperty();
-            }
-        };
+    @Test
+    public void testGetDate() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        final Calendar someDate = Calendar.getInstance();
+        when(value.getDate()).thenReturn(null, someDate);
+        assertThat(hippoNode.getDate("empty").isPresent(), is(false));
+        assertThat(hippoNode.getDate("present").get(), is(someDate));
+        assertThat(hippoNode.getDate("present").get(), is(someDate));
     }
+
+    @Test
+    public void testGetEnum() throws RepositoryException {
+        when(node.getProperty(anyString())).thenReturn(property);
+        when(property.getValue()).thenReturn(value);
+        when(value.getString()).thenReturn(null, "A");
+        assertThat(hippoNode.getEnum("empty", TEST.class).isPresent(), is(false));
+        assertThat(hippoNode.getEnum("present", TEST.class).get(), is(TEST.A));
+        assertThat(hippoNode.getEnums("x", TEST.class).count(), is(0L));
+    }
+
+    enum TEST{A}
 }

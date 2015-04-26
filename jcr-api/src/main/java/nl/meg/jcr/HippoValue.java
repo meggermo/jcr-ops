@@ -10,7 +10,7 @@ public interface HippoValue extends Supplier<Value> {
 
     Binary getBinary();
 
-    Boolean getBoolean();
+    boolean getBoolean();
 
     Calendar getDate();
 
@@ -21,4 +21,6 @@ public interface HippoValue extends Supplier<Value> {
     Long getLong();
 
     String getString();
+
+    <E extends Enum<E>> E getEnum(Class<E> enumType);
 }

@@ -3,7 +3,7 @@
     <parent>
         <groupId>nl.meg</groupId>
         <artifactId>jcr-ops</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,8 +20,10 @@
             <artifactId>jcr-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>biz.aQute</groupId>
+            <artifactId>bndlib</artifactId>
+            <version>1.50.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -34,6 +36,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>nl.meg.jcr.*</Export-Package>
+                        <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>
             </plugin>

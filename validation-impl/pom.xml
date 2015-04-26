@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jcr-ops</artifactId>
         <groupId>nl.meg</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>validation-impl</artifactId>
@@ -19,10 +19,6 @@
         <dependency>
             <groupId>nl.meg</groupId>
             <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>biz.aQute.bnd</groupId>
-            <artifactId>annotation</artifactId>
         </dependency>
     </dependencies>
 

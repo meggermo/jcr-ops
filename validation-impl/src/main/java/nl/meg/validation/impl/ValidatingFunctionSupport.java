@@ -7,9 +7,6 @@ import java.util.function.Function;
 
 public final class ValidatingFunctionSupport {
 
-    private ValidatingFunctionSupport() {
-    }
-
     public static <S, T> Function<S, T> preValidate(Validator<S> validator, Function<S, T> function) {
         return new PreValidatingFunction<>(validator, new ValidationContextImpl(), function);
     }

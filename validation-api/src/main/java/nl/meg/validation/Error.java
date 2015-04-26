@@ -4,10 +4,10 @@ import java.util.Map;
 
 public interface Error {
 
-	public String getCode();
+	String getCode();
 
-	public String getMessage();
+	String getMessage();
 
-	public Map<String, ?> getParameters();
+	Map<String, ?> getParameters();
 
 }

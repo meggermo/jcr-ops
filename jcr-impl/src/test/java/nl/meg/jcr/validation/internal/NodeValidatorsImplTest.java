@@ -100,7 +100,7 @@ public class NodeValidatorsImplTest extends AbstractMockitoTest {
     @Test
     public void testPositionInBounds() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodesAsStream()).thenReturn(Stream.of(iNode));
+        when(parent.getNodes()).thenReturn(Stream.of(iNode));
         nodeValidators.positionInBounds(0).validate(iNode, context);
         verifyZeroInteractions(context);
     }
@@ -108,7 +108,7 @@ public class NodeValidatorsImplTest extends AbstractMockitoTest {
     @Test
     public void testPositionInBounds_ValidationError() {
         when(iNode.getParent()).thenReturn(Optional.of(parent));
-        when(parent.getNodesAsStream()).thenReturn(Stream.of(iNode), Stream.of(iNode));
+        when(parent.getNodes()).thenReturn(Stream.of(iNode), Stream.of(iNode));
         nodeValidators.positionInBounds(2).validate(iNode, context);
         final Error error = forCode(POSITION_OUT_OF_RANGE);
         verify(context).addError(eq(PositionInBoundsValidator.class.getName()), eq(error));
