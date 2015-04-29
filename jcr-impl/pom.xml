@@ -20,8 +20,8 @@
             <artifactId>jcr-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>biz.aQute</groupId>
-            <artifactId>bndlib</artifactId>
+            <groupId>biz.aQute.bnd</groupId>
+            <artifactId>annotation</artifactId>
         </dependency>
     </dependencies>
 
