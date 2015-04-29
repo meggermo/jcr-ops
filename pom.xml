@@ -90,12 +90,6 @@
             </dependency>
             <!-- OSGI dependencies -->
             <dependency>
-                <groupId>biz.aQute</groupId>
-                <artifactId>bndlib</artifactId>
-                <version>1.50.0</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
                 <groupId>biz.aQute.bnd</groupId>
                 <artifactId>annotation</artifactId>
                 <version>2.4.0</version>
