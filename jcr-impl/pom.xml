@@ -33,7 +33,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>nl.meg.jcr.*</Export-Package>
                         <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>

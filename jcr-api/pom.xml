@@ -34,7 +34,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>nl.meg.jcr.*</Export-Package>
+                        <Export-Package>nl.meg.jcr.*;provide:=true</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

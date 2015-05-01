@@ -163,6 +163,7 @@
                     <configuration>
                         <instructions>
                             <build>${maven.build.timestamp}</build>
+                            <_noee>true</_noee>
                         </instructions>
                     </configuration>
                 </plugin>

@@ -30,8 +30,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>nl.meg.validation;provide:=true,nl.meg.validation.impl</Export-Package>
-                        <build>${maven.build.timestamp}</build>
+                        <Export-Package>nl.meg.validation.*;provide:=true</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
