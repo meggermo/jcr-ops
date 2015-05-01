@@ -1,11 +1,14 @@
 package nl.meg.jcr;
 
+import aQute.bnd.annotation.ProviderType;
+
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Value;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 
+@ProviderType
 public interface HippoEntityFactory {
 
     HippoValue value(Value value);

@@ -1,10 +1,12 @@
 package nl.meg.jcr.predicate;
 
+import aQute.bnd.annotation.ProviderType;
 import nl.meg.jcr.HippoValue;
 
 import java.util.Calendar;
 import java.util.function.Predicate;
 
+@ProviderType
 public interface ValuePredicates {
 
     Predicate<HippoValue> equalTo(String value);

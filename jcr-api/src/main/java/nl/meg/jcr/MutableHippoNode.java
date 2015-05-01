@@ -1,9 +1,12 @@
 package nl.meg.jcr;
 
+import aQute.bnd.annotation.ProviderType;
+
 import javax.jcr.Node;
 import java.util.Calendar;
 import java.util.function.Supplier;
 
+@ProviderType
 public interface MutableHippoNode extends Supplier<Node> {
 
     MutableHippoNode setPrimaryType(String primaryTypeName);
