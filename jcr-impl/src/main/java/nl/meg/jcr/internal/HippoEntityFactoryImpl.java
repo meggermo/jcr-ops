@@ -9,7 +9,7 @@ import javax.jcr.Value;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 
-@Component(name = "HippoEntityFactory")
+@Component(name = "HippoEntityFactory", immediate = true)
 public final class HippoEntityFactoryImpl implements HippoEntityFactory {
 
     @Override

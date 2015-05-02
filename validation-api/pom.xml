@@ -15,6 +15,13 @@
         An API for validation
     </description>
 
+    <dependencies>
+        <dependency>
+            <groupId>biz.aQute.bnd</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -23,8 +30,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>nl.meg.validation;provide:=true,nl.meg.validation.impl</Export-Package>
-                        <build>${maven.build.timestamp}</build>
+                        <Export-Package>nl.meg.validation.*;provide:=true</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

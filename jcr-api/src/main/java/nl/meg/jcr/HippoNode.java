@@ -1,12 +1,15 @@
 package nl.meg.jcr;
 
 
+import aQute.bnd.annotation.ProviderType;
+
 import javax.jcr.Node;
 import javax.jcr.nodetype.NodeType;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@ProviderType
 public interface HippoNode extends HippoItem<Node> {
 
     Integer getIndex();

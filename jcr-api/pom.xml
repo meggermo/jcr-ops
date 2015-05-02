@@ -20,6 +20,10 @@
             <groupId>javax.jcr</groupId>
             <artifactId>jcr</artifactId>
         </dependency>
+        <dependency>
+            <groupId>biz.aQute.bnd</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -30,7 +34,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>nl.meg.jcr.*</Export-Package>
+                        <Export-Package>nl.meg.jcr.*;provide:=true</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
