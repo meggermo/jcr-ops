@@ -1,7 +1,6 @@
 package nl.meg.jcr.internal;
 
 import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.ConfigurationPolicy;
 import nl.meg.jcr.*;
 
 import javax.jcr.Node;
@@ -10,7 +9,7 @@ import javax.jcr.Value;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 
-@Component(name = "HippoEntityFactory", configurationPolicy = ConfigurationPolicy.require)
+@Component(name = "HippoEntityFactory", immediate = true)
 public final class HippoEntityFactoryImpl implements HippoEntityFactory {
 
     @Override
