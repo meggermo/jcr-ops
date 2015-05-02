@@ -25,6 +25,7 @@
         <module>jcr-api</module>
         <module>validation-impl</module>
         <module>jcr-impl</module>
+        <module>content-repository</module>
     </modules>
 
     <developers>
