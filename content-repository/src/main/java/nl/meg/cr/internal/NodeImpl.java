@@ -1,16 +1,10 @@
 package nl.meg.cr.internal;
 
 import nl.meg.cr.Node;
-import nl.meg.cr.Property;
-import nl.meg.cr.RepositoryException;
-import nl.meg.cr.internal.ExceptionSupport.EFunction;
 
-import javax.jcr.NodeIterator;
-import javax.jcr.PropertyIterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
-
-import static nl.meg.cr.internal.ExceptionSupport.tryInvoke;
-import static nl.meg.cr.internal.RangeIteratorSupport.stream;
 
 final class NodeImpl implements Node {
 
@@ -22,14 +16,20 @@ final class NodeImpl implements Node {
 
     @Override
     public Stream<Node> getNodes() {
-        return stream(tryGet(javax.jcr.Node::getNodes, NodeIterator.class))
+        return JcrSupport.N.NODES.apply(delegate)
                 .map(NodeImpl::new);
     }
 
     @Override
-    public Stream<Property> getProperties() {
-        return stream(tryGet(javax.jcr.Node::getProperties, PropertyIterator.class))
-                .map(PropertyImpl::new);
+    public <T> Optional<T> getValue(String propertyName, Class<T> type) {
+        return JcrSupport.N.single(propertyName, JcrSupport.V.get(type))
+                .apply(delegate);
+    }
+
+    @Override
+    public <T> Optional<List<T>> getValues(String propertyName, Class<T> type) {
+        return JcrSupport.N.multi(propertyName, JcrSupport.V.get(type))
+                .apply(delegate);
     }
 
     @Override
@@ -46,10 +46,6 @@ final class NodeImpl implements Node {
     @Override
     public int hashCode() {
         return delegate.hashCode();
-    }
-
-    private <Y> Y tryGet(EFunction<javax.jcr.Node, Y, javax.jcr.RepositoryException> f, Class<Y> type) {
-        return tryInvoke(f, delegate, RepositoryException::new);
     }
 
 }
