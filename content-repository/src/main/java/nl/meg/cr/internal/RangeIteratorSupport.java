@@ -21,7 +21,7 @@ final class RangeIteratorSupport {
 
     @SuppressWarnings("unchecked")
     static <T extends RangeIterator> Stream asStream(T iterator) {
-        int characteristics = SIZED | CONCURRENT | NONNULL;
+        final int characteristics = SIZED | CONCURRENT | NONNULL;
         return StreamSupport.stream(spliterator(iterator, iterator.getSize(), characteristics), false);
     }
 }
