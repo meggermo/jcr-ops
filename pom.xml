@@ -109,4 +109,19 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>Github repository for pom files only</name>
+            <url>https://raw.githubusercontent.com/meggermo/maven.pom.root/master</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
+
 </project>
