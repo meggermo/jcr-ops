@@ -16,19 +16,19 @@ final class NodeImpl implements Node {
 
     @Override
     public Stream<Node> getNodes() {
-        return JcrSupport.N.NODES.apply(delegate)
+        return JcrSupport.n.nodes().apply(delegate)
                 .map(NodeImpl::new);
     }
 
     @Override
     public <T> Optional<T> getValue(String propertyName, Class<T> type) {
-        return JcrSupport.N.single(propertyName, JcrSupport.V.get(type))
+        return JcrSupport.n.single(propertyName, JcrSupport.v.get(type))
                 .apply(delegate);
     }
 
     @Override
     public <T> Optional<List<T>> getValues(String propertyName, Class<T> type) {
-        return JcrSupport.N.multi(propertyName, JcrSupport.V.get(type))
+        return JcrSupport.n.multi(propertyName, JcrSupport.v.get(type))
                 .apply(delegate);
     }
 
