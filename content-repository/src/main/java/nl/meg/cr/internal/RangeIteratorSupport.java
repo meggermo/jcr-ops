@@ -1,27 +1,20 @@
 package nl.meg.cr.internal;
 
-import javax.jcr.*;
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static java.util.Spliterator.*;
 import static java.util.Spliterators.spliterator;
+import static java.util.stream.StreamSupport.stream;
 
 final class RangeIteratorSupport {
 
-    @SuppressWarnings("unchecked")
-    static Stream<Node> stream(NodeIterator iterator) {
-        return asStream(iterator);
-    }
+    public static final int CHARACTERISTICS = SIZED | CONCURRENT | NONNULL;
 
     @SuppressWarnings("unchecked")
-    static Stream<Property> stream(PropertyIterator iterator) {
-        return asStream(iterator);
+    static Stream<Node> asStream(NodeIterator iterator) {
+        return stream(spliterator(iterator, iterator.getSize(), CHARACTERISTICS), false);
     }
 
-    @SuppressWarnings("unchecked")
-    static <T extends RangeIterator> Stream asStream(T iterator) {
-        final int characteristics = SIZED | CONCURRENT | NONNULL;
-        return StreamSupport.stream(spliterator(iterator, iterator.getSize(), characteristics), false);
-    }
 }
