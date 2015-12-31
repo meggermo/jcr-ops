@@ -26,13 +26,13 @@ public class SessionImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        this.session = new SessionImpl(s);
+        this.session = new SessionImpl(s, null, null);
     }
 
     @Test
     public void testGetNode() throws RepositoryException {
         when(s.getNode("/path")).thenReturn(n);
-        assertThat(session.getNode("/path").get(), is(new NodeImpl(n)));
+        assertThat(session.getNode("/path").get(), is(new NodeImpl(n, null, null)));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class SessionImplTest extends AbstractMockitoTest {
         assertThat(session.equals(null), is(false));
         assertThat(session.equals("test"), is(false));
         assertThat(session.equals(session), is(true));
-        assertThat(session.equals(new SessionImpl(s)), is(true));
-        assertThat(session.hashCode(), is(new SessionImpl(s).hashCode()));
+        assertThat(session.equals(new SessionImpl(s, null, null)), is(true));
+        assertThat(session.hashCode(), is(new SessionImpl(s, null, null).hashCode()));
     }
 }

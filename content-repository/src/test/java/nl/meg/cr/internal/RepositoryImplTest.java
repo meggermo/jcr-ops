@@ -23,10 +23,12 @@ public class RepositoryImplTest extends AbstractMockitoTest {
     private javax.jcr.Session s;
 
     private Repository repository;
+    private NodeSupport nodeSupport;
+    private ValueSupport valueSupport;
 
     @Before
     public void setUp() {
-        this.repository = new RepositoryImpl(r);
+        this.repository = new RepositoryImpl(r, nodeSupport, valueSupport);
     }
 
     @Test(expected = LoginException.class)
@@ -44,7 +46,7 @@ public class RepositoryImplTest extends AbstractMockitoTest {
     @Test
     public void testLoginPasses() throws LoginException, RepositoryException {
         when(r.login(Mockito.any(Credentials.class))).thenReturn(s);
-        assertThat(repository.login("username", "password"), is(new SessionImpl(s)));
+        assertThat(repository.login("username", "password"), is(new SessionImpl(s, nodeSupport, valueSupport)));
     }
 
     @Test
@@ -52,7 +54,7 @@ public class RepositoryImplTest extends AbstractMockitoTest {
         assertThat(repository.equals(null), is(false));
         assertThat(repository.equals("test"), is(false));
         assertThat(repository.equals(repository), is(true));
-        assertThat(repository.equals(new RepositoryImpl(r)), is(true));
-        assertThat(repository.hashCode(), is(new RepositoryImpl(r).hashCode()));
+        assertThat(repository.equals(new RepositoryImpl(r, nodeSupport, valueSupport)), is(true));
+        assertThat(repository.hashCode(), is(new RepositoryImpl(r, nodeSupport, valueSupport).hashCode()));
     }
 }

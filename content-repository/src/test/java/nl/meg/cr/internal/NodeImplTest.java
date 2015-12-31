@@ -27,16 +27,21 @@ public class NodeImplTest extends AbstractMockitoTest {
     private javax.jcr.Value v;
 
     private Node node;
+    private NodeSupport nodeSupport;
+    private ValueSupport valueSupport;
 
     @Before
     public void setUp() {
-        this.node = new NodeImpl(n);
+        final JcrSupport jcrSupport = new JcrSupport();
+        this.nodeSupport = new NodeSupport(jcrSupport);
+        this.valueSupport = new ValueSupport(jcrSupport);
+        this.node = new NodeImpl(n, nodeSupport, valueSupport);
     }
 
     @Test
     public void testGetNodes() throws RepositoryException {
         when(n.getNodes()).thenReturn(getNodeIterator(n));
-        assertThat(node.getNodes().collect(toList()), hasItem(new NodeImpl(n)));
+        assertThat(node.getNodes().collect(toList()), hasItem(new NodeImpl(n, nodeSupport, valueSupport)));
     }
 
     @Test
@@ -44,8 +49,8 @@ public class NodeImplTest extends AbstractMockitoTest {
         assertThat(node.equals(null), is(false));
         assertThat(node.equals("test"), is(false));
         assertThat(node.equals(node), is(true));
-        assertThat(node.equals(new NodeImpl(n)), is(true));
-        assertThat(node.hashCode(), is(new NodeImpl(n).hashCode()));
+        assertThat(node.equals(new NodeImpl(n, nodeSupport, valueSupport)), is(true));
+        assertThat(node.hashCode(), is(new NodeImpl(n, nodeSupport, valueSupport).hashCode()));
     }
 
     @Test

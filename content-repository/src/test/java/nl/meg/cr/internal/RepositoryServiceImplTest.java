@@ -15,15 +15,17 @@ public class RepositoryServiceImplTest extends AbstractMockitoTest {
     @Mock
     private Repository r;
     private RepositoryService service;
+    private NodeSupport nodeSupport;
+    private ValueSupport valueSupport;
 
     @Before
     public void setUp() {
-        this.service = new RepositoryServiceImpl();
+        this.service = new RepositoryServiceImpl(nodeSupport, valueSupport);
     }
 
     @Test
     public void testCreate() {
-        assertThat(service.create(r), is(new RepositoryImpl(r)));
+        assertThat(service.create(r), is(new RepositoryImpl(r, nodeSupport, valueSupport)));
     }
 
 }

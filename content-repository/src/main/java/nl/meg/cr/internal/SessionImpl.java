@@ -9,15 +9,20 @@ import java.util.Optional;
 final class SessionImpl implements Session {
 
     private final javax.jcr.Session delegate;
+    private final NodeSupport nodeSupport;
+    private final ValueSupport valueSupport;
 
-    SessionImpl(javax.jcr.Session session) {
+    SessionImpl(javax.jcr.Session session, NodeSupport nodeSupport, ValueSupport valueSupport) {
         this.delegate = session;
+        this.nodeSupport = nodeSupport;
+        this.valueSupport = valueSupport;
     }
 
     @Override
     public Optional<Node> getNode(String absPath) {
         try {
-            return Optional.of(new NodeImpl(delegate.getNode(absPath)));
+
+            return Optional.of(new NodeImpl(delegate.getNode(absPath), nodeSupport, valueSupport));
         } catch (javax.jcr.PathNotFoundException e) {
             return Optional.empty();
         } catch (javax.jcr.RepositoryException e) {

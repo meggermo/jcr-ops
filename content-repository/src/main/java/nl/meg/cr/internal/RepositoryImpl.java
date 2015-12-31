@@ -11,15 +11,19 @@ import javax.jcr.SimpleCredentials;
 final class RepositoryImpl implements Repository {
 
     private final javax.jcr.Repository delegate;
+    private final NodeSupport nodeSupport;
+    private final ValueSupport valueSupport;
 
-    RepositoryImpl(javax.jcr.Repository delegate) {
+    RepositoryImpl(javax.jcr.Repository delegate, NodeSupport nodeSupport, ValueSupport valueSupport) {
         this.delegate = delegate;
+        this.nodeSupport = nodeSupport;
+        this.valueSupport = valueSupport;
     }
 
     @Override
     public Session login(String username, String password) throws LoginException {
         try {
-            return new SessionImpl(delegate.login(createCredentials(username, password.toCharArray())));
+            return new SessionImpl(delegate.login(createCredentials(username, password.toCharArray())), nodeSupport, valueSupport);
         } catch (javax.jcr.LoginException e) {
             throw new LoginException("Failed to login " + username, e);
         } catch (javax.jcr.RepositoryException e) {
