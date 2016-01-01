@@ -1,6 +1,5 @@
 package nl.meg.cr.internal;
 
-import nl.meg.cr.RepositoryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

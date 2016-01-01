@@ -1,6 +1,7 @@
-package nl.meg.cr;
+package nl.meg.cr.internal;
 
 import aQute.bnd.annotation.ProviderType;
+import nl.meg.cr.Repository;
 
 @ProviderType
 public interface RepositoryService {
