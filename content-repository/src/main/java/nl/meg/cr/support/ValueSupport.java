@@ -1,7 +1,5 @@
 package nl.meg.cr.support;
 
-import nl.meg.cr.support.JcrSupport;
-
 import javax.jcr.Value;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +14,8 @@ public final class ValueSupport {
         return (Function<Value, T>) valueFnMap.get(type);
     }
 
-    public ValueSupport(JcrSupport jcrSupport) {
+    public ValueSupport() {
         valueFnMap = new HashMap<>();
-        valueFnMap.put(String.class, jcrSupport.wrap(Value::getString));
+        valueFnMap.put(String.class, JcrSupport.wrap(Value::getString));
     }
 }

@@ -12,7 +12,7 @@ public final class JcrSupport {
         R apply(T t) throws RepositoryException;
     }
 
-    <T, R> Function<T, R> wrap(JcrFn<T, R> jcrFn) {
+    static <T, R> Function<T, R> wrap(JcrFn<T, R> jcrFn) {
         return t -> {
             try {
                 return jcrFn.apply(t);
@@ -24,7 +24,8 @@ public final class JcrSupport {
         };
     }
 
-    <T, R> Function<T, Optional<R>> wrapOptional(JcrFn<T, R> jcrFn) {
+    static <T, R> Function<T, Optional<R>> wrapOptional(JcrFn<T, R> jcrFn) {
         return wrap(jcrFn).andThen(Optional::ofNullable);
     }
+
 }

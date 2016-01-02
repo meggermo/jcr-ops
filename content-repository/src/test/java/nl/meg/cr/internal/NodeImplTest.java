@@ -35,9 +35,8 @@ public class NodeImplTest extends AbstractMockitoTest {
 
     @Before
     public void setUp() {
-        final JcrSupport jcrSupport = new JcrSupport();
-        this.nodeSupport = new NodeSupport(jcrSupport);
-        this.valueSupport = new ValueSupport(jcrSupport);
+        this.nodeSupport = new NodeSupport();
+        this.valueSupport = new ValueSupport();
         this.node = new NodeImpl(n, nodeSupport, valueSupport);
     }
 

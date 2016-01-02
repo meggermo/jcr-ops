@@ -1,7 +1,5 @@
 package nl.meg.cr.support;
 
-import nl.meg.cr.support.JcrSupport;
-
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
@@ -19,7 +17,6 @@ import static java.util.stream.StreamSupport.stream;
 public final class NodeSupport {
 
     private final Function<Node, Stream<Node>> nodes;
-    private final JcrSupport jcrSupport;
 
     public <T> Function<Node, Optional<T>> single(String propertyName, Function<Value, T> valueFn) {
         return property(propertyName)
@@ -35,23 +32,22 @@ public final class NodeSupport {
         return nodes;
     }
 
-    public NodeSupport(JcrSupport jcrSupport) {
-        this.jcrSupport = jcrSupport;
-        this.nodes = jcrSupport.wrap((Node n) -> n.getNodes())
+    public NodeSupport() {
+        this.nodes = JcrSupport.wrap((Node n) -> n.getNodes())
                 .andThen(this::asStream);
     }
 
     private Function<Node, Optional<Property>> property(String propertyName) {
-        return jcrSupport.wrapOptional((Node node) -> node.getProperty(propertyName));
+        return JcrSupport.wrapOptional((Node node) -> node.getProperty(propertyName));
     }
 
     private <T> Function<Property, Optional<T>> single(Function<Value, T> valueFn) {
-        return jcrSupport.wrapOptional(Property::getValue)
+        return JcrSupport.wrapOptional(Property::getValue)
                 .andThen(v -> v.map(valueFn));
     }
 
     private <T> Function<Property, Optional<List<T>>> multi(Function<Value, T> valueFn) {
-        return property -> jcrSupport.wrapOptional(Property::getValues)
+        return property -> JcrSupport.wrapOptional(Property::getValues)
                 .apply(property)
                 .map(Stream::of)
                 .map(valueStream -> valueStream.map(valueFn).collect(toList()));
