@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 import java.util.Optional;
 import java.util.function.Function;
 
-public final class JcrSupport {
+final class JcrSupport {
 
     interface JcrFn<T, R> {
         R apply(T t) throws RepositoryException;
