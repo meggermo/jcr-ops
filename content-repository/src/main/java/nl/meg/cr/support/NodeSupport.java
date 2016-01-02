@@ -16,37 +16,31 @@ import static java.util.stream.StreamSupport.stream;
 
 public final class NodeSupport {
 
-    private final Function<Node, Stream<Node>> nodes;
-
-    public <T> Function<Node, Optional<T>> single(String propertyName, Function<Value, T> valueFn) {
+    public static <T> Function<Node, Optional<T>> single(String propertyName, Function<Value, T> valueFn) {
         return property(propertyName)
                 .andThen(p -> p.flatMap(single(valueFn)));
     }
 
-    public <T> Function<Node, Optional<List<T>>> multi(String propertyName, Function<Value, T> valueFn) {
+    public static <T> Function<Node, Optional<List<T>>> multi(String propertyName, Function<Value, T> valueFn) {
         return property(propertyName)
                 .andThen(p -> p.flatMap(multi(valueFn)));
     }
 
-    public Function<Node, Stream<Node>> nodes() {
-        return nodes;
+    public static Function<Node, Stream<Node>> nodes() {
+        return JcrSupport.wrap((Node n) -> n.getNodes())
+                .andThen(NodeSupport::asStream);
     }
 
-    public NodeSupport() {
-        this.nodes = JcrSupport.wrap((Node n) -> n.getNodes())
-                .andThen(this::asStream);
-    }
-
-    private Function<Node, Optional<Property>> property(String propertyName) {
+    private static Function<Node, Optional<Property>> property(String propertyName) {
         return JcrSupport.wrapOptional((Node node) -> node.getProperty(propertyName));
     }
 
-    private <T> Function<Property, Optional<T>> single(Function<Value, T> valueFn) {
+    private static <T> Function<Property, Optional<T>> single(Function<Value, T> valueFn) {
         return JcrSupport.wrapOptional(Property::getValue)
                 .andThen(v -> v.map(valueFn));
     }
 
-    private <T> Function<Property, Optional<List<T>>> multi(Function<Value, T> valueFn) {
+    private static <T> Function<Property, Optional<List<T>>> multi(Function<Value, T> valueFn) {
         return property -> JcrSupport.wrapOptional(Property::getValues)
                 .apply(property)
                 .map(Stream::of)
@@ -54,7 +48,7 @@ public final class NodeSupport {
     }
 
     @SuppressWarnings("unchecked")
-    private Stream<Node> asStream(NodeIterator iterator) {
+    private static Stream<Node> asStream(NodeIterator iterator) {
         final int CHARACTERISTICS = SIZED | CONCURRENT | NONNULL;
         return stream(spliterator(iterator, iterator.getSize(), CHARACTERISTICS), false);
     }

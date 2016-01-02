@@ -1,9 +1,6 @@
 package nl.meg.cr.internal;
 
 import nl.meg.cr.Node;
-import nl.meg.cr.support.JcrSupport;
-import nl.meg.cr.support.NodeSupport;
-import nl.meg.cr.support.ValueSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,20 +27,16 @@ public class NodeImplTest extends AbstractMockitoTest {
     private javax.jcr.Value v;
 
     private Node node;
-    private NodeSupport nodeSupport;
-    private ValueSupport valueSupport;
 
     @Before
     public void setUp() {
-        this.nodeSupport = new NodeSupport();
-        this.valueSupport = new ValueSupport();
-        this.node = new NodeImpl(n, nodeSupport, valueSupport);
+        this.node = new NodeImpl(n);
     }
 
     @Test
     public void testGetNodes() throws RepositoryException {
         when(n.getNodes()).thenReturn(getNodeIterator(n));
-        assertThat(node.getNodes().collect(toList()), hasItem(new NodeImpl(n, nodeSupport, valueSupport)));
+        assertThat(node.getNodes().collect(toList()), hasItem(new NodeImpl(n)));
     }
 
     @Test
@@ -51,8 +44,8 @@ public class NodeImplTest extends AbstractMockitoTest {
         assertThat(node.equals(null), is(false));
         assertThat(node.equals("test"), is(false));
         assertThat(node.equals(node), is(true));
-        assertThat(node.equals(new NodeImpl(n, nodeSupport, valueSupport)), is(true));
-        assertThat(node.hashCode(), is(new NodeImpl(n, nodeSupport, valueSupport).hashCode()));
+        assertThat(node.equals(new NodeImpl(n)), is(true));
+        assertThat(node.hashCode(), is(new NodeImpl(n).hashCode()));
     }
 
     @Test

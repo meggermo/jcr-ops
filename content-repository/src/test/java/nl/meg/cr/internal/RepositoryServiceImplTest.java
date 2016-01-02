@@ -1,7 +1,5 @@
 package nl.meg.cr.internal;
 
-import nl.meg.cr.support.NodeSupport;
-import nl.meg.cr.support.ValueSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,17 +14,15 @@ public class RepositoryServiceImplTest extends AbstractMockitoTest {
     @Mock
     private Repository r;
     private RepositoryService service;
-    private NodeSupport nodeSupport;
-    private ValueSupport valueSupport;
 
     @Before
     public void setUp() {
-        this.service = new RepositoryServiceImpl(nodeSupport, valueSupport);
+        this.service = new RepositoryServiceImpl();
     }
 
     @Test
     public void testCreate() {
-        assertThat(service.create(r), is(new RepositoryImpl(r, nodeSupport, valueSupport)));
+        assertThat(service.create(r), is(new RepositoryImpl(r)));
     }
 
 }

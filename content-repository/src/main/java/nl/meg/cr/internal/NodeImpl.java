@@ -11,30 +11,26 @@ import java.util.stream.Stream;
 final class NodeImpl implements Node {
 
     private final javax.jcr.Node delegate;
-    private final NodeSupport nodeSupport;
-    private final ValueSupport valueSupport;
 
-    NodeImpl(javax.jcr.Node node, NodeSupport nodeSupport, ValueSupport valueSupport) {
+    NodeImpl(javax.jcr.Node node) {
         this.delegate = node;
-        this.nodeSupport = nodeSupport;
-        this.valueSupport = valueSupport;
     }
 
     @Override
     public Stream<Node> getNodes() {
-        return nodeSupport.nodes().apply(delegate)
-                .map(n -> new NodeImpl(n, nodeSupport, valueSupport));
+        return NodeSupport.nodes().apply(delegate)
+                .map(n -> new NodeImpl(n));
     }
 
     @Override
     public <T> Optional<T> getValue(String propertyName, Class<T> type) {
-        return nodeSupport.single(propertyName, valueSupport.get(type))
+        return NodeSupport.single(propertyName, ValueSupport.get(type))
                 .apply(delegate);
     }
 
     @Override
     public <T> Optional<List<T>> getValues(String propertyName, Class<T> type) {
-        return nodeSupport.multi(propertyName, valueSupport.get(type))
+        return NodeSupport.multi(propertyName, ValueSupport.get(type))
                 .apply(delegate);
     }
 

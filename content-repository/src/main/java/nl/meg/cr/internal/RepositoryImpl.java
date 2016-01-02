@@ -4,8 +4,6 @@ import nl.meg.cr.LoginException;
 import nl.meg.cr.Repository;
 import nl.meg.cr.RepositoryException;
 import nl.meg.cr.Session;
-import nl.meg.cr.support.NodeSupport;
-import nl.meg.cr.support.ValueSupport;
 
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
@@ -13,19 +11,15 @@ import javax.jcr.SimpleCredentials;
 final class RepositoryImpl implements Repository {
 
     private final javax.jcr.Repository delegate;
-    private final NodeSupport nodeSupport;
-    private final ValueSupport valueSupport;
 
-    RepositoryImpl(javax.jcr.Repository delegate, NodeSupport nodeSupport, ValueSupport valueSupport) {
+    RepositoryImpl(javax.jcr.Repository delegate) {
         this.delegate = delegate;
-        this.nodeSupport = nodeSupport;
-        this.valueSupport = valueSupport;
     }
 
     @Override
     public Session login(String username, String password) throws LoginException {
         try {
-            return new SessionImpl(delegate.login(createCredentials(username, password.toCharArray())), nodeSupport, valueSupport);
+            return new SessionImpl(delegate.login(createCredentials(username, password.toCharArray())));
         } catch (javax.jcr.LoginException e) {
             throw new LoginException("Failed to login " + username, e);
         } catch (javax.jcr.RepositoryException e) {

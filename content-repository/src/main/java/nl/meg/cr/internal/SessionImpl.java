@@ -3,28 +3,21 @@ package nl.meg.cr.internal;
 import nl.meg.cr.Node;
 import nl.meg.cr.RepositoryException;
 import nl.meg.cr.Session;
-import nl.meg.cr.support.NodeSupport;
-import nl.meg.cr.support.ValueSupport;
 
 import java.util.Optional;
 
 final class SessionImpl implements Session {
 
     private final javax.jcr.Session delegate;
-    private final NodeSupport nodeSupport;
-    private final ValueSupport valueSupport;
 
-    SessionImpl(javax.jcr.Session session, NodeSupport nodeSupport, ValueSupport valueSupport) {
+    SessionImpl(javax.jcr.Session session) {
         this.delegate = session;
-        this.nodeSupport = nodeSupport;
-        this.valueSupport = valueSupport;
     }
 
     @Override
     public Optional<Node> getNode(String absPath) {
         try {
-
-            return Optional.of(new NodeImpl(delegate.getNode(absPath), nodeSupport, valueSupport));
+            return Optional.of(new NodeImpl(delegate.getNode(absPath)));
         } catch (javax.jcr.PathNotFoundException e) {
             return Optional.empty();
         } catch (javax.jcr.RepositoryException e) {
