@@ -28,4 +28,6 @@ public final class JcrSupport {
         return wrap(jcrFn).andThen(Optional::ofNullable);
     }
 
+    private JcrSupport() {
+    }
 }
