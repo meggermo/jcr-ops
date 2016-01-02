@@ -19,7 +19,7 @@ final class NodeImpl implements Node {
     @Override
     public Stream<Node> getNodes() {
         return NodeSupport.nodes().apply(delegate)
-                .map(n -> new NodeImpl(n));
+                .map(NodeImpl::new);
     }
 
     @Override
