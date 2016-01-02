@@ -2,6 +2,8 @@ package nl.meg.cr.internal;
 
 import aQute.bnd.annotation.component.Component;
 import nl.meg.cr.Repository;
+import nl.meg.cr.support.NodeSupport;
+import nl.meg.cr.support.ValueSupport;
 
 @Component(name = "RepositoryService")
 public class RepositoryServiceImpl implements RepositoryService {

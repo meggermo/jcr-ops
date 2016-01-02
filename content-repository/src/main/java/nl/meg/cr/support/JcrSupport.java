@@ -1,4 +1,4 @@
-package nl.meg.cr.internal;
+package nl.meg.cr.support;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.PathNotFoundException;
@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 import java.util.Optional;
 import java.util.function.Function;
 
-final class JcrSupport {
+public final class JcrSupport {
 
     interface JcrFn<T, R> {
         R apply(T t) throws RepositoryException;

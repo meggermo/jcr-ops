@@ -1,5 +1,7 @@
-package nl.meg.cr.internal;
+package nl.meg.cr.support;
 
+import nl.meg.cr.internal.AbstractMockitoTest;
+import nl.meg.cr.support.JcrSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

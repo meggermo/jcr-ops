@@ -1,6 +1,9 @@
-package nl.meg.cr.internal;
+package nl.meg.cr.support;
+
+import nl.meg.cr.support.JcrSupport;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.Value;
 import java.util.List;
@@ -8,7 +11,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static java.util.Spliterator.*;
+import static java.util.Spliterators.spliterator;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 public final class NodeSupport {
 
@@ -32,7 +38,7 @@ public final class NodeSupport {
     public NodeSupport(JcrSupport jcrSupport) {
         this.jcrSupport = jcrSupport;
         this.nodes = jcrSupport.wrap((Node n) -> n.getNodes())
-                .andThen(RangeIteratorSupport::asStream);
+                .andThen(this::asStream);
     }
 
     private Function<Node, Optional<Property>> property(String propertyName) {
@@ -49,5 +55,11 @@ public final class NodeSupport {
                 .apply(property)
                 .map(Stream::of)
                 .map(valueStream -> valueStream.map(valueFn).collect(toList()));
+    }
+
+    @SuppressWarnings("unchecked")
+    private Stream<Node> asStream(NodeIterator iterator) {
+        final int CHARACTERISTICS = SIZED | CONCURRENT | NONNULL;
+        return stream(spliterator(iterator, iterator.getSize(), CHARACTERISTICS), false);
     }
 }

@@ -4,6 +4,8 @@ import nl.meg.cr.LoginException;
 import nl.meg.cr.Repository;
 import nl.meg.cr.RepositoryException;
 import nl.meg.cr.Session;
+import nl.meg.cr.support.NodeSupport;
+import nl.meg.cr.support.ValueSupport;
 
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;

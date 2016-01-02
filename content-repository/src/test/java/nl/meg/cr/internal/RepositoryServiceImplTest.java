@@ -1,5 +1,7 @@
 package nl.meg.cr.internal;
 
+import nl.meg.cr.support.NodeSupport;
+import nl.meg.cr.support.ValueSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

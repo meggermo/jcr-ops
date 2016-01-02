@@ -3,6 +3,8 @@ package nl.meg.cr.internal;
 import nl.meg.cr.Node;
 import nl.meg.cr.RepositoryException;
 import nl.meg.cr.Session;
+import nl.meg.cr.support.NodeSupport;
+import nl.meg.cr.support.ValueSupport;
 
 import java.util.Optional;
 
