@@ -24,13 +24,13 @@ final class NodeImpl implements Node {
 
     @Override
     public <T> Optional<T> getValue(String propertyName, Class<T> type) {
-        return NodeSupport.getValue(propertyName, ValueSupport.get(type))
+        return NodeSupport.getValue(propertyName, ValueSupport.valueToType(type))
                 .apply(delegate);
     }
 
     @Override
     public <T> Optional<List<T>> getValues(String propertyName, Class<T> type) {
-        return NodeSupport.getValues(propertyName, ValueSupport.get(type))
+        return NodeSupport.getValues(propertyName, ValueSupport.valueToType(type))
                 .apply(delegate);
     }
 
