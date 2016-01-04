@@ -46,10 +46,4 @@ final class JcrSupport {
         };
     }
 
-    static <S, T, R> BiFunction<S, T, Optional<R>> wrapOptional(JcrBiFn<S, T, R> jcrFn) {
-        return wrap(jcrFn).andThen(Optional::ofNullable);
-    }
-
-    private JcrSupport() {
-    }
 }
