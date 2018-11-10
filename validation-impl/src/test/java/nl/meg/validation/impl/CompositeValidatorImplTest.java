@@ -1,15 +1,15 @@
 package nl.meg.validation.impl;
 
-import nl.meg.AbstractMockitoTest;
-import nl.meg.validation.ValidationContext;
-import nl.meg.validation.Validator;
-import org.junit.Test;
-import org.mockito.Mock;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.junit.Test;
+import org.mockito.Mock;
+
+import nl.meg.AbstractMockitoTest;
+import nl.meg.validation.ValidationContext;
+import nl.meg.validation.Validator;
 import static java.util.Arrays.asList;
 import static nl.meg.validation.impl.ValidatorBuilderImpl.CompositeValidator;
 import static org.hamcrest.CoreMatchers.is;
@@ -33,9 +33,7 @@ public class CompositeValidatorImplTest extends AbstractMockitoTest {
 
     @Test
     public void testValidate() {
-        when(c0.hasErrors()).thenReturn(false);
         when(v0.validate("TEST", c0)).thenReturn(c1);
-        when(c1.hasErrors()).thenReturn(false);
         when(v1.validate("TEST", c1)).thenReturn(c2);
         assertThat(new CompositeValidator<>(asList(v0, v1),p).validate("TEST", c0), is(c2));
     }
@@ -43,7 +41,6 @@ public class CompositeValidatorImplTest extends AbstractMockitoTest {
     @Test
     public void testValidate_WithInvalidInitialContext() {
         when(p.test(c0)).thenReturn(true);
-        when(c0.hasErrors()).thenReturn(true);
         assertThat(new CompositeValidator<>(asList(v0, v1), p).validate("TEST", c0), is(c0));
         verifyZeroInteractions(v0, v1);
     }
@@ -51,9 +48,7 @@ public class CompositeValidatorImplTest extends AbstractMockitoTest {
     @Test
     public void testValidate_ContinueEvenWithErrors() {
         when(p.test(any(ValidationContext.class))).thenReturn(false);
-        when(c0.hasErrors()).thenReturn(true);
         when(v0.validate("TEST", c0)).thenReturn(c1);
-        when(c1.hasErrors()).thenReturn(true);
         when(v1.validate("TEST", c1)).thenReturn(c2);
         assertThat(new CompositeValidator<>(asList(v0, v1), p).validate("TEST", c0), is(c2));
     }

@@ -1,17 +1,24 @@
 package nl.meg.jcr.internal;
 
-import nl.meg.AbstractMockitoTest;
-import nl.meg.jcr.HippoNode;
-import nl.meg.jcr.HippoProperty;
-import nl.meg.jcr.RuntimeRepositoryException;
+import java.util.Calendar;
+
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.jcr.nodetype.NodeType;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import javax.jcr.*;
-import javax.jcr.nodetype.NodeType;
-import java.util.Calendar;
-
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.RuntimeRepositoryException;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -94,7 +101,6 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetNode() throws RepositoryException {
-        when(node.hasNode("X")).thenReturn(true);
         when(node.getNode("X")).thenReturn(node);
         assertThat(hippoNode.getNode("X").get().get(), is(node));
     }
@@ -120,7 +126,6 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
 
     @Test
     public void testGetExistingProperty() throws RepositoryException {
-        when(node.hasProperty("X")).thenReturn(true);
         when(node.getProperty("X")).thenReturn(property);
         final HippoProperty p = hippoNode.getProperty("X").get();
         assertThat(p.get(), is(property));
@@ -222,7 +227,6 @@ public class HippoNodeImplTest extends AbstractMockitoTest {
             assertThat(e.getCause(), is(t));
         }
         try {
-            when(node.hasProperty("X")).thenReturn(true);
             when(node.getProperty("X")).thenThrow(e);
             hippoNode.getProperty("X");
             shouldHaveThrown();

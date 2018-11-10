@@ -1,16 +1,16 @@
 package nl.meg.jcr.traversal.internal;
 
-import nl.meg.AbstractMockitoTest;
-import nl.meg.jcr.traversal.WhileIterables;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+
+import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.traversal.WhileIterables;
 import static java.util.Arrays.asList;
 import static java.util.Spliterators.spliteratorUnknownSize;
 import static java.util.stream.Collectors.toList;
@@ -68,7 +68,6 @@ public class WhileIterablesImplTest extends AbstractMockitoTest {
     public void testTakeWhile_ThrowsNoSuchElement_AfterSecond() {
         when(nullValues.iterator()).thenReturn(iteratorWithNulls);
         when(iteratorWithNulls.hasNext()).thenReturn(true, false);
-        when(iteratorWithNulls.next()).thenReturn(1);
         final Iterator<Integer> iterator = whileIterables.takeWhile(x -> true, nullValues).iterator();
         iterator.next();
         iterator.next();

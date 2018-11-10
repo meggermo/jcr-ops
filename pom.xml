@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.meggermo.maven</groupId>
         <artifactId>maven.pom.root</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
 
     <groupId>nl.meg</groupId>
@@ -59,10 +59,6 @@
         <system>Travis</system>
         <url>https://travis-ci.org/meggermo/jcr-ops</url>
     </ciManagement>
-
-    <prerequisites>
-        <maven>2.2.1</maven>
-    </prerequisites>
 
     <properties>
         <!-- Library versions -->
