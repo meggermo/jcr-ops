@@ -7,7 +7,7 @@
     <parent>
         <artifactId>jcr-ops</artifactId>
         <groupId>nl.meg</groupId>
-        <version>1.0.4-functional-store-SNAPSHOT</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>content-repository</artifactId>
