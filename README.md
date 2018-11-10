@@ -8,4 +8,4 @@ useful Functions, Predicates and TreeTraversers
 
 ## License
 This library is licensed under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
-The full license text is available in [LICENSE.txt](https://github.com/meggermo/jcr-ops/blob/master/LICENSE.txt).
+The full license text is available in [LICENSE.txt](https://raw.githubusercontent.com/${github.account.name}/jcr-ops/master/LICENSE.txt).
