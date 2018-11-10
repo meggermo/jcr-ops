@@ -1,6 +1,7 @@
 package nl.meg.cr.internal;
 
-import aQute.bnd.annotation.component.Component;
+import org.osgi.service.component.annotations.Component;
+
 import nl.meg.cr.Repository;
 import nl.meg.cr.RepositoryService;
 

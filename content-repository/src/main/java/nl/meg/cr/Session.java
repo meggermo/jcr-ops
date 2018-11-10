@@ -1,8 +1,9 @@
 package nl.meg.cr;
 
-import aQute.bnd.annotation.ProviderType;
 
 import java.util.Optional;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface Session {

@@ -12,20 +12,48 @@
     <groupId>nl.meg</groupId>
     <artifactId>jcr-ops</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-functional-store-SNAPSHOT</version>
 
     <description>
         Functional immutable operations on the The Content repository API for Java.
     </description>
     <inceptionYear>2014</inceptionYear>
-    <url>https://github.com/meggermo/jcr-ops</url>
+    <url>https://${github.host}/${project.artifactId}</url>
+
+    <scm>
+        <url>https://${github.host}/${project.artifactId}</url>
+        <connection>scm:https://${github.host}/${project.artifactId}</connection>
+        <developerConnection>scm:git:ssh://git@${github.host}/jcr-ops</developerConnection>
+    </scm>
+    <issueManagement>
+        <url>https://${github.host}/jcr-ops/issues</url>
+        <system>github</system>
+    </issueManagement>
+
+    <organization>
+        <name>${github.account.name}</name>
+        <url>https://${github.host}</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>${github.account.name}</id>
+            <name>Michiel Eggermont</name>
+            <email>michiel.eggermont@gmail.com</email>
+            <url>https://${github.host}</url>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
-            <name>The MIT License</name>
-            <url>http://en.wikipedia.org/wiki/MIT_License</url>
+            <name>MIT License</name>
+            <url>https://raw.githubusercontent.com/${github.account.name}/jcr-ops/master/LICENSE.txt</url>
         </license>
     </licenses>
+
+    <ciManagement>
+        <system>Travis</system>
+        <url>https://travis-ci.org/${github.account.name}/jcr-ops</url>
+    </ciManagement>
 
     <modules>
         <module>validation-api</module>
@@ -35,30 +63,6 @@
         <module>content-repository</module>
     </modules>
 
-    <developers>
-        <developer>
-            <id>meggermo</id>
-            <name>Michiel Eggermont</name>
-            <email>michiel.eggermont@gmail.com</email>
-            <url>https://github.com/meggermo</url>
-        </developer>
-    </developers>
-
-    <scm>
-        <url>https://github.com/meggermo/jcr-ops</url>
-        <connection>scm:git://github.com/meggermo/jcr-ops.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/meggermo/jcr-ops.git</developerConnection>
-    </scm>
-
-    <issueManagement>
-        <url>https://github.com/meggermo/jcr-ops/issues</url>
-        <system>github</system>
-    </issueManagement>
-
-    <ciManagement>
-        <system>Travis</system>
-        <url>https://travis-ci.org/meggermo/jcr-ops</url>
-    </ciManagement>
 
     <properties>
         <!-- Library versions -->
@@ -91,6 +95,18 @@
                 <groupId>nl.meg</groupId>
                 <artifactId>jcr-impl</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.service.component.annotations</artifactId>
+                <version>1.4.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.annotation.versioning</artifactId>
+                <version>1.1.0</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

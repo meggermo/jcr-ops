@@ -1,8 +1,8 @@
 package nl.meg.cr.internal;
 
-import nl.meg.cr.RepositoryException;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -10,10 +10,11 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import nl.meg.cr.RepositoryException;
 import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
