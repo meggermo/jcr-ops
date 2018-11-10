@@ -1,10 +1,11 @@
 package nl.meg.cr;
 
-import aQute.bnd.annotation.ProviderType;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface Node {

@@ -1,13 +1,20 @@
 package nl.meg.jcr.internal;
 
-import aQute.bnd.annotation.component.Component;
-import nl.meg.jcr.*;
-
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Value;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
+
+import org.osgi.service.component.annotations.Component;
+
+import nl.meg.jcr.HippoEntityFactory;
+import nl.meg.jcr.HippoNode;
+import nl.meg.jcr.HippoProperty;
+import nl.meg.jcr.HippoValue;
+import nl.meg.jcr.HippoVersion;
+import nl.meg.jcr.HippoVersionHistory;
+import nl.meg.jcr.MutableHippoNode;
 
 @Component(name = "HippoEntityFactory", immediate = true)
 public final class HippoEntityFactoryImpl implements HippoEntityFactory {
