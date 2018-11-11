@@ -1,10 +1,13 @@
 package nl.meg.jcr.function;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
 public interface JcrProperty<V> {
 
-    V getValue();
+    String getName();
 
-    JcrBiFunction<Node, V, ?> valueSetter();
+    V getValue(Node node) throws RepositoryException;
+
+    JcrProperty<V> setValue(final Node node, final V value) throws RepositoryException;
 }
