@@ -5,7 +5,7 @@
     <parent>
         <groupId>nl.meg</groupId>
         <artifactId>jcr-ops</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-store-SNAPSHOT</version>
     </parent>
 
     <artifactId>jcr-impl</artifactId>
