@@ -12,7 +12,7 @@
     <groupId>nl.meg</groupId>
     <artifactId>jcr-ops</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-store-SNAPSHOT</version>
 
     <description>
         Functional immutable operations on the The Content repository API for Java.

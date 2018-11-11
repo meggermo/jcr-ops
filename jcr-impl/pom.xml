@@ -5,7 +5,7 @@
     <parent>
         <groupId>nl.meg</groupId>
         <artifactId>jcr-ops</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-store-SNAPSHOT</version>
     </parent>
 
     <artifactId>jcr-impl</artifactId>
@@ -34,11 +34,6 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Service-Component>*</Service-Component>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>

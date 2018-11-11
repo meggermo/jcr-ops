@@ -7,7 +7,7 @@
     <parent>
         <artifactId>jcr-ops</artifactId>
         <groupId>nl.meg</groupId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-store-SNAPSHOT</version>
     </parent>
 
     <artifactId>content-repository</artifactId>
@@ -39,7 +39,6 @@
                 <configuration>
                     <instructions>
                         <Export-Package>nl.meg.cr;provide:=true</Export-Package>
-                        <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>
             </plugin>
