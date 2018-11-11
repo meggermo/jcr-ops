@@ -39,7 +39,6 @@
                 <configuration>
                     <instructions>
                         <Export-Package>nl.meg.cr;provide:=true</Export-Package>
-                        <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>
             </plugin>
