@@ -1,4 +1,4 @@
-package nl.meg.jcr.function;
+package nl.meg.jcr.function.internal;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
@@ -13,43 +13,44 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.VersionException;
 
-public final class JcrStore {
+import nl.meg.jcr.function.JcrEither;
+import nl.meg.jcr.function.JcrFunction;
+import nl.meg.jcr.function.JcrResult;
+import nl.meg.jcr.function.JcrStore;
+
+public final class JcrStoreImpl implements JcrStore {
 
     private final Repository repository;
 
-    public JcrStore(final Repository repository) {
+    public JcrStoreImpl(final Repository repository) {
         this.repository = repository;
     }
 
-    public JcrResult<Session, ?> getSession(final Credentials credentials, final String workspace) {
+    @Override
+    public <R> JcrEither<RepositoryException, R> read(final Credentials credentials, final String workspace, final JcrFunction<Session, R> task) {
+        return login(credentials, workspace)
+                .andThen(task)
+                .closeContext(Session::logout)
+                .getState();
+    }
+
+    @Override
+    public <R> JcrEither<RepositoryException, R> write(final Credentials credentials, final String workspace, final JcrFunction<Session, R> task) {
+        return login(credentials, workspace)
+                .andThen(task)
+                .andCall(this::save)
+                .closeContext(Session::logout)
+                .getState();
+    }
+
+    private JcrResult<Session, ?> login(final Credentials credentials, final String workspace) {
         return JcrResult
                 .startWith(credentials, login(workspace))
-                .switchContext((c, s) -> s, c -> {});
+                .switchContext((c, s) -> s, c -> {
+                });
     }
 
-    public <R> JcrResult<Session, R> read(JcrResult<Session, ?> session, JcrFunction<Session, R> task) {
-        return session.andThen(task);
-    }
-
-    public <R> JcrResult<Session, R> write(JcrResult<Session, ?> session, JcrFunction<Session, R> task) {
-        return session
-                .andThen(task)
-                .andCall(this::save);
-    }
-
-    public <R> JcrEither<RepositoryException, R> read(Credentials credentials, String workspace, JcrFunction<Session, R> task) {
-        return read(getSession(credentials, workspace), task)
-                .closeContext(Session::logout)
-                .getState();
-    }
-
-    public <R> JcrEither<RepositoryException, R> write(Credentials credentials, String workspace, JcrFunction<Session, R> task) {
-        return write(getSession(credentials, workspace), task)
-                .closeContext(Session::logout)
-                .getState();
-    }
-
-    public void save(final Session session) throws RepositoryException {
+    private void save(final Session session) throws RepositoryException {
         try {
             if (session.hasPendingChanges()) {
                 session.refresh(true);
@@ -64,6 +65,7 @@ public final class JcrStore {
                 | LockException
                 | NoSuchNodeTypeException e) {
             session.refresh(false);
+            throw e;
         }
     }
 
