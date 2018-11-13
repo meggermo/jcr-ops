@@ -6,8 +6,8 @@ import javax.jcr.Session;
 
 public interface JcrStore {
 
-    <R> JcrEither<RepositoryException, R> read(Credentials credentials, String workspace, JcrFunction<Session, R> task);
+    <R> JcrEither<RepositoryException, R> read(Credentials credentials, JcrFunction<Session, R> task);
 
-    <R> JcrEither<RepositoryException, R> write(Credentials credentials, String workspace, JcrFunction<Session, R> task);
+    <R> JcrEither<RepositoryException, R> write(Credentials credentials, JcrFunction<Session, R> task);
 
 }

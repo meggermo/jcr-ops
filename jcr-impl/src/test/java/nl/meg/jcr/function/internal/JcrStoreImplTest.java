@@ -44,13 +44,13 @@ public class JcrStoreImplTest {
 
     @Before
     public void setUp() throws RepositoryException {
-        jcrStore = new JcrStoreImpl(repositoryMock);
+        jcrStore = new JcrStoreImpl(repositoryMock, workspace);
     }
 
     @Test
     public void testRead() throws RepositoryException {
         when(repositoryMock.login(credentials, workspace)).thenReturn(sessionMock);
-        jcrStore.read(credentials, workspace, session -> 10L).eitherAccept(
+        jcrStore.read(credentials, session -> 10L).eitherAccept(
                 e -> fail("did not expect this: " + e),
                 r -> assertThat(r, is(10L))
         );
@@ -74,7 +74,7 @@ public class JcrStoreImplTest {
                     final Node node = session.getNodeByIdentifier("id");
                     return node.addNode("x").setProperty("p", "test");
                 };
-        jcrStore.write(credentials, workspace, task).eitherAccept(
+        jcrStore.write(credentials, task).eitherAccept(
                 e -> fail("did not expect this: " + e),
                 p -> assertThat(p, is(propertyMock))
         );
@@ -92,7 +92,7 @@ public class JcrStoreImplTest {
         when(sessionMock.hasPendingChanges()).thenReturn(true);
         doThrow(new VersionException()).when(sessionMock).save();
 
-        jcrStore.write(credentials, workspace, session -> "TEST").eitherAccept(
+        jcrStore.write(credentials, session -> "TEST").eitherAccept(
                 e -> assertThat(e, instanceOf(VersionException.class)),
                 x -> fail("did not expect this: " + x)
         );
@@ -108,7 +108,7 @@ public class JcrStoreImplTest {
         when(repositoryMock.login(credentials, workspace)).thenReturn(sessionMock);
         when(sessionMock.hasPendingChanges()).thenReturn(false);
 
-        jcrStore.write(credentials, workspace, session -> "TEST").eitherAccept(
+        jcrStore.write(credentials, session -> "TEST").eitherAccept(
                 e -> fail("did not expect this: " + e),
                 s -> assertThat(s, is("TEST"))
         );
