@@ -14,14 +14,14 @@ import javax.jcr.Value;
 
 public final class JcrPropertyFactory {
 
-    public static JcrPropertyImpl<String> ofString(String name) {
+    public static JcrProperty<String> ofString(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> node.getProperty(name).getString(),
                 (n, v) -> n.setProperty(name, v));
     }
 
-    public static JcrPropertyImpl<Optional<String>> ofStringOption(String name) {
+    public static JcrProperty<Optional<String>> ofStringOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, Property::getString),
@@ -29,14 +29,14 @@ public final class JcrPropertyFactory {
         );
     }
 
-    public static JcrPropertyImpl<List<String>> ofStringList(String name) {
+    public static JcrProperty<List<String>> ofStringList(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getValues(node.getProperty(name).getValues(), Value::getString),
                 setValues(name, FROM_STRING));
     }
 
-    public static JcrPropertyImpl<Optional<List<String>>> ofStringListOption(String name) {
+    public static JcrProperty<Optional<List<String>>> ofStringListOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, p -> getValues(p.getValues(), Value::getString)),
@@ -45,28 +45,28 @@ public final class JcrPropertyFactory {
     }
 
 
-    public static JcrPropertyImpl<Long> ofLong(String name) {
+    public static JcrProperty<Long> ofLong(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> node.getProperty(name).getLong(),
                 (n, v) -> n.setProperty(name, v));
     }
 
-    public static JcrPropertyImpl<Optional<Long>> ofLongOption(String name) {
+    public static JcrProperty<Optional<Long>> ofLongOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, Property::getLong),
                 setOption(name, FROM_LONG));
     }
 
-    public static JcrPropertyImpl<List<Long>> ofLongList(String name) {
+    public static JcrProperty<List<Long>> ofLongList(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getValues(node.getProperty(name).getValues(), Value::getLong),
                 setValues(name, FROM_LONG));
     }
 
-    public static JcrPropertyImpl<Optional<List<Long>>> ofLongListOption(String name) {
+    public static JcrProperty<Optional<List<Long>>> ofLongListOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, p -> getValues(p.getValues(), Value::getLong)),
@@ -75,28 +75,28 @@ public final class JcrPropertyFactory {
     }
 
 
-    public static JcrPropertyImpl<Boolean> ofBoolean(String name) {
+    public static JcrProperty<Boolean> ofBoolean(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> node.getProperty(name).getBoolean(),
                 (n, v) -> n.setProperty(name, v));
     }
 
-    public static JcrPropertyImpl<Optional<Boolean>> ofBooleanOption(String name) {
+    public static JcrProperty<Optional<Boolean>> ofBooleanOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, Property::getBoolean),
                 setOption(name, FROM_BOOLEAN));
     }
 
-    public static JcrPropertyImpl<List<Boolean>> ofBooleanList(String name) {
+    public static JcrProperty<List<Boolean>> ofBooleanList(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getValues(node.getProperty(name).getValues(), Value::getBoolean),
                 setValues(name, FROM_BOOLEAN));
     }
 
-    public static JcrPropertyImpl<Optional<List<Boolean>>> ofBooleanListOption(String name) {
+    public static JcrProperty<Optional<List<Boolean>>> ofBooleanListOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, p -> getValues(p.getValues(), Value::getBoolean)),
@@ -105,7 +105,7 @@ public final class JcrPropertyFactory {
     }
 
 
-    public static JcrPropertyImpl<Instant> ofInstant(String name) {
+    public static JcrProperty<Instant> ofInstant(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> node.getProperty(name).getDate().toInstant(),
@@ -117,21 +117,21 @@ public final class JcrPropertyFactory {
                 });
     }
 
-    public static JcrPropertyImpl<Optional<Instant>> ofInstantOption(String name) {
+    public static JcrProperty<Optional<Instant>> ofInstantOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, p -> p.getDate().toInstant()),
                 setOption(name, FROM_INSTANT));
     }
 
-    public static JcrPropertyImpl<List<Instant>> ofInstantList(String name) {
+    public static JcrProperty<List<Instant>> ofInstantList(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getValues(node.getProperty(name).getValues(), v -> v.getDate().toInstant()),
                 setValues(name, FROM_INSTANT));
     }
 
-    public static JcrPropertyImpl<Optional<List<Instant>>> ofInstantListOption(String name) {
+    public static JcrProperty<Optional<List<Instant>>> ofInstantListOption(String name) {
         return new JcrPropertyImpl<>(
                 name,
                 node -> getOption(node, name, p -> getValues(p.getValues(), v -> v.getDate().toInstant())),
