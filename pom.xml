@@ -55,12 +55,10 @@
         <url>https://travis-ci.org/${github.account.name}/jcr-ops</url>
     </ciManagement>
 
+
     <modules>
-        <module>validation-api</module>
         <module>jcr-api</module>
-        <module>validation-impl</module>
         <module>jcr-impl</module>
-        <module>content-repository</module>
     </modules>
 
 
