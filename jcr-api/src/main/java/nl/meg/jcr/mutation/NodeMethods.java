@@ -1,9 +1,10 @@
 package nl.meg.jcr.mutation;
 
-import aQute.bnd.annotation.ProviderType;
-import nl.meg.jcr.HippoNode;
-
 import java.util.function.Function;
+
+import org.osgi.annotation.versioning.ProviderType;
+
+import nl.meg.jcr.HippoNode;
 
 @ProviderType
 public interface NodeMethods {

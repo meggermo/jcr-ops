@@ -1,10 +1,12 @@
 package nl.meg.jcr;
 
-import aQute.bnd.annotation.ProviderType;
 
-import javax.jcr.Property;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.jcr.Property;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface HippoProperty extends HippoItem<Property> {

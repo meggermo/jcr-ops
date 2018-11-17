@@ -1,6 +1,8 @@
 package nl.meg.jcr.traversal;
 
-import aQute.bnd.annotation.ProviderType;
+
+import org.osgi.annotation.versioning.ProviderType;
+
 import nl.meg.jcr.HippoNode;
 
 @ProviderType

@@ -1,6 +1,7 @@
 package nl.meg.validation;
 
-import aQute.bnd.annotation.ConsumerType;
+
+import org.osgi.annotation.versioning.ConsumerType;
 
 @ConsumerType
 public interface Validator<T> {

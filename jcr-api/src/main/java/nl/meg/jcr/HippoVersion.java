@@ -1,11 +1,13 @@
 package nl.meg.jcr;
 
-import aQute.bnd.annotation.ProviderType;
 
-import javax.jcr.version.Version;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.jcr.version.Version;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface HippoVersion extends HippoItem<Version> {

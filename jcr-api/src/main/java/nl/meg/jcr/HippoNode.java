@@ -1,13 +1,14 @@
 package nl.meg.jcr;
 
 
-import aQute.bnd.annotation.ProviderType;
-
-import javax.jcr.Node;
-import javax.jcr.nodetype.NodeType;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import javax.jcr.Node;
+import javax.jcr.nodetype.NodeType;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface HippoNode extends HippoItem<Node> {

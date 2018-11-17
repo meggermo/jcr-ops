@@ -1,8 +1,9 @@
 package nl.meg.validation;
 
-import aQute.bnd.annotation.ProviderType;
 
 import java.util.function.Predicate;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface ValidatorBuilder<S> {

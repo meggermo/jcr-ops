@@ -1,13 +1,15 @@
 package nl.meg.jcr;
 
-import aQute.bnd.annotation.ProviderType;
+
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.LabelExistsVersionException;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
-import java.util.Optional;
-import java.util.stream.Stream;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface HippoVersionHistory extends HippoItem<VersionHistory> {

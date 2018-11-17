@@ -1,10 +1,12 @@
 package nl.meg.jcr;
 
-import aQute.bnd.annotation.ProviderType;
 
-import javax.jcr.Node;
 import java.util.Calendar;
 import java.util.function.Supplier;
+
+import javax.jcr.Node;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface MutableHippoNode extends Supplier<Node> {

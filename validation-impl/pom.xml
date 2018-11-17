@@ -21,6 +21,10 @@
             <groupId>nl.meg</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.versioning</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

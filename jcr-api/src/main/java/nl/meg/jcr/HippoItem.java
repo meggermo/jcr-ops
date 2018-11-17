@@ -1,11 +1,13 @@
 package nl.meg.jcr;
 
-import aQute.bnd.annotation.ProviderType;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.jcr.Item;
 import javax.jcr.Session;
-import java.util.Optional;
-import java.util.function.Supplier;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface HippoItem<E extends Item> extends Supplier<E> {

@@ -1,10 +1,11 @@
 package nl.meg.jcr.predicate;
 
-import aQute.bnd.annotation.ProviderType;
-import nl.meg.jcr.HippoValue;
-
 import java.util.Calendar;
 import java.util.function.Predicate;
+
+import org.osgi.annotation.versioning.ProviderType;
+
+import nl.meg.jcr.HippoValue;
 
 @ProviderType
 public interface ValuePredicates {

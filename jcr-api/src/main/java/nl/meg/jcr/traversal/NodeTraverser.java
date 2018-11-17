@@ -1,8 +1,9 @@
 package nl.meg.jcr.traversal;
 
-import aQute.bnd.annotation.ProviderType;
 
 import java.util.stream.Stream;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface NodeTraverser<T> {

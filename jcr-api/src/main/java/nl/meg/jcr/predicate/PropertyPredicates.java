@@ -1,11 +1,12 @@
 package nl.meg.jcr.predicate;
 
 
-import aQute.bnd.annotation.ProviderType;
+import java.util.function.Predicate;
+
+import org.osgi.annotation.versioning.ProviderType;
+
 import nl.meg.jcr.HippoProperty;
 import nl.meg.jcr.HippoValue;
-
-import java.util.function.Predicate;
 
 @ProviderType
 public interface PropertyPredicates {

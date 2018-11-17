@@ -18,8 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>biz.aQute.bnd</groupId>
-            <artifactId>annotation</artifactId>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.versioning</artifactId>
         </dependency>
     </dependencies>
 

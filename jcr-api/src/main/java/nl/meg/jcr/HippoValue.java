@@ -1,12 +1,14 @@
 package nl.meg.jcr;
 
-import aQute.bnd.annotation.ProviderType;
 
-import javax.jcr.Binary;
-import javax.jcr.Value;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.function.Supplier;
+
+import javax.jcr.Binary;
+import javax.jcr.Value;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
 public interface HippoValue extends Supplier<Value> {
