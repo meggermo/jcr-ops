@@ -1,4 +1,4 @@
-package nl.meg.jcr.function.internal;
+package nl.meg.jcr.store.internal;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
@@ -16,7 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import nl.meg.jcr.function.JcrFunction;
-import nl.meg.jcr.function.JcrStore;
+import nl.meg.jcr.store.JcrStore;
+import nl.meg.jcr.store.internal.JcrStoreImpl;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

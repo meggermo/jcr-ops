@@ -1,4 +1,4 @@
-package nl.meg.jcr.function.internal;
+package nl.meg.jcr.store.internal;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
@@ -16,7 +16,7 @@ import javax.jcr.version.VersionException;
 import nl.meg.jcr.function.JcrEither;
 import nl.meg.jcr.function.JcrFunction;
 import nl.meg.jcr.function.JcrResult;
-import nl.meg.jcr.function.JcrStore;
+import nl.meg.jcr.store.JcrStore;
 
 public final class JcrStoreImpl implements JcrStore {
 

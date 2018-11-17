@@ -1,4 +1,4 @@
-package nl.meg.jcr.function;
+package nl.meg.jcr.store;
 
 import java.util.Collection;
 

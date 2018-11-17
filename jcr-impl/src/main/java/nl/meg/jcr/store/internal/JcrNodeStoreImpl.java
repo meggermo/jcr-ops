@@ -1,4 +1,4 @@
-package nl.meg.jcr.function.internal;
+package nl.meg.jcr.store.internal;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
@@ -6,9 +6,9 @@ import javax.jcr.RepositoryException;
 
 import nl.meg.jcr.function.JcrEither;
 import nl.meg.jcr.function.JcrFunction;
-import nl.meg.jcr.function.JcrNode;
-import nl.meg.jcr.function.JcrNodeStore;
-import nl.meg.jcr.function.JcrStore;
+import nl.meg.jcr.store.JcrNode;
+import nl.meg.jcr.store.JcrNodeStore;
+import nl.meg.jcr.store.JcrStore;
 
 public class JcrNodeStoreImpl implements JcrNodeStore {
 

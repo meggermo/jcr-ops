@@ -1,4 +1,4 @@
-package nl.meg.jcr.function;
+package nl.meg.jcr.store.internal;
 
 
 import java.time.Instant;
@@ -11,6 +11,10 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
+
+import nl.meg.jcr.function.JcrBiFunction;
+import nl.meg.jcr.function.JcrFunction;
+import nl.meg.jcr.store.JcrProperty;
 
 public final class JcrPropertyFactory {
 
@@ -204,7 +208,7 @@ public final class JcrPropertyFactory {
         };
     }
 
-    private static final class JcrPropertyImpl<V> implements nl.meg.jcr.function.JcrProperty<V> {
+    private static final class JcrPropertyImpl<V> implements JcrProperty<V> {
 
         private final String name;
         private final JcrFunction<Node, V> valueGetter;
@@ -231,7 +235,7 @@ public final class JcrPropertyFactory {
 
         @Override
         public String toString() {
-            return nl.meg.jcr.function.JcrProperty.class.getSimpleName() +
+            return JcrProperty.class.getSimpleName() +
                     "[" + "name=" + name + "]";
         }
 

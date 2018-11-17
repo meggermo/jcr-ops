@@ -1,4 +1,4 @@
-package nl.meg.jcr.function.internal;
+package nl.meg.jcr.store.internal;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
@@ -17,9 +17,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import nl.meg.AbstractMockitoTest;
-import nl.meg.jcr.function.JcrNodeStore;
-import nl.meg.jcr.function.JcrProperty;
-import nl.meg.jcr.function.JcrPropertyFactory;
+import nl.meg.jcr.store.JcrNodeStore;
+import nl.meg.jcr.store.JcrProperty;
+import nl.meg.jcr.store.internal.AbstractJcrNode;
+import nl.meg.jcr.store.internal.JcrNodeStoreImpl;
+import nl.meg.jcr.store.internal.JcrPropertyFactory;
+import nl.meg.jcr.store.internal.JcrStoreImpl;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

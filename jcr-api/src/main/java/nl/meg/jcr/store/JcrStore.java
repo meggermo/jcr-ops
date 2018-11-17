@@ -1,8 +1,11 @@
-package nl.meg.jcr.function;
+package nl.meg.jcr.store;
 
 import javax.jcr.Credentials;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+
+import nl.meg.jcr.function.JcrEither;
+import nl.meg.jcr.function.JcrFunction;
 
 public interface JcrStore {
 

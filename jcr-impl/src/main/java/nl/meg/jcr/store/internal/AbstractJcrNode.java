@@ -1,4 +1,4 @@
-package nl.meg.jcr.function.internal;
+package nl.meg.jcr.store.internal;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -9,9 +9,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import nl.meg.jcr.function.JcrNode;
-import nl.meg.jcr.function.JcrProperty;
-import nl.meg.jcr.function.JcrPropertyFactory;
+import nl.meg.jcr.store.JcrNode;
+import nl.meg.jcr.store.JcrProperty;
 
 public class AbstractJcrNode implements JcrNode {
 

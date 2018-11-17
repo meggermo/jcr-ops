@@ -1,4 +1,4 @@
-package nl.meg.jcr.function.internal;
+package nl.meg.jcr.store.internal;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,10 +6,10 @@ import java.util.Optional;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import nl.meg.jcr.function.JcrProperty;
-import static nl.meg.jcr.function.JcrPropertyFactory.ofLongOption;
-import static nl.meg.jcr.function.JcrPropertyFactory.ofString;
-import static nl.meg.jcr.function.JcrPropertyFactory.ofStringListOption;
+import nl.meg.jcr.store.JcrProperty;
+import static nl.meg.jcr.store.internal.JcrPropertyFactory.ofLongOption;
+import static nl.meg.jcr.store.internal.JcrPropertyFactory.ofString;
+import static nl.meg.jcr.store.internal.JcrPropertyFactory.ofStringListOption;
 
 public final class ControlNode {
 
