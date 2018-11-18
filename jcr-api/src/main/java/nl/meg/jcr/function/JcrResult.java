@@ -48,8 +48,8 @@ public final class JcrResult<C, R> {
         return switchContext((c, r) -> f.apply(r), contextCloser);
     }
 
-    public JcrResult<?, R> closeContext(Consumer<C> contextCloser) {
-        return switchContext(r -> r, contextCloser);
+    public JcrResult<Void, R> closeContext(Consumer<C> contextCloser) {
+        return switchContext(r -> null, contextCloser);
     }
 
 
