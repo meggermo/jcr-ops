@@ -43,6 +43,8 @@ public abstract class JcrEither<L, R> {
         return f.apply(this);
     }
 
+    private JcrEither() {
+    }
 
     private static final class Left<L, R> extends JcrEither<L, R> {
 
