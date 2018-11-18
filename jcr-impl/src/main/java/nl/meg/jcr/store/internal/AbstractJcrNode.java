@@ -14,13 +14,13 @@ import nl.meg.jcr.store.JcrProperty;
 
 public abstract class AbstractJcrNode implements JcrNode {
 
-    private static final JcrProperty<Optional<Long>> VERSION = JcrPropertyFactory.ofLongOption("version");
+    private static final JcrProperty<Optional<Long>> VERSION_PROPERTY = JcrPropertyFactory.ofLongOption("version");
     private final AtomicLong version;
     private final String absPath;
 
     public AbstractJcrNode(Node node) throws RepositoryException {
         this.absPath = node.getPath();
-        this.version = new AtomicLong(VERSION.getValue(node).orElse(0L));
+        this.version = new AtomicLong(VERSION_PROPERTY.getValue(node).orElse(0L));
     }
 
     @Override
@@ -35,8 +35,8 @@ public abstract class AbstractJcrNode implements JcrNode {
 
     @Override
     public final JcrNode writeValues(Node node) throws RepositoryException {
-        if (version.compareAndSet(VERSION.getValue(node).orElse(0L), version.get() + 1)) {
-            VERSION.setValue(node, Optional.of(version.get()));
+        if (version.compareAndSet(VERSION_PROPERTY.getValue(node).orElse(0L), version.get() + 1)) {
+            VERSION_PROPERTY.setValue(node, Optional.of(version.get()));
             for (JcrNode n : getNodes()) {
                 writeValues(node.getNode(n.getAbsPath()));
             }
