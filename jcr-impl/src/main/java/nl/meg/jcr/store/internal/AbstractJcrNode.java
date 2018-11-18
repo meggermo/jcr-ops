@@ -12,7 +12,7 @@ import javax.jcr.RepositoryException;
 import nl.meg.jcr.store.JcrNode;
 import nl.meg.jcr.store.JcrProperty;
 
-public class AbstractJcrNode implements JcrNode {
+public abstract class AbstractJcrNode implements JcrNode {
 
     private static final JcrProperty<Optional<Long>> VERSION = JcrPropertyFactory.ofLongOption("version");
     private final AtomicLong version;
@@ -29,7 +29,7 @@ public class AbstractJcrNode implements JcrNode {
     }
 
     @Override
-    public final Collection<JcrNode> getNodes() {
+    public Collection<JcrNode> getNodes() {
         return Collections.emptyList();
     }
 
@@ -42,12 +42,11 @@ public class AbstractJcrNode implements JcrNode {
             }
             doWriteValues(node);
         } else {
-            throw new ConcurrentModificationException(String.format("Node at path %s was concurrently modified", absPath));
+            final String message = String.format("Node at path %s was concurrently modified", absPath);
+            throw new ConcurrentModificationException(message);
         }
         return this;
     }
 
-    protected void doWriteValues(Node node) throws RepositoryException {
-
-    }
+    protected abstract void doWriteValues(Node node) throws RepositoryException;
 }

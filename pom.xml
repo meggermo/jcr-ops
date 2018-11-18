@@ -1,142 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.github.meggermo.maven</groupId>
-        <artifactId>maven.pom.root</artifactId>
-        <version>1.0.5</version>
-    </parent>
+  <parent>
+    <groupId>com.github.meggermo.maven</groupId>
+    <artifactId>maven.pom.root</artifactId>
+    <version>1.0.5</version>
+  </parent>
 
-    <groupId>nl.meg</groupId>
-    <artifactId>jcr-ops</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0.4-SNAPSHOT</version>
+  <groupId>nl.meg</groupId>
+  <artifactId>jcr-ops</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.4-SNAPSHOT</version>
 
-    <description>
-        Functional immutable operations on the The Content repository API for Java.
-    </description>
-    <inceptionYear>2014</inceptionYear>
+  <description>
+    Functional immutable operations on the The Content repository API for Java.
+  </description>
+  <inceptionYear>2014</inceptionYear>
+  <url>https://${github.host}/${project.artifactId}</url>
+
+  <scm>
     <url>https://${github.host}/${project.artifactId}</url>
+    <connection>scm:https://${github.host}/${project.artifactId}</connection>
+    <developerConnection>scm:git:ssh://git@${github.host}/jcr-ops</developerConnection>
+  </scm>
+  <issueManagement>
+    <url>https://${github.host}/jcr-ops/issues</url>
+    <system>github</system>
+  </issueManagement>
 
-    <scm>
-        <url>https://${github.host}/${project.artifactId}</url>
-        <connection>scm:https://${github.host}/${project.artifactId}</connection>
-        <developerConnection>scm:git:ssh://git@${github.host}/jcr-ops</developerConnection>
-    </scm>
-    <issueManagement>
-        <url>https://${github.host}/jcr-ops/issues</url>
-        <system>github</system>
-    </issueManagement>
+  <organization>
+    <name>${github.account.name}</name>
+    <url>https://${github.host}</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>${github.account.name}</id>
+      <name>Michiel Eggermont</name>
+      <email>michiel.eggermont@gmail.com</email>
+      <url>https://${github.host}</url>
+    </developer>
+  </developers>
 
-    <organization>
-        <name>${github.account.name}</name>
-        <url>https://${github.host}</url>
-    </organization>
-    <developers>
-        <developer>
-            <id>${github.account.name}</id>
-            <name>Michiel Eggermont</name>
-            <email>michiel.eggermont@gmail.com</email>
-            <url>https://${github.host}</url>
-        </developer>
-    </developers>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://raw.githubusercontent.com/${github.account.name}/jcr-ops/master/LICENSE.txt</url>
+    </license>
+  </licenses>
 
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>https://raw.githubusercontent.com/${github.account.name}/jcr-ops/master/LICENSE.txt</url>
-        </license>
-    </licenses>
-
-    <ciManagement>
-        <system>Travis</system>
-        <url>https://travis-ci.org/${github.account.name}/jcr-ops</url>
-    </ciManagement>
+  <ciManagement>
+    <system>Travis</system>
+    <url>https://travis-ci.org/${github.account.name}/jcr-ops</url>
+  </ciManagement>
 
 
-    <modules>
-        <module>jcr-api</module>
-        <module>jcr-impl</module>
-    </modules>
+  <modules>
+    <module>jcr-api</module>
+    <module>jcr-impl</module>
+  </modules>
 
 
-    <properties>
-        <!-- Library versions -->
-        <jcr.version>2.0</jcr.version>
-    </properties>
+  <properties>
+    <!-- Library versions -->
+    <jcr.version>2.0</jcr.version>
+  </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>javax.jcr</groupId>
-                <artifactId>jcr</artifactId>
-                <version>${jcr.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>nl.meg</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>nl.meg</groupId>
-                <artifactId>validation-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>nl.meg</groupId>
-                <artifactId>jcr-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>nl.meg</groupId>
-                <artifactId>jcr-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.service.component.annotations</artifactId>
-                <version>1.4.0</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.annotation.versioning</artifactId>
-                <version>1.1.0</version>
-                <scope>provided</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
+  <dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-        </dependency>
+      <dependency>
+        <groupId>javax.jcr</groupId>
+        <artifactId>jcr</artifactId>
+        <version>${jcr.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>nl.meg</groupId>
+        <artifactId>jcr-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>nl.meg</groupId>
+        <artifactId>jcr-impl</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.component.annotations</artifactId>
+        <version>1.4.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.annotation.versioning</artifactId>
+        <version>1.1.0</version>
+        <scope>provided</scope>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
-    <repositories>
-        <repository>
-            <id>github</id>
-            <name>Github repository for pom files only</name>
-            <url>https://raw.githubusercontent.com/meggermo/maven.pom.root/master</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-    </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>github</id>
+      <name>Github repository for pom files only</name>
+      <url>https://raw.githubusercontent.com/meggermo/maven.pom.root/master</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>ignore</checksumPolicy>
+      </releases>
+    </repository>
+  </repositories>
 
 </project>

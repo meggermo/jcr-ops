@@ -1,5 +1,10 @@
 package nl.meg.jcr.store.internal;
 
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+
 import javax.jcr.Credentials;
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -19,10 +24,7 @@ import org.mockito.Mockito;
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.store.JcrNodeStore;
 import nl.meg.jcr.store.JcrProperty;
-import nl.meg.jcr.store.internal.AbstractJcrNode;
-import nl.meg.jcr.store.internal.JcrNodeStoreImpl;
-import nl.meg.jcr.store.internal.JcrPropertyFactory;
-import nl.meg.jcr.store.internal.JcrStoreImpl;
+import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -61,6 +63,9 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
         when(nodeMock.getProperty("enabled")).thenReturn(propertyMock);
         when(propertyMock.getBoolean()).thenReturn(true);
 
+        when(nodeMock.getProperty("modifiedAt")).thenReturn(propertyMock);
+        when(propertyMock.getDate()).thenReturn(Calendar.getInstance());
+
         when(nodeMock.hasProperty("version")).thenReturn(false);
         when(valeuFactoryMock.createValue(1L)).thenReturn(valueMock);
 
@@ -82,9 +87,17 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
         private static final JcrProperty<Boolean> ENABLED = JcrPropertyFactory.ofBoolean("enabled");
         private boolean enabled;
 
+        private static final JcrProperty<Instant> MODIFIED_AT = JcrPropertyFactory.ofInstant("modifiedAt");
+        private Instant modifiedAt;
+
+        private static final JcrProperty<Optional<List<String>>> URLS = JcrPropertyFactory.ofStringListOption("urls");
+        private List<String> urls;
+
         public EnabledNode(final Node node) throws RepositoryException {
             super(node);
             this.enabled = ENABLED.getValue(node);
+            this.modifiedAt = MODIFIED_AT.getValue(node);
+            this.urls = URLS.getValue(node).orElse(emptyList());
         }
 
         public boolean isEnabled() {
@@ -95,10 +108,27 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
             this.enabled = enabled;
         }
 
+        public Instant getModifiedAt() {
+            return modifiedAt;
+        }
+
+        public void setModifiedAt(final Instant modifiedAt) {
+            this.modifiedAt = modifiedAt;
+        }
+
+        public List<String> getUrls() {
+            return urls;
+        }
+
+        public void setUrls(final List<String> urls) {
+            this.urls = urls;
+        }
+
         @Override
         protected void doWriteValues(final Node node) throws RepositoryException {
-            super.doWriteValues(node);
             ENABLED.setValue(node, enabled);
+            MODIFIED_AT.setValue(node, modifiedAt);
+            URLS.setValue(node, urls.isEmpty() ? Optional.empty() : Optional.of(urls));
         }
     }
 

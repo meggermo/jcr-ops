@@ -14,10 +14,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>nl.meg</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.jcr</groupId>
             <artifactId>jcr</artifactId>
         </dependency>

@@ -25,20 +25,16 @@ public abstract class JcrEither<L, R> {
     public final <X> X either(JcrFunction<L, X> f, JcrFunction<R, X> g) throws RepositoryException {
         if (isLeft()) {
             return f.apply(fromLeft());
-        }
-        if (isRight()) {
+        } else {
             return g.apply(fromRight());
         }
-        throw new UnsupportedOperationException("there are no values to map");
     }
 
     public final void eitherAccept(Consumer<L> f, Consumer<R> g) {
         if (isLeft()) {
             f.accept(fromLeft());
-        } else if (isRight()) {
-            g.accept(fromRight());
         } else {
-            throw new UnsupportedOperationException("there are no values to map");
+            g.accept(fromRight());
         }
     }
 

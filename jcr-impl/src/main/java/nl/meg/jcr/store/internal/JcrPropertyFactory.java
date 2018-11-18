@@ -18,6 +18,9 @@ import nl.meg.jcr.store.JcrProperty;
 
 public final class JcrPropertyFactory {
 
+    private JcrPropertyFactory() {
+    }
+
     public static JcrProperty<String> ofString(String name) {
         return new JcrPropertyImpl<>(
                 name,

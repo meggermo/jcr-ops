@@ -55,7 +55,7 @@ public class JcrResultTest {
                 })
                 .switchContext(b -> b, c -> {
                 })
-                .andThen((s, b) -> s.length())
+                .andThen(String::length)
                 .andThen((s, i) -> 2L * i)
                 .andCall(System.out::println)
                 .closeContext(s -> {
