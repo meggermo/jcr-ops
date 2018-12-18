@@ -5,20 +5,21 @@
     <parent>
         <artifactId>jcr-ops</artifactId>
         <groupId>nl.meg</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
 
     <artifactId>jcr-api</artifactId>
+    <name>${project.artifactId}</name>
     <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>nl.meg</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.jcr</groupId>
             <artifactId>jcr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.versioning</artifactId>
         </dependency>
     </dependencies>
 
@@ -30,7 +31,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>nl.meg.jcr.*</Export-Package>
+                        <Export-Package>nl.meg.jcr.*;provide:=true</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
