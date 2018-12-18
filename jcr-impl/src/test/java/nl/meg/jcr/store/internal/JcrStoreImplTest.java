@@ -9,25 +9,22 @@ import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.version.VersionException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import nl.meg.jcr.function.JcrFunction;
 import nl.meg.jcr.store.JcrStore;
-import nl.meg.jcr.store.internal.JcrStoreImpl;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JcrStoreImplTest {
 
     private final Credentials credentials = new SimpleCredentials("userID", "password".toCharArray());
@@ -43,7 +40,7 @@ public class JcrStoreImplTest {
     @Mock
     private Property propertyMock;
 
-    @Before
+    @BeforeEach
     public void setUp() throws RepositoryException {
         jcrStore = new JcrStoreImpl(repositoryMock, workspace);
     }
@@ -53,7 +50,7 @@ public class JcrStoreImplTest {
         when(repositoryMock.login(credentials, workspace)).thenReturn(sessionMock);
         jcrStore.read(credentials, session -> 10L).eitherAccept(
                 e -> fail("did not expect this: " + e),
-                r -> assertThat(r, is(10L))
+                r -> assertThat(r).isEqualTo(10L)
         );
     }
 
@@ -77,7 +74,7 @@ public class JcrStoreImplTest {
                 };
         jcrStore.write(credentials, task).eitherAccept(
                 e -> fail("did not expect this: " + e),
-                p -> assertThat(p, is(propertyMock))
+                p -> assertThat(p).isEqualTo(propertyMock)
         );
 
         verify(sessionMock, times(1)).refresh(true);
@@ -94,7 +91,7 @@ public class JcrStoreImplTest {
         doThrow(new VersionException()).when(sessionMock).save();
 
         jcrStore.write(credentials, session -> "TEST").eitherAccept(
-                e -> assertThat(e, instanceOf(VersionException.class)),
+                e -> assertThat(e).isInstanceOf(VersionException.class),
                 x -> fail("did not expect this: " + x)
         );
 
@@ -111,7 +108,7 @@ public class JcrStoreImplTest {
 
         jcrStore.write(credentials, session -> "TEST").eitherAccept(
                 e -> fail("did not expect this: " + e),
-                s -> assertThat(s, is("TEST"))
+                s -> assertThat(s).isEqualTo("TEST")
         );
 
         verify(sessionMock, times(0)).save();

@@ -16,8 +16,8 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -25,6 +25,7 @@ import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.store.JcrNodeStore;
 import nl.meg.jcr.store.JcrProperty;
 import static java.util.Collections.emptyList;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +48,7 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
     @Mock
     private Value valueMock;
 
-    @Before
+    @BeforeEach
     public void setUp() throws RepositoryException {
         store = new JcrNodeStoreImpl(new JcrStoreImpl(repositoryMock, "ws"));
         when(repositoryMock.login(credentials, "ws")).thenReturn(sessionMock);
@@ -60,10 +61,10 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
     @Test
     public void testLoadAndWrite() throws RepositoryException {
 
-        when(nodeMock.getProperty("enabled")).thenReturn(propertyMock);
+        doReturn(propertyMock).when(nodeMock).getProperty("enabled");
         when(propertyMock.getBoolean()).thenReturn(true);
 
-        when(nodeMock.getProperty("modifiedAt")).thenReturn(propertyMock);
+        doReturn(propertyMock).when(nodeMock).getProperty("modifiedAt");
         when(propertyMock.getDate()).thenReturn(Calendar.getInstance());
 
         when(nodeMock.hasProperty("version")).thenReturn(false);
