@@ -13,13 +13,14 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import nl.meg.AbstractMockitoTest;
 import nl.meg.jcr.store.JcrProperty;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -74,8 +75,8 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
 
         when(nodeMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
-        when(valueFactoryMock.createValue(true)).thenReturn(valueMock);
-        when(valueFactoryMock.createValue(false)).thenReturn(valueMock);
+        doReturn(valueMock).when(valueFactoryMock).createValue(true);
+        doReturn(valueMock).when(valueFactoryMock).createValue(false);
 
         p.setValue(nodeMock, Arrays.asList(true, false));
     }
@@ -150,8 +151,9 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
 
         when(nodeMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
-        when(valueFactoryMock.createValue(10L)).thenReturn(valueMock);
-        when(valueFactoryMock.createValue(20L)).thenReturn(valueMock);
+
+        doReturn(valueMock).when(valueFactoryMock).createValue(10L);
+        doReturn(valueMock).when(valueFactoryMock).createValue(20L);
         p.setValue(nodeMock, Arrays.asList(10L, 20L));
 
         verify(nodeMock).setProperty(Mockito.eq("test"), Mockito.<Value[]>any());
@@ -222,8 +224,9 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
 
         when(nodeMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
-        when(valueFactoryMock.createValue("x")).thenReturn(valueMock);
-        when(valueFactoryMock.createValue("y")).thenReturn(valueMock);
+        doReturn(valueMock).when(valueFactoryMock).createValue("x");
+        doReturn(valueMock).when(valueFactoryMock).createValue("y");
+
         p.setValue(nodeMock, Arrays.asList("x", "y"));
 
         verify(nodeMock).setProperty(Mockito.eq("test"), Mockito.<Value[]>any());
@@ -264,8 +267,8 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
 
         when(nodeMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
-        when(valueFactoryMock.createValue("x")).thenReturn(valueMock);
-        when(valueFactoryMock.createValue("y")).thenReturn(valueMock);
+        doReturn(valueMock).when(valueFactoryMock).createValue("x");
+        doReturn(valueMock).when(valueFactoryMock).createValue("y");
         p.setValue(nodeMock, Optional.of(Arrays.asList("x", "y")));
 
         verify(nodeMock).setProperty(Mockito.eq("test"), Mockito.<Value[]>any());
@@ -307,8 +310,8 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
 
         when(nodeMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
-        when(valueFactoryMock.createValue(c1)).thenReturn(valueMock);
-        when(valueFactoryMock.createValue(c2)).thenReturn(valueMock);
+        doReturn(valueMock).when(valueFactoryMock).createValue(c1);
+        doReturn(valueMock).when(valueFactoryMock).createValue(c2);
         p.setValue(nodeMock, Arrays.asList(c1.toInstant(), c2.toInstant()));
 
         verify(nodeMock).setProperty(Mockito.eq("test"), Mockito.<Value[]>any());

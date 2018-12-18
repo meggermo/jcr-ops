@@ -10,7 +10,7 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import nl.meg.AbstractMockitoTest;

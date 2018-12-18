@@ -4,7 +4,7 @@ import java.time.Instant;
 
 import javax.jcr.RepositoryException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
