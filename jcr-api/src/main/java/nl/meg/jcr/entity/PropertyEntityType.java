@@ -12,5 +12,11 @@ public enum PropertyEntityType {
 
     LONG,
 
-    STRING
+    PATH,
+
+    STRING,
+
+    URI,
+
+    UNSUPPORTED
 }

@@ -32,7 +32,6 @@ class TypesReaderTest extends AbstractMockitoTest {
         doReturn(nt0).when(node).getPrimaryNodeType();
         when(nt0.getSupertypes()).thenReturn(new NodeType[]{nt1, this.nt2});
         when(nt1.getSupertypes()).thenReturn(new NodeType[]{nt3});
-        when(this.nt2.getSupertypes()).thenReturn(new NodeType[0]);
         when(nt3.getSupertypes()).thenReturn(new NodeType[0]);
 
         doReturn("nt0").when(nt0).getName();

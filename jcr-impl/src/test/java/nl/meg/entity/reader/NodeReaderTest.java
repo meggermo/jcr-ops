@@ -1,5 +1,7 @@
 package nl.meg.entity.reader;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -9,6 +11,7 @@ import java.util.stream.Stream;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
+import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
@@ -21,6 +24,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 import nl.meg.AbstractOakIntegrationTest;
@@ -44,7 +48,7 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
                 "<'nt'='http://www.jcp.org/jcr/nt/1.0'>\n" +
                 "<'jcr'='http://www.jcp.org/jcr/1.0'>\n" +
                 "<'mix'='http://www.jcp.org/jcr/mix/1.0'>\n" +
-                "[hippo:basedocument] > nt:unstructured\n" +
+                "[hippo:basedocument] > nt:unstructured, mix:referenceable\n" +
                 "[hippo:blogdocument] > hippo:basedocument\n";
         loadCnd(cnd);
     }
@@ -54,7 +58,12 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
 
         final Session session = getAdminSession();
         final Node test = session.getRootNode().addNode("test", "hippo:blogdocument");
-        test.setProperty("x", "y");
+        test.setProperty("x", new String[]{"y", "Z"}, PropertyType.PATH);
+        test.setProperty("y", 1);
+        test.setProperty("z", true);
+        test.setProperty("a", BigDecimal.TEN);
+        test.setProperty("b", 1.0);
+        test.setProperty("c", Calendar.getInstance());
         session.save();
 
 
@@ -64,10 +73,13 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
         final NodeEntity nodeEntity = nodeReader.apply(getAdminSession().getRootNode());
         final ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new JaxbAnnotationModule())
+                .registerModule(new JavaTimeModule())
                 .configure(MapperFeature.USE_WRAPPER_NAME_AS_PROPERTY_NAME, true)
                 .enable(SerializationFeature.INDENT_OUTPUT)
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        System.out.println(objectMapper.writeValueAsString(nodeEntity));
+        getLogger().info("{}", objectMapper.writeValueAsString(nodeEntity));
     }
 
     private Function<Node, List<NodeEntity>> createNodesReader(final NodeReader nodeReader) {

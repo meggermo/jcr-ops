@@ -20,7 +20,7 @@ public class JcrPrefixFilter implements Predicate<String> {
 
     private Set<String> namespacePrefixes;
 
-    public JcrPrefixFilter(final Set<String> namespacePrefixes) {
+    public JcrPrefixFilter(Set<String> namespacePrefixes) {
         Objects.requireNonNull(namespacePrefixes);
         this.namespacePrefixes = namespacePrefixes;
     }

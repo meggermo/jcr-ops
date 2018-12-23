@@ -24,7 +24,6 @@ public class TypesReader implements Function<Node, List<String>> {
     public List<String> apply(final Node node) {
         try {
             return flatten(node.getPrimaryNodeType())
-                    .filter(filter)
                     .map(NodeType::getName)
                     .collect(Collectors.toList());
         } catch (RepositoryException e) {
@@ -32,10 +31,13 @@ public class TypesReader implements Function<Node, List<String>> {
         }
     }
 
-    private static Stream<NodeType> flatten(NodeType nodeType) {
+    private Stream<NodeType> flatten(NodeType nodeType) {
         return Stream.concat(
-                Stream.of(nodeType),
-                Stream.of(nodeType.getSupertypes()).flatMap(TypesReader::flatten)
+                Stream.of(nodeType)
+                        .filter(filter),
+                Stream.of(nodeType.getSupertypes())
+                        .filter(filter)
+                        .flatMap(this::flatten)
         );
     }
 }

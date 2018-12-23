@@ -69,6 +69,7 @@
     <jackrabbit-oak.version>1.8.9</jackrabbit-oak.version>
     <jackson.version>2.9.8</jackson.version>
     <immutable.version>2.7.3</immutable.version>
+    <log4j.version>2.11.1</log4j.version>
   </properties>
 
 
@@ -79,6 +80,22 @@
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
         <version>${junit5.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- Jackson -->
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- log4j -->
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-bom</artifactId>
+        <version>${log4j.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -108,13 +125,6 @@
         <groupId>nl.meg</groupId>
         <artifactId>jcr-impl</artifactId>
         <version>${project.version}</version>
-      </dependency>
-
-      <!-- Jackson -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-        <artifactId>jackson-dataformat-xml</artifactId>
-        <version>${jackson.version}</version>
       </dependency>
 
       <!-- Immutable -->

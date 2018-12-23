@@ -18,6 +18,28 @@ import nl.meg.jcr.function.JcrFunction;
 
 public class PropertyReader implements Function<Property, PropertyEntity<?>> {
 
+    private static final PropertyEntityType[] MAP;
+
+    static {
+        MAP = new PropertyEntityType[PropertyType.DECIMAL + 1];
+
+        MAP[PropertyType.BOOLEAN] = PropertyEntityType.BOOLEAN;
+        MAP[PropertyType.DATE] = PropertyEntityType.DATE;
+        MAP[PropertyType.DECIMAL] = PropertyEntityType.BIGDECIMAL;
+        MAP[PropertyType.DOUBLE] = PropertyEntityType.DOUBLE;
+        MAP[PropertyType.LONG] = PropertyEntityType.LONG;
+        MAP[PropertyType.PATH] = PropertyEntityType.PATH;
+        MAP[PropertyType.URI] = PropertyEntityType.URI;
+
+        MAP[PropertyType.STRING] = PropertyEntityType.STRING;
+        MAP[PropertyType.NAME] = PropertyEntityType.STRING;
+        MAP[PropertyType.REFERENCE] = PropertyEntityType.STRING;
+        MAP[PropertyType.WEAKREFERENCE] = PropertyEntityType.STRING;
+
+        MAP[PropertyType.BINARY] = PropertyEntityType.UNSUPPORTED;
+        MAP[PropertyType.UNDEFINED] = PropertyEntityType.UNSUPPORTED;
+    }
+
     private final Function<Property, UnaryOperator<String>> stringPostProcessor;
 
     public PropertyReader(Function<Property, UnaryOperator<String>> stringPostProcessor) {
@@ -28,39 +50,46 @@ public class PropertyReader implements Function<Property, PropertyEntity<?>> {
     @Override
     public PropertyEntity<?> apply(final Property property) {
         try {
-            final ImmutablePropertyEntity.Builder<Object> builder = ImmutablePropertyEntity.builder()
+
+            final PropertyEntityType type = MAP[property.getType()];
+            return ImmutablePropertyEntity.builder()
                     .name(property.getName())
-                    .multiple(property.isMultiple());
-            final Value[] values = values(property);
-            switch (property.getType()) {
-                case PropertyType.DECIMAL:
-                    builder.type(PropertyEntityType.BIGDECIMAL);
-                    return builder.values(convert(values, Value::getDecimal)).build();
-                case PropertyType.BOOLEAN:
-                    builder.type(PropertyEntityType.BOOLEAN);
-                    return builder.values(convert(values, Value::getBoolean)).build();
-                case PropertyType.DATE:
-                    builder.type(PropertyEntityType.DATE);
-                    return builder.values(convert(values, v -> v.getDate().toInstant())).build();
-                case PropertyType.DOUBLE:
-                    builder.type(PropertyEntityType.DOUBLE);
-                    return builder.values(convert(values, Value::getDouble)).build();
-                case PropertyType.LONG:
-                    builder.type(PropertyEntityType.LONG);
-                    return builder.values(convert(values, Value::getLong)).build();
-                case PropertyType.NAME:
-                case PropertyType.PATH:
-                case PropertyType.REFERENCE:
-                case PropertyType.STRING:
-                case PropertyType.WEAKREFERENCE:
-                    builder.type(PropertyEntityType.STRING);
-                    return builder.values(convert(values, v -> stringPostProcessor.apply(property).apply(v.getString()))).build();
-                default:
-                    throw new IllegalArgumentException(PropertyType.nameFromValue(property.getType()));
-            }
+                    .multiple(property.isMultiple())
+                    .type(type)
+                    .values(values(type, property))
+                    .build();
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<?> values(PropertyEntityType type, Property property) throws RepositoryException {
+        switch (type) {
+
+            case BIGDECIMAL:
+                return convert(values(property), Value::getDecimal);
+
+            case BOOLEAN:
+                return convert(values(property), Value::getBoolean);
+
+            case DATE:
+                return convert(values(property), Value::getDate);
+
+            case DOUBLE:
+                return convert(values(property), Value::getDouble);
+
+            case LONG:
+                return convert(values(property), Value::getLong);
+
+            case PATH:
+            case STRING:
+            case URI:
+                return convert(values(property), v -> stringPostProcessor.apply(property).apply(v.getString()));
+
+            default:
+                throw new IllegalArgumentException(PropertyType.nameFromValue(property.getType()));
+        }
+
     }
 
     private Value[] values(Property property) throws RepositoryException {
