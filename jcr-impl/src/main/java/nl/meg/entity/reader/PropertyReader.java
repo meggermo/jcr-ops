@@ -16,7 +16,7 @@ import nl.meg.jcr.entity.PropertyEntity;
 import nl.meg.jcr.entity.PropertyEntityType;
 import nl.meg.jcr.function.JcrFunction;
 
-public class PropertyReader implements Function<Property, PropertyEntity<?>> {
+public class PropertyReader implements JcrFunction<Property, PropertyEntity<?>> {
 
     private static final PropertyEntityType[] MAP;
 
@@ -48,19 +48,14 @@ public class PropertyReader implements Function<Property, PropertyEntity<?>> {
     }
 
     @Override
-    public PropertyEntity<?> apply(final Property property) {
-        try {
-
-            final PropertyEntityType type = MAP[property.getType()];
-            return ImmutablePropertyEntity.builder()
-                    .name(property.getName())
-                    .multiple(property.isMultiple())
-                    .type(type)
-                    .values(values(type, property))
-                    .build();
-        } catch (RepositoryException e) {
-            throw new RuntimeException(e);
-        }
+    public PropertyEntity<?> apply(final Property property) throws RepositoryException {
+        final PropertyEntityType type = MAP[property.getType()];
+        return ImmutablePropertyEntity.builder()
+                .name(property.getName())
+                .multiple(property.isMultiple())
+                .type(type)
+                .values(values(type, property))
+                .build();
     }
 
     private List<?> values(PropertyEntityType type, Property property) throws RepositoryException {

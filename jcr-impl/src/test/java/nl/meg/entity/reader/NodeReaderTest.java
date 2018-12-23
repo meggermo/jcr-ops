@@ -30,6 +30,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import nl.meg.AbstractOakIntegrationTest;
 import nl.meg.jcr.entity.NodeEntity;
 import nl.meg.jcr.entity.PropertyEntity;
+import nl.meg.jcr.function.JcrFunction;
 
 class NodeReaderTest extends AbstractOakIntegrationTest {
 
@@ -82,7 +83,7 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
         getLogger().info("{}", objectMapper.writeValueAsString(nodeEntity));
     }
 
-    private Function<Node, List<NodeEntity>> createNodesReader(final NodeReader nodeReader) {
+    private JcrFunction<Node, List<NodeEntity>> createNodesReader(final NodeReader nodeReader) {
         final Predicate<Node> nodeFilter = node -> {
             try {
                 return prefixFilter.test(node.getName());
@@ -93,7 +94,7 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
         return new NodesReader(nodeFilter, nodeReader);
     }
 
-    private Function<Node, List<PropertyEntity<?>>> createPropertiesReader() {
+    private JcrFunction<Node, List<PropertyEntity<?>>> createPropertiesReader() {
         final Predicate<Property> propertyFilter = property -> {
             try {
                 return prefixFilter.test(property.getName());
@@ -102,11 +103,11 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
             }
         };
         final Function<Property, UnaryOperator<String>> postProcessor = p -> UnaryOperator.identity();
-        final Function<Property, PropertyEntity<?>> propertyReader = new PropertyReader(postProcessor);
+        final JcrFunction<Property, PropertyEntity<?>> propertyReader = new PropertyReader(postProcessor);
         return new PropertiesReader(propertyFilter, propertyReader);
     }
 
-    private Function<Node, List<String>> createTypesReader() {
+    private JcrFunction<Node, List<String>> createTypesReader() {
         final Predicate<NodeType> typesFilter = nodeType -> prefixFilter.test(nodeType.getName());
         return new TypesReader(typesFilter);
     }

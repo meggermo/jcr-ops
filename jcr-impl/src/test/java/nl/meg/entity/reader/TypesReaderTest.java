@@ -1,7 +1,6 @@
 package nl.meg.entity.reader;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.jcr.Node;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import nl.meg.AbstractMockitoTest;
+import nl.meg.jcr.function.JcrFunction;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +27,7 @@ class TypesReaderTest extends AbstractMockitoTest {
     void apply() throws RepositoryException {
 
         final Predicate<NodeType> filter = nt -> !nt.getName().equals("nt2");
-        final Function<Node, List<String>> typesReader = new TypesReader(filter);
+        final JcrFunction<Node, List<String>> typesReader = new TypesReader(filter);
 
         doReturn(nt0).when(node).getPrimaryNodeType();
         when(nt0.getSupertypes()).thenReturn(new NodeType[]{nt1, this.nt2});
