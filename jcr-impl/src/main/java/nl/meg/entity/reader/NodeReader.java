@@ -2,9 +2,11 @@ package nl.meg.entity.reader;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.nodetype.NodeType;
 
 import nl.meg.jcr.entity.ImmutableNodeEntity;
 import nl.meg.jcr.entity.NodeEntity;
@@ -13,14 +15,14 @@ import nl.meg.jcr.function.JcrFunction;
 
 public class NodeReader implements JcrFunction<Node, NodeEntity> {
 
-    private final JcrFunction<Node, List<String>> typesReader;
+    private final Function<NodeType, List<String>> nodeTypesReader;
     private final JcrFunction<Node, List<PropertyEntity<?>>> propertiesReader;
     private JcrFunction<Node, List<NodeEntity>> nodesReader;
 
-    public NodeReader(JcrFunction<Node, List<String>> typesReader, JcrFunction<Node, List<PropertyEntity<?>>> propertiesReader) {
-        Objects.requireNonNull(typesReader);
+    public NodeReader(Function<NodeType, List<String>> nodeTypesReader, JcrFunction<Node, List<PropertyEntity<?>>> propertiesReader) {
+        Objects.requireNonNull(nodeTypesReader);
         Objects.requireNonNull(propertiesReader);
-        this.typesReader = typesReader;
+        this.nodeTypesReader = nodeTypesReader;
         this.propertiesReader = propertiesReader;
     }
 
@@ -35,7 +37,7 @@ public class NodeReader implements JcrFunction<Node, NodeEntity> {
                 .id(node.getIdentifier())
                 .name(node.getName())
                 .path(node.getPath())
-                .types(typesReader.apply(node))
+                .types(nodeTypesReader.apply(node.getPrimaryNodeType()))
                 .properties(propertiesReader.apply(node))
                 .nodes(nodesReader.apply(node))
                 .build();

@@ -107,8 +107,8 @@ class NodeReaderTest extends AbstractOakIntegrationTest {
         return new PropertiesReader(propertyFilter, propertyReader);
     }
 
-    private JcrFunction<Node, List<String>> createTypesReader() {
+    private Function<NodeType, List<String>> createTypesReader() {
         final Predicate<NodeType> typesFilter = nodeType -> prefixFilter.test(nodeType.getName());
-        return new TypesReader(typesFilter);
+        return new NodeTypesReader(typesFilter);
     }
 }
