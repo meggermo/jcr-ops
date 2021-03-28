@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class JcrNodeStoreImplTest extends AbstractMockitoTest {
+class JcrNodeStoreImplTest extends AbstractMockitoTest {
 
     private JcrNodeStore store;
     private final Credentials credentials = new SimpleCredentials("userId", "password".toCharArray());
@@ -49,7 +49,7 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
     private Value valueMock;
 
     @BeforeEach
-    public void setUp() throws RepositoryException {
+    void setUp() throws RepositoryException {
         store = new JcrNodeStoreImpl(new JcrStoreImpl(repositoryMock, "ws"));
         when(repositoryMock.login(credentials, "ws")).thenReturn(sessionMock);
         when(sessionMock.getNode(Mockito.anyString())).thenReturn(nodeMock);
@@ -59,7 +59,7 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testLoadAndWrite() throws RepositoryException {
+    void testLoadAndWrite() throws RepositoryException {
 
         doReturn(propertyMock).when(nodeMock).getProperty("enabled");
         when(propertyMock.getBoolean()).thenReturn(true);
@@ -94,34 +94,34 @@ public class JcrNodeStoreImplTest extends AbstractMockitoTest {
         private static final JcrProperty<Optional<List<String>>> URLS = JcrPropertyFactory.ofStringListOption("urls");
         private List<String> urls;
 
-        public EnabledNode(final Node node) throws RepositoryException {
+        EnabledNode(final Node node) throws RepositoryException {
             super(node);
             this.enabled = ENABLED.getValue(node);
             this.modifiedAt = MODIFIED_AT.getValue(node);
             this.urls = URLS.getValue(node).orElse(emptyList());
         }
 
-        public boolean isEnabled() {
+        boolean isEnabled() {
             return enabled;
         }
 
-        public void setEnabled(final boolean enabled) {
+        void setEnabled(final boolean enabled) {
             this.enabled = enabled;
         }
 
-        public Instant getModifiedAt() {
+        Instant getModifiedAt() {
             return modifiedAt;
         }
 
-        public void setModifiedAt(final Instant modifiedAt) {
+        void setModifiedAt(final Instant modifiedAt) {
             this.modifiedAt = modifiedAt;
         }
 
-        public List<String> getUrls() {
+        List<String> getUrls() {
             return urls;
         }
 
-        public void setUrls(final List<String> urls) {
+        void setUrls(final List<String> urls) {
             this.urls = urls;
         }
 

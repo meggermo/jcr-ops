@@ -21,7 +21,7 @@ public final class JcrResult<C, R> {
 
     private JcrResult(C context, JcrEither<RepositoryException, R> state) {
         this.context = context;
-        this.state = state;
+        this.state = Objects.requireNonNull(state);
     }
 
     public JcrEither<RepositoryException, R> getState() {
@@ -48,8 +48,16 @@ public final class JcrResult<C, R> {
         return switchContext((c, r) -> f.apply(r), contextCloser);
     }
 
+    public <C2> JcrResult<C2, R> switchContext(JcrFunction<R, C2> f) {
+        return switchContext((c, r) -> f.apply(r), ignore -> {});
+    }
+
     public JcrResult<Void, R> closeContext(Consumer<C> contextCloser) {
         return switchContext(r -> null, contextCloser);
+    }
+
+    public JcrResult<Void, R> closeContext() {
+        return switchContext(r -> null, ignore -> {});
     }
 
 

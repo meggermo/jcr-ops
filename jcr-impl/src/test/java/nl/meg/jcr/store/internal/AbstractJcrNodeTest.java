@@ -17,7 +17,7 @@ import nl.meg.AbstractMockitoTest;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class AbstractJcrNodeTest extends AbstractMockitoTest {
+class AbstractJcrNodeTest extends AbstractMockitoTest {
 
     @Mock
     private Node nodeMock;
@@ -32,7 +32,7 @@ public class AbstractJcrNodeTest extends AbstractMockitoTest {
 
     private static final class ANode extends AbstractJcrNode {
 
-        public ANode(final Node node) throws RepositoryException {
+        ANode(final Node node) throws RepositoryException {
             super(node);
         }
 
@@ -44,7 +44,7 @@ public class AbstractJcrNodeTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testWriteValuesVersionIncremented() throws RepositoryException {
+    void testWriteValuesVersionIncremented() throws RepositoryException {
 
         when(nodeMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
@@ -62,7 +62,7 @@ public class AbstractJcrNodeTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testWriteValuesConcurrentModification() throws RepositoryException {
+    void testWriteValuesConcurrentModification() throws RepositoryException {
 
         when(nodeMock.hasProperty("version")).thenReturn(true);
         when(nodeMock.getProperty("version")).thenReturn(propertyMock);

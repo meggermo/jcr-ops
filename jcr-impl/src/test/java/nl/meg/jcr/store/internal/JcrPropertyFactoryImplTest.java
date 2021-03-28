@@ -24,7 +24,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
+class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
 
     @Mock
     private Node nodeMock;
@@ -38,14 +38,14 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     private ValueFactory valueFactoryMock;
 
     @Test
-    public void testGetNameAndToString() {
+    void testGetNameAndToString() {
         final JcrProperty<Boolean> p = JcrPropertyFactory.ofBoolean("test");
         assertThat(p.getName()).isEqualTo("test");
         assertThat(p.toString()).isEqualTo("JcrProperty[name=test]");
     }
 
     @Test
-    public void testBoolean() throws RepositoryException {
+    void testBoolean() throws RepositoryException {
 
         when(nodeMock.getProperty("test"))
                 .thenReturn(propertyMock);
@@ -61,7 +61,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testBooleanList() throws RepositoryException {
+    void testBooleanList() throws RepositoryException {
 
         when(nodeMock.getProperty("test"))
                 .thenReturn(propertyMock);
@@ -82,7 +82,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testBooleanOption() throws RepositoryException {
+    void testBooleanOption() throws RepositoryException {
 
         when(nodeMock.hasProperty("test"))
                 .thenReturn(false, true);
@@ -101,7 +101,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testBooleanListOption() throws RepositoryException {
+    void testBooleanListOption() throws RepositoryException {
 
         when(nodeMock.hasProperty("test"))
                 .thenReturn(false, true);
@@ -121,7 +121,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testLong() throws RepositoryException {
+    void testLong() throws RepositoryException {
 
         when(nodeMock.getProperty("test"))
                 .thenReturn(propertyMock);
@@ -137,7 +137,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testLongList() throws RepositoryException {
+    void testLongList() throws RepositoryException {
 
         when(nodeMock.getProperty("test"))
                 .thenReturn(propertyMock);
@@ -160,7 +160,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testLongOption() throws RepositoryException {
+    void testLongOption() throws RepositoryException {
 
         when(nodeMock.hasProperty("test"))
                 .thenReturn(false, true);
@@ -176,7 +176,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testLongListOption() throws RepositoryException {
+    void testLongListOption() throws RepositoryException {
 
         when(nodeMock.hasProperty("test"))
                 .thenReturn(false, true);
@@ -194,7 +194,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testString() throws RepositoryException {
+    void testString() throws RepositoryException {
 
         when(nodeMock.getProperty("test"))
                 .thenReturn(propertyMock);
@@ -210,7 +210,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testStringList() throws RepositoryException {
+    void testStringList() throws RepositoryException {
 
         when(nodeMock.getProperty("test"))
                 .thenReturn(propertyMock);
@@ -233,7 +233,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testStringOption() throws RepositoryException {
+    void testStringOption() throws RepositoryException {
 
         when(nodeMock.hasProperty("test"))
                 .thenReturn(false, true);
@@ -249,7 +249,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testStringListOption() throws RepositoryException {
+    void testStringListOption() throws RepositoryException {
 
         when(nodeMock.hasProperty("test"))
                 .thenReturn(false, true);
@@ -275,7 +275,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testInstant() throws RepositoryException {
+    void testInstant() throws RepositoryException {
 
         final Calendar c1 = Calendar.getInstance();
         c1.setTimeInMillis(0);
@@ -292,7 +292,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testInstantList() throws RepositoryException {
+    void testInstantList() throws RepositoryException {
 
         final Calendar c1 = Calendar.getInstance();
         c1.setTimeInMillis(0);
@@ -318,7 +318,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testInstantOption() throws RepositoryException {
+    void testInstantOption() throws RepositoryException {
 
         final Calendar c1 = Calendar.getInstance();
         c1.setTimeInMillis(0);
@@ -338,7 +338,7 @@ public class JcrPropertyFactoryImplTest extends AbstractMockitoTest {
     }
 
     @Test
-    public void testInstantListOption() throws RepositoryException {
+    void testInstantListOption() throws RepositoryException {
 
         final Calendar c1 = Calendar.getInstance();
         c1.setTimeInMillis(0);

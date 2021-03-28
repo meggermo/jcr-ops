@@ -6,17 +6,17 @@ import javax.jcr.RepositoryException;
 
 import org.junit.jupiter.api.Test;
 
+import static nl.meg.jcr.function.JcrResult.startWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class JcrResultTest {
+class JcrResultTest {
 
     @Test
-    public void testResultApi() {
+    void testResultApi() {
 
         final Instant context = Instant.ofEpochMilli(0);
-        final JcrResult<Instant, Boolean> start = JcrResult
-                .startWith(context, i -> i.isAfter(i));
+        final JcrResult<Instant, Boolean> start = startWith(context, i -> i.isAfter(i));
         assertThat(start.getState().fromRight()).isFalse();
 
         final JcrResult<Instant, Boolean> then1 = start
@@ -43,23 +43,21 @@ public class JcrResultTest {
     }
 
     @Test
-    public void testResultErrorInNextState() {
+    void testResultErrorInNextState() {
 
         final Instant context = Instant.ofEpochMilli(0);
-        final JcrResult<?, Long> result = JcrResult.startWith(context, i -> i.isAfter(i))
+        final JcrResult<?, Long> result = startWith(context, i -> i.isAfter(i))
                 .andThen((i, b) -> {
                     if (!b) {
                         throw new RepositoryException("");
                     }
                     return "X";
                 })
-                .switchContext(b -> b, c -> {
-                })
+                .switchContext(JcrFunction.identity())
                 .andThen(String::length)
                 .andThen((s, i) -> 2L * i)
                 .andCall(System.out::println)
-                .closeContext(s -> {
-                });
+                .closeContext();
         assertThat(result.getState().isLeft()).isTrue();
         assertThat(result.getState().fromLeft()).isInstanceOf(RepositoryException.class);
     }

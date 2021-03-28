@@ -10,6 +10,7 @@ import javax.jcr.SimpleCredentials;
 import javax.jcr.version.VersionException;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,14 +19,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import nl.meg.jcr.function.JcrFunction;
 import nl.meg.jcr.store.JcrStore;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.fail;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class JcrStoreImplTest {
+class JcrStoreImplTest {
 
     private final Credentials credentials = new SimpleCredentials("userID", "password".toCharArray());
     private final String workspace = "some-workspace-name";
@@ -41,22 +43,22 @@ public class JcrStoreImplTest {
     private Property propertyMock;
 
     @BeforeEach
-    public void setUp() throws RepositoryException {
+    void setUp() {
         jcrStore = new JcrStoreImpl(repositoryMock, workspace);
     }
 
     @Test
-    public void testRead() throws RepositoryException {
+    void testRead() throws RepositoryException {
         when(repositoryMock.login(credentials, workspace)).thenReturn(sessionMock);
         jcrStore.read(credentials, session -> 10L).eitherAccept(
-                e -> fail("did not expect this: " + e),
+                JcrStoreImplTest::unexpected,
                 r -> assertThat(r).isEqualTo(10L)
         );
     }
 
 
     @Test
-    public void testWrite() throws RepositoryException {
+    void testWrite() throws RepositoryException {
 
         final Credentials credentials = new SimpleCredentials("userID", "password".toCharArray());
         final String workspace = "some-workspace-name";
@@ -73,7 +75,7 @@ public class JcrStoreImplTest {
                     return node.addNode("x").setProperty("p", "test");
                 };
         jcrStore.write(credentials, task).eitherAccept(
-                e -> fail("did not expect this: " + e),
+                JcrStoreImplTest::unexpected,
                 p -> assertThat(p).isEqualTo(propertyMock)
         );
 
@@ -82,7 +84,7 @@ public class JcrStoreImplTest {
     }
 
     @Test
-    public void testChangesDiscardedOnSaveException() throws RepositoryException {
+    void testChangesDiscardedOnSaveException() throws RepositoryException {
 
         final Credentials credentials = new SimpleCredentials("userID", "password".toCharArray());
         final String workspace = "some-workspace-name";
@@ -92,14 +94,14 @@ public class JcrStoreImplTest {
 
         jcrStore.write(credentials, session -> "TEST").eitherAccept(
                 e -> assertThat(e).isInstanceOf(VersionException.class),
-                x -> fail("did not expect this: " + x)
+                x -> fail("did not expect this: %s", x)
         );
 
         verify(sessionMock).refresh(false);
     }
 
     @Test
-    public void testSaveNotCalledIfTherAreNoChanges() throws RepositoryException {
+    void testSaveNotCalledIfTherAreNoChanges() throws RepositoryException {
 
         final Credentials credentials = new SimpleCredentials("userID", "password".toCharArray());
         final String workspace = "some-workspace-name";
@@ -107,11 +109,46 @@ public class JcrStoreImplTest {
         when(sessionMock.hasPendingChanges()).thenReturn(false);
 
         jcrStore.write(credentials, session -> "TEST").eitherAccept(
-                e -> fail("did not expect this: " + e),
+                JcrStoreImplTest::unexpected,
                 s -> assertThat(s).isEqualTo("TEST")
         );
 
         verify(sessionMock, times(0)).save();
     }
 
+    @Nested
+    class ExampleUseCase {
+        @Test
+        void readControlNode() throws RepositoryException {
+
+            when(repositoryMock.login(credentials, workspace)).thenReturn(sessionMock);
+
+            when(sessionMock.getNode("/foo")).thenReturn(nodeMock);
+
+            doReturn(propertyMock).when(nodeMock).getProperty("state");
+            doReturn(ReplicationState.FULL_SYNC.name()).when(propertyMock).getString();
+
+            doReturn(true).when(nodeMock).hasProperty("lastSyncLogId");
+            doReturn(propertyMock).when(nodeMock).getProperty("lastSyncLogId");
+            doReturn(10L).when(propertyMock).getLong();
+
+            final JcrFunction<Session, Node> getNode = session -> session.getNode("/foo");
+
+            jcrStore.read(credentials, getNode.andThen(ControlNode::getConfig))
+                    .eitherAccept(
+                            JcrStoreImplTest::unexpected,
+                            c -> {
+                                assertThat(c.getState())
+                                        .isEqualByComparingTo(ReplicationState.FULL_SYNC);
+                                assertThat(c.getLastSyncLogId())
+                                        .hasValue(10L);
+                            }
+                    );
+        }
+
+    }
+
+    private static void unexpected(Object value) {
+        fail("did not expect this: %s", value);
+    }
 }
