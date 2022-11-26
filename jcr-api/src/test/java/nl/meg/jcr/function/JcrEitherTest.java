@@ -12,7 +12,7 @@ class JcrEitherTest {
 
     @Test
     void testAsLeft() {
-        final JcrEither<String, ?> left = JcrEither.asLeft("X");
+        final JcrEither<String, ?> left = JcrEither.left("X");
         assertThat(left.fromLeft())
                 .isEqualTo("X");
         assertThatThrownBy(left::fromRight)
@@ -21,7 +21,7 @@ class JcrEitherTest {
 
     @Test
     void testAsRight() {
-        final JcrEither<Object, String> right = JcrEither.asRight("X");
+        final JcrEither<Object, String> right = JcrEither.right("X");
         assertThat(right.fromRight())
                 .isEqualTo("X");
         assertThatThrownBy(right::fromLeft)
@@ -30,24 +30,24 @@ class JcrEitherTest {
 
     @Test
     void testIsLeft() {
-        assertThat(JcrEither.asLeft("X").isLeft()).isTrue();
-        assertThat(JcrEither.asLeft("X").isRight()).isFalse();
+        assertThat(JcrEither.left("X").isLeft()).isTrue();
+        assertThat(JcrEither.left("X").isRight()).isFalse();
     }
 
     @Test
     void testIsRight() {
-        assertThat(JcrEither.asRight("X").isLeft()).isFalse();
-        assertThat(JcrEither.asRight("X").isRight()).isTrue();
+        assertThat(JcrEither.right("X").isLeft()).isFalse();
+        assertThat(JcrEither.right("X").isRight()).isTrue();
     }
 
     @Test
     void testEither() throws RepositoryException {
-        final String left = JcrEither.asLeft("X").either(
+        final String left = JcrEither.left("X").either(
                 l -> l,
                 r -> null
         );
         assertThat(left).isNotNull();
-        final String right = JcrEither.asRight("X").either(
+        final String right = JcrEither.right("X").either(
                 l -> null,
                 r -> r
         );
@@ -56,11 +56,11 @@ class JcrEitherTest {
 
     @Test
     void testEitherAccept() {
-        JcrEither.asLeft("X").eitherAccept(
+        JcrEither.left("X").eitherAccept(
                 l -> assertThat(l).isNotNull(),
                 r -> Assertions.fail("Did not expect this: %s", r)
         );
-        JcrEither.asRight("X").eitherAccept(
+        JcrEither.right("X").eitherAccept(
                 l -> Assertions.fail("Did not expect this: %s", l),
                 r -> assertThat(r).isNotNull()
         );
@@ -68,11 +68,11 @@ class JcrEitherTest {
 
     @Test
     void testMap() throws RepositoryException {
-        assertThat(swap(JcrEither.asLeft("X")).isRight()).isTrue();
-        assertThat(swap(JcrEither.asRight("X")).isLeft()).isTrue();
+        assertThat(swap(JcrEither.left("X")).isRight()).isTrue();
+        assertThat(swap(JcrEither.right("X")).isLeft()).isTrue();
     }
 
     private <L, R> JcrEither<R, L> swap(JcrEither<L, R> either) throws RepositoryException {
-        return either.map(e -> e.either(JcrEither::asRight, JcrEither::asLeft));
+        return either.map(e -> e.either(JcrEither::right, JcrEither::left));
     }
 }

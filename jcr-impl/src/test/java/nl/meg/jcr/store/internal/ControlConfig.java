@@ -1,35 +1,22 @@
 package nl.meg.jcr.store.internal;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
-public final class ControlConfig {
+import nl.meg.jcr.store.JcrVersioned;
 
-    private ReplicationState state;
-    private Long lastSyncLogId;
-    private List<String> syncRootPaths;
+public record ControlConfig(
+        AtomicLong version,
+        ReplicationState state,
+        Long lastSyncLogId,
+        List<SyncRoot> syncRoots) implements JcrVersioned {
 
-    public ReplicationState getState() {
-        return state;
+    public ControlConfig copy(ReplicationState replicationState) {
+        return new ControlConfig(this.version, replicationState, this.lastSyncLogId, this.syncRoots);
     }
 
-    public void setState(final ReplicationState state) {
-        this.state = state;
+    public ControlConfig copy(List<SyncRoot> syncRoots) {
+        return new ControlConfig(this.version, this.state, this.lastSyncLogId, syncRoots);
     }
 
-    public Optional<Long> getLastSyncLogId() {
-        return Optional.ofNullable(lastSyncLogId);
-    }
-
-    public void setLastSyncLogId(final Long lastSyncLogId) {
-        this.lastSyncLogId = lastSyncLogId;
-    }
-
-    public Optional<List<String>> getSyncRootPaths() {
-        return Optional.ofNullable(syncRootPaths);
-    }
-
-    public void setSyncRootPaths(final List<String> syncRootPaths) {
-        this.syncRootPaths = syncRootPaths;
-    }
 }

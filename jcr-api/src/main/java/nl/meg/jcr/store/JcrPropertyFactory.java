@@ -1,4 +1,4 @@
-package nl.meg.jcr.store.internal;
+package nl.meg.jcr.store;
 
 
 import java.time.Instant;
@@ -14,7 +14,6 @@ import javax.jcr.Value;
 
 import nl.meg.jcr.function.JcrBiFunction;
 import nl.meg.jcr.function.JcrFunction;
-import nl.meg.jcr.store.JcrProperty;
 
 public final class JcrPropertyFactory {
 
@@ -211,29 +210,20 @@ public final class JcrPropertyFactory {
         };
     }
 
-    private static final class JcrPropertyImpl<V> implements JcrProperty<V> {
+    private record JcrPropertyImpl<V>(
+            String name,
+            JcrFunction<Node, V> valueGetter,
+            JcrBiFunction<Node, V, ?> valueSetter
+    ) implements JcrProperty<V> {
 
-        private final String name;
-        private final JcrFunction<Node, V> valueGetter;
-        private final JcrBiFunction<Node, V, ?> valueSetter;
-
-        JcrPropertyImpl(String name, JcrFunction<Node, V> valueGetter, JcrBiFunction<Node, V, ?> valueSetter) {
-            this.name = name;
-            this.valueGetter = valueGetter;
-            this.valueSetter = valueSetter;
-        }
-
-        public String getName() {
-            return name;
-        }
-
+        @Override
         public V getValue(Node node) throws RepositoryException {
             return valueGetter.apply(node);
         }
 
-        public JcrPropertyImpl<V> setValue(final Node node, final V value) throws RepositoryException {
+        @Override
+        public void setValue(final Node node, final V value) throws RepositoryException {
             valueSetter.apply(node, value);
-            return this;
         }
 
         @Override

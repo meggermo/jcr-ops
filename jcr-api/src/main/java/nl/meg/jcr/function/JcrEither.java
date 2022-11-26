@@ -4,25 +4,25 @@ import java.util.function.Consumer;
 
 import javax.jcr.RepositoryException;
 
-public abstract class JcrEither<L, R> {
+public sealed interface JcrEither<L, R> {
 
-    public static <L, R> JcrEither<L, R> asLeft(L value) {
+    static <L, R> JcrEither<L, R> left(L value) {
         return new Left<>(value);
     }
 
-    public static <L, R> JcrEither<L, R> asRight(R value) {
+    static <L, R> JcrEither<L, R> right(R value) {
         return new Right<>(value);
     }
 
-    abstract boolean isLeft();
+    boolean isLeft();
 
-    abstract L fromLeft();
+    L fromLeft();
 
-    abstract boolean isRight();
+    boolean isRight();
 
-    abstract R fromRight();
+    R fromRight();
 
-    public final <X> X either(JcrFunction<L, X> f, JcrFunction<R, X> g) throws RepositoryException {
+    default <X> X either(JcrFunction<L, X> f, JcrFunction<R, X> g) throws RepositoryException {
         if (isLeft()) {
             return f.apply(fromLeft());
         } else {
@@ -30,7 +30,7 @@ public abstract class JcrEither<L, R> {
         }
     }
 
-    public final void eitherAccept(Consumer<L> f, Consumer<R> g) {
+    default void eitherAccept(Consumer<L> f, Consumer<R> g) {
         if (isLeft()) {
             f.accept(fromLeft());
         } else {
@@ -39,69 +39,55 @@ public abstract class JcrEither<L, R> {
     }
 
 
-    public final <L2, R2> JcrEither<L2, R2> map(JcrFunction<JcrEither<L, R>, JcrEither<L2, R2>> f) throws RepositoryException {
+    default <L2, R2> JcrEither<L2, R2> map(JcrFunction<JcrEither<L, R>, JcrEither<L2, R2>> f) throws RepositoryException {
         return f.apply(this);
     }
 
-    private JcrEither() {
-    }
-
-    private static final class Left<L, R> extends JcrEither<L, R> {
-
-        private final L value;
-
-        private Left(final L value) {
-            this.value = value;
-        }
-
-        @Override
-        boolean isLeft() {
-            return true;
-        }
-
-        @Override
-        L fromLeft() {
-            return value;
-        }
-
-        @Override
-        boolean isRight() {
-            return false;
-        }
-
-        @Override
-        R fromRight() {
-            throw new UnsupportedOperationException("left has no right value");
-        }
-    }
-
-    private static final class Right<L, R> extends JcrEither<L, R> {
-
-        private final R value;
-
-        private Right(final R value) {
-            this.value = value;
-        }
-
-        @Override
-        boolean isLeft() {
-            return false;
-        }
-
-        @Override
-        L fromLeft() {
-            throw new UnsupportedOperationException("right has no left value");
-        }
-
-        @Override
-        boolean isRight() {
-            return true;
-        }
-
-        @Override
-        R fromRight() {
-            return value;
-        }
-    }
-
 }
+
+record Left<L, R>(L value) implements JcrEither<L, R> {
+
+    @Override
+    public boolean isLeft() {
+        return true;
+    }
+
+    @Override
+    public L fromLeft() {
+        return value;
+    }
+
+    @Override
+    public boolean isRight() {
+        return false;
+    }
+
+    @Override
+    public R fromRight() {
+        throw new UnsupportedOperationException("left has no right value");
+    }
+}
+
+record Right<L, R>(R value) implements JcrEither<L, R> {
+
+    @Override
+    public boolean isLeft() {
+        return false;
+    }
+
+    @Override
+    public L fromLeft() {
+        throw new UnsupportedOperationException("right has no left value");
+    }
+
+    @Override
+    public boolean isRight() {
+        return true;
+    }
+
+    @Override
+    public R fromRight() {
+        return value;
+    }
+}
+
