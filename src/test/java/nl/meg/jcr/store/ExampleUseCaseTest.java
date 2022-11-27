@@ -6,29 +6,32 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.jcr.Credentials;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
+import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.ValueFactory;
+import javax.jcr.SimpleCredentials;
 
+import org.apache.jackrabbit.oak.Oak;
+import org.apache.jackrabbit.oak.jcr.Jcr;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import nl.meg.jcr.function.JcrFunction;
+import static javax.jcr.nodetype.NodeType.NT_UNSTRUCTURED;
 import static nl.meg.jcr.store.JcrNamed.loadEntities;
 import static nl.meg.jcr.store.JcrNamed.saveEntities;
 import static nl.meg.jcr.store.JcrPropertyFactory.ofBoolean;
 import static nl.meg.jcr.store.JcrPropertyFactory.ofLongOption;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class ExampleUseCaseTest {
+
+    private Repository repository;
+    private Credentials credentials;
+
+    @BeforeEach
+    void initialize() {
+        repository = new Jcr(new Oak()).createRepository();
+        credentials = new SimpleCredentials("admin", "admin".toCharArray());
+    }
 
     record Entity(Boolean active, AtomicLong version, String name) implements JcrNamed, JcrVersioned {
         Entity copy(boolean active) {
@@ -50,51 +53,45 @@ class ExampleUseCaseTest {
 
         @Override
         public String nodeType() {
-            return "nt:my-entity-type";
+            return NT_UNSTRUCTURED;
         }
     }
 
     record ComposedEntity(Boolean active, List<Entity> entities, AtomicLong version) implements JcrVersioned {
-        ComposedEntity copy(boolean active) {
-            return new ComposedEntity(active, this.entities, this.version);
+        ComposedEntity copy(List<Entity> entities) {
+            return new ComposedEntity(this.active, entities, this.version);
         }
     }
 
     @Test
-    void testEntityRepository(
-            @Mock JcrFunction<Credentials, Session> repoLogin,
-            @Mock Credentials credentials,
-            @Mock Session session,
-            @Mock Node node,
-            @Mock Property property,
-            @Mock ValueFactory valueFactory
-    ) throws RepositoryException {
+    void testEntityRepository() throws RepositoryException {
+
+        final JcrProperty<Boolean> active = ofBoolean("active");
+        final var node = repository.login(credentials).getRootNode()
+                .addNode("x", NT_UNSTRUCTURED)
+                .addNode("y", NT_UNSTRUCTURED)
+                .addNode("z", NT_UNSTRUCTURED);
+        active.setValue(node, true);
+        node.getSession().save();
 
         final var repoFactory = new JcrRepoFactory(ofLongOption("version"));
-        final var entityRepositoryFactory = new EntityRepositoryFactory(repoLogin);
+        final var entityRepositoryFactory = new EntityRepositoryFactory(c -> repository.login(c));
 
-        final var entityRepo = repoFactory.create(new EntityRepo(ofBoolean("active")));
-        final var repository = entityRepositoryFactory.make(entityRepo, List.of("x", "y", "my-entities"));
+        final var entityRepo = repoFactory.create(new EntityRepo(active));
+        final var entityRepository = entityRepositoryFactory.make(entityRepo, List.of("x", "y", "z"));
 
-        when(repoLogin.apply(credentials)).thenReturn(session);
-        when(session.getNode("/x/y")).thenReturn(node);
-        when(node.hasNode("my-entities")).thenReturn(false);
-        when(node.addNode("my-entities", entityRepo.nodeType())).thenReturn(node);
-        when(node.getProperty("active")).thenReturn(property);
-        when(property.getBoolean()).thenReturn(true);
-
-        final var entity = repository.read(credentials).fromRight();
+        final var entity = entityRepository.read(credentials).fromRight();
         assertThat(entity.active()).isTrue();
         assertThat(entity.version()).hasValue(0L);
 
-        when(node.getSession()).thenReturn(session);
-        when(session.getValueFactory()).thenReturn(valueFactory);
-
-        final var written = repository.write(credentials, entity.copy(false)).fromRight();
+        final var written = entityRepository.write(credentials, entity.copy(false)).fromRight();
         assertThat(written.active()).isFalse();
         assertThat(entity.version()).hasValue(1L);
 
-        verify(node).setProperty("active", false);
+        final var read = entityRepository.read(credentials).fromRight();
+        assertThat(read.active()).isFalse();
+        assertThat(read.version()).hasValue(1L);
+
     }
 
     record ComposedEntityRepo(JcrProperty<Boolean> active,
@@ -108,61 +105,45 @@ class ExampleUseCaseTest {
         @Override
         public void save(final Node node, final ComposedEntity composedEntity) throws RepositoryException {
             active.setValue(node, composedEntity.active());
-            saveEntities(node, null, composedEntity.entities(), entityJcrRepo);
+            saveEntities(node, "*", composedEntity.entities(), entityJcrRepo);
         }
 
         @Override
         public String nodeType() {
-            return "nt:my-entity-type";
+            return NT_UNSTRUCTURED;
         }
     }
 
     @Test
-    void testComposedEntityRepository(
-            @Mock JcrFunction<Credentials, Session> repoLogin,
-            @Mock Credentials credentials,
-            @Mock Session session,
-            @Mock Node node,
-            @Mock Property property,
-            @Mock ValueFactory valueFactory,
-            @Mock NodeIterator nodeIterator
-    ) throws RepositoryException {
+    void testComposedEntityRepository() throws RepositoryException {
+
+        final JcrProperty<Boolean> active = ofBoolean("active");
+        final var node = repository.login(credentials).getRootNode()
+                .addNode("x", NT_UNSTRUCTURED)
+                .addNode("y", NT_UNSTRUCTURED)
+                .addNode("z", NT_UNSTRUCTURED);
+        active.setValue(node, true);
+        node.getSession().save();
 
         final JcrProperty<Optional<Long>> version = ofLongOption("version");
         final var repoFactory = new JcrRepoFactory(version);
-        final var entityRepositoryFactory = new EntityRepositoryFactory(repoLogin);
+        final var entityRepositoryFactory = new EntityRepositoryFactory(c -> repository.login(c));
 
-        final JcrProperty<Boolean> active = ofBoolean("active");
         final var entityRepo = repoFactory.create(new EntityRepo(active));
         final var composedEntityRepo = repoFactory.create(new ComposedEntityRepo(active, entityRepo));
-        final var repository = entityRepositoryFactory.make(composedEntityRepo, List.of("x", "y", "my-entities"));
+        final var composedEntityRepository = entityRepositoryFactory.make(composedEntityRepo, List.of("x", "y", "z"));
 
-        when(repoLogin.apply(credentials)).thenReturn(session);
-        when(session.getNode("/x/y")).thenReturn(node);
-        when(node.hasNode("my-entities")).thenReturn(false);
-        when(node.addNode("my-entities", entityRepo.nodeType())).thenReturn(node);
-        when(node.getProperty("active")).thenReturn(property);
-        when(property.getBoolean()).thenReturn(true);
-        when(node.getNodes()).thenReturn(nodeIterator);
-        when(nodeIterator.hasNext()).thenReturn(true, false);
-        when(nodeIterator.nextNode()).thenReturn(node);
-
-        final var composedEntity = repository.read(credentials).fromRight();
+        final var composedEntity = composedEntityRepository.read(credentials).fromRight();
         assertThat(composedEntity.active()).isTrue();
         assertThat(composedEntity.version()).hasValue(0L);
-        assertThat(composedEntity.entities()).hasSize(1);
+        assertThat(composedEntity.entities()).isEmpty();
 
-        when(node.getSession()).thenReturn(session);
-        when(session.getValueFactory()).thenReturn(valueFactory);
-        when(node.getNode(null)).thenReturn(node);
-        when(node.getNodes((String)null)).thenReturn(nodeIterator);
-        reset(nodeIterator);
-        when(nodeIterator.hasNext()).thenReturn(true, false);
-        when(nodeIterator.nextNode()).thenReturn(node);
+        final var e1 = new Entity(true, new AtomicLong(0), "e1");
+        final var e2 = new Entity(true, new AtomicLong(0), "e2");
+        composedEntityRepository.write(credentials, composedEntity.copy(List.of(e1, e2)));
 
-        final var written = repository.write(credentials, composedEntity.copy(false)).fromRight();
-        assertThat(written.active()).isFalse();
-        assertThat(composedEntity.version()).hasValue(1L);
+        final var read = composedEntityRepository.read(credentials).fromRight();
+        assertThat(read.entities()).hasSize(2);
 
     }
 
