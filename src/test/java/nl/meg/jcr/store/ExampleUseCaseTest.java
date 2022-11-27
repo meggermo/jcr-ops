@@ -1,6 +1,5 @@
 package nl.meg.jcr.store;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,18 +18,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import nl.meg.jcr.function.JcrFunction;
+import static nl.meg.jcr.store.JcrNamed.loadEntities;
+import static nl.meg.jcr.store.JcrNamed.saveEntities;
 import static nl.meg.jcr.store.JcrPropertyFactory.ofBoolean;
 import static nl.meg.jcr.store.JcrPropertyFactory.ofLongOption;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExampleUseCaseTest {
 
-    record Entity(Boolean active, AtomicLong version, String relPath) implements JcrVersioned {
+    record Entity(Boolean active, AtomicLong version, String name) implements JcrNamed, JcrVersioned {
         Entity copy(boolean active) {
-            return new Entity(active, this.version, this.relPath);
+            return new Entity(active, this.version, this.name);
         }
     }
 
@@ -100,23 +102,13 @@ class ExampleUseCaseTest {
 
         @Override
         public ComposedEntity load(final Node node, final AtomicLong version) throws RepositoryException {
-            final List<Entity> entities = new ArrayList<>();
-            for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
-                entities.add(entityJcrRepo.load(it.nextNode()));
-            }
-
-            return new ComposedEntity(active.getValue(node), entities, version);
+            return new ComposedEntity(active.getValue(node), loadEntities(node, entityJcrRepo), version);
         }
 
         @Override
-        public void save(final Node node, final ComposedEntity entity) throws RepositoryException {
-            active.setValue(node, entity.active());
-            for (final Entity syncRoot : entity.entities()) {
-                if (!node.hasNode(syncRoot.relPath())) {
-                    node.addNode(syncRoot.relPath(), entityJcrRepo.nodeType());
-                }
-                entityJcrRepo.save(node.getNode(syncRoot.relPath()), syncRoot);
-            }
+        public void save(final Node node, final ComposedEntity composedEntity) throws RepositoryException {
+            active.setValue(node, composedEntity.active());
+            saveEntities(node, null, composedEntity.entities(), entityJcrRepo);
         }
 
         @Override
@@ -163,6 +155,10 @@ class ExampleUseCaseTest {
         when(node.getSession()).thenReturn(session);
         when(session.getValueFactory()).thenReturn(valueFactory);
         when(node.getNode(null)).thenReturn(node);
+        when(node.getNodes((String)null)).thenReturn(nodeIterator);
+        reset(nodeIterator);
+        when(nodeIterator.hasNext()).thenReturn(true, false);
+        when(nodeIterator.nextNode()).thenReturn(node);
 
         final var written = repository.write(credentials, composedEntity.copy(false)).fromRight();
         assertThat(written.active()).isFalse();
