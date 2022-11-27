@@ -57,12 +57,6 @@ class ExampleUseCaseTest {
         }
     }
 
-    record ComposedEntity(Boolean active, List<Entity> entities, AtomicLong version) implements JcrVersioned {
-        ComposedEntity copy(List<Entity> entities) {
-            return new ComposedEntity(this.active, entities, this.version);
-        }
-    }
-
     @Test
     void testEntityRepository() throws RepositoryException {
 
@@ -92,6 +86,12 @@ class ExampleUseCaseTest {
         assertThat(read.active()).isFalse();
         assertThat(read.version()).hasValue(1L);
 
+    }
+
+    record ComposedEntity(Boolean active, List<Entity> entities, AtomicLong version) implements JcrVersioned {
+        ComposedEntity copy(List<Entity> entities) {
+            return new ComposedEntity(this.active, entities, this.version);
+        }
     }
 
     record ComposedEntityRepo(JcrProperty<Boolean> active,
