@@ -62,5 +62,4 @@ class JcrMonadTest {
         assertThat(result.getState().fromLeft()).isInstanceOf(RepositoryException.class);
     }
 
-
 }

@@ -75,12 +75,12 @@ public final class JcrMonad<C, R> {
 
     private <C2> JcrMonad<C2, R> nextContext(JcrBiFunction<C, R, C2> f, Consumer<C> contextCloser) {
         try {
-            return nextState(f).either(
-                    e -> new JcrMonad<>(null, left(e)),
-                    c -> new JcrMonad<>(c, state)
-            );
-        } catch (RepositoryException e) {
-            return new JcrMonad<>(null, left(e));
+            final var next = nextState(f);
+            if (next.isRight()) {
+                return new JcrMonad<>(next.fromRight(), state);
+            } else {
+                return new JcrMonad<>(null, left(next.fromLeft()));
+            }
         } finally {
             contextCloser.accept(context);
         }

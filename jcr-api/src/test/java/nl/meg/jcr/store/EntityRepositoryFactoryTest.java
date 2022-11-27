@@ -24,7 +24,24 @@ import static org.mockito.Mockito.when;
 class EntityRepositoryFactoryTest {
 
     @Test
-    void make(
+    void reading(
+            @Mock JcrFunction<Credentials, Session> repoLogin,
+            @Mock JcrRepo<Long> jcrRepo,
+            @Mock Session session,
+            @Mock Credentials credentials,
+            @Mock Node node
+    ) throws RepositoryException {
+
+        when(repoLogin.apply(any())).thenReturn(session);
+        when(session.getNode(anyString())).thenReturn(node);
+
+        final var factory = new EntityRepositoryFactory(repoLogin);
+        final var repository = factory.make(jcrRepo, List.of("a"));
+        assertThat(repository.read(credentials).isRight()).isTrue();
+    }
+
+    @Test
+    void writing(
             @Mock JcrFunction<Credentials, Session> repoLogin,
             @Mock JcrRepo<Long> jcrRepo,
             @Mock Session session,
@@ -42,7 +59,7 @@ class EntityRepositoryFactoryTest {
     }
 
     @Test
-    void save_throws(
+    void writing_throws(
             @Mock JcrFunction<Credentials, Session> repoLogin,
             @Mock JcrRepo<Long> jcrRepo,
             @Mock Session session,

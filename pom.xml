@@ -51,7 +51,6 @@
 
   <modules>
     <module>jcr-api</module>
-    <module>jcr-impl</module>
   </modules>
 
   <properties>

@@ -1,4 +1,4 @@
-package nl.meg.jcr.store.internal;
+package nl.meg.jcr.store;
 
 import java.time.Instant;
 import java.util.Calendar;
@@ -13,18 +13,18 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import nl.meg.AbstractMockitoTest;
-import nl.meg.jcr.store.JcrProperty;
-import nl.meg.jcr.store.JcrPropertyFactory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class JcrPropertyFactoryTest extends AbstractMockitoTest {
+@ExtendWith(MockitoExtension.class)
+class JcrPropertyFactoryTest {
 
     @Mock
     private Node nodeMock;
@@ -91,6 +91,18 @@ class JcrPropertyFactoryTest extends AbstractMockitoTest {
 
         p.setValue(nodeMock, Optional.empty());
         verify(propertyMock).remove();
+    }
+
+    @Test
+    void testOptionPresent() throws RepositoryException {
+
+        when(nodeMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getValueFactory()).thenReturn(valueFactoryMock);
+        when(valueFactoryMock.createValue(true)).thenReturn(valueMock);
+
+        final JcrProperty<Optional<Boolean>> p = JcrPropertyFactory.ofBooleanOption("test");
+        p.setValue(nodeMock, Optional.of(true));
+        verify(nodeMock).setProperty("test", valueMock);
     }
 
     @Test
