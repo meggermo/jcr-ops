@@ -5,14 +5,15 @@
 
   <groupId>nl.meg</groupId>
   <artifactId>jcr-ops</artifactId>
-  <packaging>pom</packaging>
   <version>1.0.5-SNAPSHOT</version>
+  <packaging>bundle</packaging>
 
   <description>
     Functional immutable operations on the Content repository API for Java.
   </description>
   <inceptionYear>2014</inceptionYear>
   <url>https://${github.host}/${project.artifactId}</url>
+  <name>${project.artifactId}</name>
 
   <scm>
     <url>https://${github.host}/${project.artifactId}</url>
@@ -44,15 +45,6 @@
     </license>
   </licenses>
 
-  <ciManagement>
-    <system>Travis</system>
-    <url>https://travis-ci.org/${github.account.name}/jcr-ops</url>
-  </ciManagement>
-
-  <modules>
-    <module>jcr-api</module>
-  </modules>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
@@ -81,20 +73,20 @@
         <artifactId>jcr</artifactId>
         <version>${jcr.version}</version>
       </dependency>
-      <dependency>
-        <groupId>nl.meg</groupId>
-        <artifactId>jcr-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>nl.meg</groupId>
-        <artifactId>jcr-impl</artifactId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.annotation.versioning</artifactId>
+      <version>1.1.2</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -122,6 +114,17 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <version>5.1.8</version>
+        <configuration>
+          <instructions>
+            <Export-Package>nl.meg.jcr.*;provide:=true</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
