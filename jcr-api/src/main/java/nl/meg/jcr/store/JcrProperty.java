@@ -5,9 +5,9 @@ import javax.jcr.RepositoryException;
 
 public interface JcrProperty<V> {
 
-    String getName();
+    String name();
 
     V getValue(Node node) throws RepositoryException;
 
-    JcrProperty<V> setValue(final Node node, final V value) throws RepositoryException;
+    void setValue(final Node node, final V value) throws RepositoryException;
 }

@@ -18,5 +18,4 @@ public interface JcrBiFunction<T, U, R> {
     default <V> JcrBiFunction<T, U, V> andThen(JcrFunction<? super R, ? extends V> after) {
         return (t, u) -> after.apply(apply(t, u));
     }
-
 }

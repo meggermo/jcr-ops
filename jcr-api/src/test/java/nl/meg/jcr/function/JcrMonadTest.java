@@ -6,60 +6,58 @@ import javax.jcr.RepositoryException;
 
 import org.junit.jupiter.api.Test;
 
+import static nl.meg.jcr.function.JcrMonad.startWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class JcrResultTest {
+class JcrMonadTest {
 
     @Test
-    public void testResultApi() {
+    void testResultApi() {
 
         final Instant context = Instant.ofEpochMilli(0);
-        final JcrResult<Instant, Boolean> start = JcrResult
-                .startWith(context, i -> i.isAfter(i));
+        final JcrMonad<Instant, Boolean> start = startWith(context, i -> i.isAfter(i));
         assertThat(start.getState().fromRight()).isFalse();
 
-        final JcrResult<Instant, Boolean> then1 = start
+        final JcrMonad<Instant, Boolean> then1 = start
                 .andThen((i, b) -> !b);
         assertThat(then1.getState().fromRight()).isTrue();
 
-        final JcrResult<String, Boolean> switched1 = then1
+        final JcrMonad<String, Boolean> switched1 = then1
                 .switchContext(b -> Boolean.toString(b), c -> {
                 });
         assertThat(then1.getState().fromRight()).isTrue();
 
-        final JcrResult<String, Integer> then2 = switched1
+        final JcrMonad<String, Integer> then2 = switched1
                 .andThen((s, b) -> s.length());
         assertThat(then2.getState().fromRight()).isEqualTo(Boolean.TRUE.toString().length());
 
-        final JcrResult<String, Long> then3 = then2
+        final JcrMonad<String, Long> then3 = then2
                 .andThen((s, i) -> 2L * i)
                 .andCall(System.out::println);
 
-        final JcrResult<?, Long> result = then3
+        final JcrMonad<?, Long> result = then3
                 .closeContext(s -> {
                 });
         assertThat(result.getState().fromRight()).isEqualTo(8L);
     }
 
     @Test
-    public void testResultErrorInNextState() {
+    void testResultErrorInNextState() {
 
         final Instant context = Instant.ofEpochMilli(0);
-        final JcrResult<?, Long> result = JcrResult.startWith(context, i -> i.isAfter(i))
+        final JcrMonad<?, Long> result = startWith(context, i -> i.isAfter(i))
                 .andThen((i, b) -> {
                     if (!b) {
                         throw new RepositoryException("");
                     }
                     return "X";
                 })
-                .switchContext(b -> b, c -> {
-                })
+                .switchContext(JcrFunction.identity())
                 .andThen(String::length)
                 .andThen((s, i) -> 2L * i)
                 .andCall(System.out::println)
-                .closeContext(s -> {
-                });
+                .closeContext();
         assertThat(result.getState().isLeft()).isTrue();
         assertThat(result.getState().fromLeft()).isInstanceOf(RepositoryException.class);
     }

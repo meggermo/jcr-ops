@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>com.github.meggermo.maven</groupId>
-    <artifactId>maven.pom.root</artifactId>
-    <version>1.0.8</version>
-  </parent>
 
   <groupId>nl.meg</groupId>
   <artifactId>jcr-ops</artifactId>
@@ -15,7 +9,7 @@
   <version>1.0.5-SNAPSHOT</version>
 
   <description>
-    Functional immutable operations on the The Content repository API for Java.
+    Functional immutable operations on the Content repository API for Java.
   </description>
   <inceptionYear>2014</inceptionYear>
   <url>https://${github.host}/${project.artifactId}</url>
@@ -55,16 +49,23 @@
     <url>https://travis-ci.org/${github.account.name}/jcr-ops</url>
   </ciManagement>
 
-
   <modules>
     <module>jcr-api</module>
     <module>jcr-impl</module>
   </modules>
 
-
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>17</java.version>
+    <java.source.version>${java.version}</java.source.version>
+    <java.target.version>${java.version}</java.target.version>
+    <github.host>github.com</github.host>
+    <github.account.name>${project.name}</github.account.name>
     <!-- Library versions -->
+    <assertj.version>3.23.1</assertj.version>
     <jcr.version>2.0</jcr.version>
+    <junit.version>5.9.1</junit.version>
+    <mockito.version>4.9.0</mockito.version>
   </properties>
 
   <dependencyManagement>
@@ -72,7 +73,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>${junit5.version}</version>
+        <version>${junit.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -103,33 +104,34 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>github</id>
-      <name>Github repository for pom files only</name>
-      <url>https://raw.githubusercontent.com/meggermo/maven.pom.root/master</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-        <checksumPolicy>ignore</checksumPolicy>
-      </releases>
-    </repository>
-  </repositories>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <release>${java.version}</release>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
