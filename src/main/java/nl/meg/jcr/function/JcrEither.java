@@ -90,4 +90,3 @@ record Right<L, R>(R value) implements JcrEither<L, R> {
         return value;
     }
 }
-

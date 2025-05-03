@@ -69,7 +69,7 @@ class ExampleUseCaseTest {
         node.getSession().save();
 
         final var repoFactory = new JcrRepoFactory(ofLongOption("version"));
-        final var entityRepositoryFactory = new EntityRepositoryFactory(c -> repository.login(c));
+        final var entityRepositoryFactory = new EntityRepositoryFactory(repository::login);
 
         final var entityRepo = repoFactory.create(new EntityRepo(active));
         final var entityRepository = entityRepositoryFactory.make(entityRepo, List.of("x", "y", "z"));
@@ -127,7 +127,7 @@ class ExampleUseCaseTest {
 
         final JcrProperty<Optional<Long>> version = ofLongOption("version");
         final var repoFactory = new JcrRepoFactory(version);
-        final var entityRepositoryFactory = new EntityRepositoryFactory(c -> repository.login(c));
+        final var entityRepositoryFactory = new EntityRepositoryFactory(repository::login);
 
         final var entityRepo = repoFactory.create(new EntityRepo(active));
         final var composedEntityRepo = repoFactory.create(new ComposedEntityRepo(active, entityRepo));

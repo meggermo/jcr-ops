@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+  <parent>
+    <groupId>com.github.meggermo.maven</groupId>
+    <artifactId>maven.pom.root</artifactId>
+    <version>2.0.0</version>
+  </parent>
   <groupId>nl.meg</groupId>
   <artifactId>jcr-ops</artifactId>
   <version>1.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
-
-  <description>
-    Functional immutable operations on the Content repository API for Java.
-  </description>
-  <inceptionYear>2014</inceptionYear>
-  <url>https://${github.host}/${project.artifactId}</url>
   <name>${project.artifactId}</name>
-
-  <scm>
-    <url>https://${github.host}/${project.artifactId}</url>
-    <connection>scm:https://${github.host}/${project.artifactId}</connection>
-    <developerConnection>scm:git:ssh://git@${github.host}/jcr-ops</developerConnection>
-  </scm>
-  <issueManagement>
-    <url>https://${github.host}/jcr-ops/issues</url>
-    <system>github</system>
-  </issueManagement>
-
+  <description>Functional immutable operations on the Content repository API for Java.</description>
+  <url>https://${github.host}/${project.artifactId}</url>
+  <inceptionYear>2014</inceptionYear>
   <organization>
     <name>${github.account.name}</name>
     <url>https://${github.host}</url>
   </organization>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://raw.githubusercontent.com/${github.account.name}/jcr-ops/master/LICENSE.txt</url>
+    </license>
+  </licenses>
   <developers>
     <developer>
       <id>${github.account.name}</id>
@@ -37,39 +32,26 @@
       <url>https://${github.host}</url>
     </developer>
   </developers>
-
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>https://raw.githubusercontent.com/${github.account.name}/jcr-ops/master/LICENSE.txt</url>
-    </license>
-  </licenses>
-
+  <scm>
+    <connection>scm:https://${github.host}/${project.artifactId}</connection>
+    <developerConnection>scm:git:ssh://git@${github.host}/jcr-ops</developerConnection>
+    <url>https://${github.host}/${project.artifactId}</url>
+  </scm>
+  <issueManagement>
+    <system>github</system>
+    <url>https://${github.host}/jcr-ops/issues</url>
+  </issueManagement>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>17</java.version>
-    <java.source.version>${java.version}</java.source.version>
-    <java.target.version>${java.version}</java.target.version>
-    <github.host>github.com</github.host>
+    <maven.compiler.release>21</maven.compiler.release>
     <github.account.name>${project.name}</github.account.name>
     <!-- Library versions -->
-    <assertj.version>3.23.1</assertj.version>
     <jcr.version>2.0</jcr.version>
-    <junit.version>5.9.1</junit.version>
-    <mockito.version>4.9.0</mockito.version>
-    <oak-jcr.version>1.44.0</oak-jcr.version>
-    <logback.version>1.2.11</logback.version>
+    <oak-jcr.version>1.78.0</oak-jcr.version>
+    <logback.version>1.5.18</logback.version>
+    <maven-bundle-plugin.version>6.0.0</maven-bundle-plugin.version>
   </properties>
-
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>${junit.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
       <dependency>
         <groupId>javax.jcr</groupId>
         <artifactId>jcr</artifactId>
@@ -87,7 +69,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>javax.jcr</groupId>
@@ -96,7 +77,6 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.annotation.versioning</artifactId>
-      <version>1.1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -107,19 +87,16 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -133,29 +110,33 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>ignore</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>github</id>
+      <name>Github repository for pom files only</name>
+      <url>https://raw.githubusercontent.com/meggermo/maven.pom.root/master</url>
+    </repository>
+  </repositories>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <version>${maven-bundle-plugin.version}</version>
         <extensions>true</extensions>
-        <version>5.1.8</version>
         <configuration>
           <instructions>
             <Export-Package>nl.meg.jcr.*;provide:=true</Export-Package>
           </instructions>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
-        <configuration>
-          <release>${java.version}</release>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
-
 </project>
