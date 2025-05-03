@@ -1,4 +1,4 @@
-jcr-ops [![Travis CI status](https://secure.travis-ci.org/meggermo/jcr-ops.png)](http://travis-ci.org/#!/meggermo/jcr-ops/builds)
+jcr-ops [![Travis CI status](https://secure.travis-ci.org/meggermo/jcr-ops.png)](https://app.travis-ci.com/meggermo/jcr-ops.svg?token=dxrDs141zeDd35csRqYm&branch=master)
 =======
 
 Functional immutable operations on the [The Content repository API for Java](http://en.wikipedia.org/wiki/Content_repository_API_for_Java).
